@@ -216,21 +216,51 @@
 <body class="login">
     <div class="page-content">
         <div class="login-content">
-            <form class="form-detail" action="#" method="post" id="Login">
+            <form class="form-detail" action="{{ route('login') }}" method="POST" id="Login">
+                {{ csrf_field() }}
                 <h2>Laboratoire AKSAM</h2>
                 <p class="text">Veuillez saisir ci-dessous votre email et mot de passe. &nbsp; &nbsp; &nbsp; &nbsp; </p>
+                @if(session('errors'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Something it's wrong:
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                @if (Session::has('success'))
+                <div class="alert alert-success">
+                    {{ Session::get('success') }}
+                </div>
+                @endif
+                @if (Session::has('error'))
+                <div class="alert alert-danger">
+                    {{ Session::get('error') }}
+                </div>
+                @endif
                 <div class="form-group">
                     <div class="form-row form-row-1">
-                        <label for="full-name">Email :</label>
-                        <input type="text" name="full-name" id="full-name" class="input-text" required>
+                        <label for="email">Email :</label>
+                        <input type="text" name="email" class="input-text" required>
+                        @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                     </div>
 
 
                 </div>
                 <div class="form-group">
                     <div class="form-row form-row-1">
-                        <label for="full-name">Mot de passe :</label>
-                        <input type="text" name="full-name" id="full-name" class="input-text" required>
+                        <label for="password">Mot de passe :</label>
+                        <input style=" margin-bottom: 29px;" type="password" name="password" class="form-control">
+
                     </div>
 
 

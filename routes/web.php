@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,22 +13,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('evolutionproteine');
-});
-Route::get('/login', function () {
-    return view('login');
-});
-Route::get('/home', function () {
-    return view('evolutionproteine');
+/* Resource Route Parameters */
+Route::resource('users','UserController');
+Route::resource('navires','NavireController');
+Route::resource('fournisseurs','FournisseurController');
+Route::resource('origines','OrigineController');
+Route::resource('categories','CategorieController');
+Route::resource('produits','ProduitController');
+Route::resource('commercials','CommercialController');
+Route::resource('clients','ClientController');
+Route::resource('Nutriment','NutrimentController');
+Route::resource('Analysetype','AnalysetypeController');
+Route::resource('crapports','CrapportController');
+Route::resource('pfrapports','PfrapportController');
+Route::resource('mprapports','mprapportController');
+
+/* Login */
+Route::get('/', 'Auth\AuthController@showFormLogin')->name('login');
+Route::get('login', 'Auth\AuthController@showFormLogin')->name('login');
+Route::post('login', 'Auth\AuthController@login');
+Route::get('logout', 'Auth\AuthController@logout')->name('logout');
+Route::group(['middleware' => 'auth'], function () {
+ 
+    Route::get('home', 'HomeController@index')->name('home');
+    Route::get('logout', 'Auth\AuthController@logout')->name('logout');
+
 });
 
+
 /* Administration*/
-Route::get('/users', function () {
-    return view('users');
-});
+Route::get('/users','UserController@index' )->name('users.index');
 Route::get('/logs', function () {
-    return view('logs');
+    return view('users.logs');
 });
 
 /* Dashboard*/
@@ -44,82 +60,73 @@ Route::get('/formulaire_arp', function () {
 
 
 /* Partenaires*/
-Route::get('/clients', function () {
-    return view('clients');
-});
-
-Route::get('/fournisseurs', function () {
-    return view('fournisseurs');
-});
-
-Route::get('/navires', function () {
-    return view('navires');
-});
+Route::get('/clients', 'ClientController@index' )->name('clients.index');
+Route::get('/commerciaux', 'CommercialController@index')->name('commercials.index');
+Route::get('/fournisseurs', 'FournisseurController@index')->name('fournisseurs.index');
+Route::get('/navires', 'NavireController@index')->name('navires.index');
 
 /* Données techniques*/
-Route::get('/produits', function () {
-    return view('produits');
-});
-Route::get('/nutriments', function () {
-    return view('nutriments');
-});
-Route::get('/origines', function () {
-    return view('origines');
-});
-Route::get('/categories', function () {
-    return view('categories');
-});
+Route::get('/produits', 'ProduitController@index')->name('produits.index');
+Route::get('/nutriments', 'NutrimentController@index')->name('Nutriment.index');
+Route::get('/origines', 'OrigineController@index')->name('origines.index');
+Route::get('/categories','CategorieController@index' )->name('categories.index');
 
 /* Analyses*/
-Route::get('/matieres_premieres', function () {
-    return view('matierepremiere');
-});
-Route::get('/produits_finis', function () {
-    return view('produitfini');
-});
+Route::get('/matieres_premieres', 'MprapportController@index')->name('mprapports.index');
 Route::get('/rapport_ensilage', function () {
     return view('rapportensilage');
 });
-Route::get('/rapport_analyse', function () {
-    return view('rapportanalyse');
-});
+Route::get('/rapport_analyse',  'CrapportController@index' )->name('crapports.index');
+Route::get('/rapport_pf',  'PfrapportController@index' )->name('pfrapports.index');
 
-/* Actions*/
+/* Actions : Export EXCEL */
+Route::get('exportc', 'CommercialController@export')->name('exportc');
+Route::get('exportl', 'ClientController@export')->name('exportcl');
+Route::get('exportf', 'FournisseurController@export')->name('exportf');
+Route::get('exportn', 'NavireController@export')->name('exportn');
+Route::get('exportnt', 'NutrimentController@export')->name('exportnt');
+Route::get('exportpf', 'PfrapportController@export')->name('exportpf');
+Route::get('exportmp', 'MprapportController@export')->name('exportmp');
+Route::get('exportrc', 'CrapportController@export')->name('exportrc');
+Route::get('exportp', 'ProduitController@export')->name('exportp');
+Route::get('exporto', 'OrigineController@export')->name('exporto');
+Route::get('exportct', 'CategorieController@export')->name('exportct');
 
-Route::get('/adduser', function () {
-    return view('add_user');
-});
+/* Actions : Export PDF */
+Route::get('/PDF_RC','CrapportController@generatePDF');
+Route::get('/PDF_Client', 'ClientController@pdf')->name('pdfcl');
+Route::get('/PDF_Fournisseur', 'FournisseurController@pdf')->name('pdff');
+Route::get('/PDF_Navire', 'NavireController@pdf')->name('pdfn');
+Route::get('/PDF_Produit', 'ProduitController@pdf')->name('pdfp');
+Route::get('/PDF_Origine', 'OrigineController@pdf')->name('pdfo');
+Route::get('/PDF_Categorie', 'CategorieController@pdf')->name('pdfct');
+Route::get('/PDF_Nutriment', 'NutrimentController@pdf')->name('pdfn');
+Route::get('/pdf_g','CommercialController@pdf')->name('pdf_g');
+Route::get('/PDF_MP', 'MprapportController@generatePDF');
+Route::get('/PDF_MP_Mycotoxine', 'MprapportController@generatePDF_mycotoxine');
+Route::get('/PDF_PF', 'PfrapportController@generatePDF');
+Route::get('/PDF_PF_Mycotoxine', 'PfrapportController@generatePDF_mycotoxine');
 
-Route::get('/add_client', function () {
-    return view('add_client');
-});
+/* Actions : IMPORT EXCEL */
+Route::post('importExcelNavire', 'NavireController@import');
+Route::post('importExcelNutriment', 'NutrimentController@import');
+Route::post('importExcelCommercial', 'CommercialController@import');
+Route::post('importExcelCategorie', 'CategorieController@import');
+Route::post('importExcelOrigine', 'OrigineController@import');
+Route::post('importExcelFournisseur', 'FournisseurController@import');
+Route::post('importExcelClient', 'ClientController@import');
+Route::post('importExcelProduit', 'ProduitController@import');
+Route::post('importExcelPF', 'PfrapportController@import');
+Route::post('importExcelMP', 'MprapportController@import');
+Route::post('importExcelRC', 'CrapportController@import');
 
-Route::get('/add_fournisseur', function () {
-    return view('add_fournisseur');
-});
 
-Route::get('/add_navire', function () {
-    return view('add_navire');
-});
-Route::get('/add_produit', function () {
-    return view('add_produit');
-});
-Route::get('/add_nutriment', function () {
-    return view('add_nutriment');
-});
-Route::get('/add_origine', function () {
-    return view('add_origine');
-});
-Route::get('/add_categorie', function () {
-    return view('add_categorie');
-});
+/* Standards Section */
+Route::get('/standards', 'AnalysetypeController@index')->name('Analysestype.index');
+Route::get('standardtype/{standardtype}', 'StandardtypeController@show')->name('Standardstype.show');
+Route::get('standardtype/{standardtype}/add', 'StandardtypeController@create')->name('Standardstype.create');
+Route::post('standardtype/store', 'StandardtypeController@store')->name('Standardstype.store');
+Route::post('standardtype/delete', 'StandardtypeController@destroy')->name('Standardstype.destroy');
 
-Route::get('/add_mp', function () {
-    return view('add_mp');
-});
-Route::get('/add_pf', function () {
-    return view('add_pf');
-});
-Route::get('/add_ra', function () {
-    return view('add_ra');
-});
+
+

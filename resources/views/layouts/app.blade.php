@@ -7,11 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('/css/style.css') }}" crossorigin="anonymous">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
 
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -47,7 +51,7 @@
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" style="color:#FFFFFF;" href="/clients">Partenaires</a>
+                            <a class="nav-link" style="color:#FFFFFF;" href="/commerciaux">Partenaires</a>
                         </li>
 
                     </ul>
@@ -63,22 +67,22 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"
-                                aria-expanded="false"> <img src="images/profile_image.jpg" alt="user-img" width="36"
-                                    class="img-circle"><span style="color:#FFFFFF;">Username</span></span> </a>
+                                aria-expanded="false"> <img src="../../images/profile_image.jpg" alt="user-img" width="36"
+                                    class="img-circle"><span style="color:#FFFFFF;">{{ Auth::user()->name }}</span></span> </a>
                             <ul class="dropdown-menu dropdown-user">
                                 <li>
                                     <div class="user-box">
-                                        <div class="u-img"><img src="images/profile_image.jpg" alt="user"></div>
+                                        <div class="u-img"><img src="./images/profile_image.jpg" alt="user"></div>
                                         <div class="u-text">
                                             <h4>Username</h4>
-                                            <p class="text-muted">username@aksam.ma</p><a href="#"
+                                            <p class="text-muted">{{ Auth::user()->email }}</p><a href="#"
                                                 class="btn btn-rounded btn-secondary btn-sm">View Profile</a>
                                         </div>
                                     </div>
                                 </li>
 
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"><i class="la la-power-off"></i> Logout</a>
+                                <a class="dropdown-item" href="{{ route('logout') }}"><i class="la la-power-off"></i> Logout</a>
                             </ul>
 
                         </li>
@@ -140,7 +144,33 @@
 
 
 </body>
+<script>
+function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
 
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</script>
 <script src="{{ asset('js/core/jquery.3.2.1.min.js')}}"></script>
 <script src="{{ asset('js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
 <script src="{{ asset('js/core/popper.min.js')}}"></script>
@@ -150,5 +180,46 @@
 <script src="{{ asset('js/plugin/chart-circle/circles.min.js')}}"></script>
 <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
 <script src="{{ asset('js/file.min.js')}}"></script>
+<script type="text/javascript">
+   var typingTimer;                //timer identifier
+var doneTypingInterval = 500;  //time in ms, 5 second for example
+var $input = $('.typeD');
+
+//on keyup, start the countdown
+$input.on('keyup', function () {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(doneTyping, doneTypingInterval);
+});
+
+//on keydown, clear the countdown 
+$input.on('keydown', function () {
+  clearTimeout(typingTimer);
+});
+
+//user is "finished typing," do something
+function doneTyping () {
+ var counting = 0;
+ $(".typeD").each(function(){
+    var prix = $(this).attr('data-valeur');
+    var id_input = $(this).attr('data-id');
+    var count_status_seche = $(".data-analyse-id-seche-"+id_input).attr('data-count');
+    var count_status_brut = $(".data-analyse-id-brut-"+id_input).attr('data-count');
+    var value_inpt_sech = $(".data-analyse-id-seche-"+id_input).val();
+    var value_inpt_brut = $(".data-analyse-id-brut-"+id_input).val();
+    if(count_status_brut === "false" ){
+        if(value_inpt_brut !== "" || value_inpt_sech !== ""){         
+            counting += Number(prix);           
+            $(".data-analyse-id-brut-"+id_input).attr('data-count','true');
+            
+        }
+    }
+    
+    
+ });
+ $("#cout_total").val(counting);
+ $(".typeD").attr('data-count',"false");
+ 
+ }
+</script>
 
 </html>
