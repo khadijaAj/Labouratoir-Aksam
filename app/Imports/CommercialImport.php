@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Commercial;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CommercialImport implements ToModel
+class CommercialImport implements ToModel , WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,7 +16,7 @@ class CommercialImport implements ToModel
     public function model(array $row)
     {
         return new Commercial([
-            'name'  => $row[0], 'adresse'  => $row[1], 'tele'=> $row[2] , 'Reference'=> $row[3]
+            'name'  => $row['nom'], 'Reference'=> $row['reference'], 'adresse'  => $row['adresse'], 'tele'=> $row['tele'] 
 
         ]);
     }

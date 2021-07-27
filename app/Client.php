@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
+
 
 class Client extends Model
 {
-    
+    use Loggable;
       /**
      * The attributes that are mass assignable.
      *
@@ -23,5 +25,9 @@ class Client extends Model
     public function Crapports()
     {
         return $this->hasMany(Rpclient::class);
+    }
+    public function Enrapports()
+    {
+        return $this->hasMany(Enrapport::class);
     }
 }

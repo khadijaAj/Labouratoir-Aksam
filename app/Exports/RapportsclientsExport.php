@@ -9,49 +9,77 @@ use App\Commercial;
 use App\Standardtype;
 use App\Nutriment;
 use App\Value;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromArray;
 
-class RapportsclientsExport implements FromCollection
+
+class RapportsclientsExport implements FromArray, WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
-    {
-      
+    protected $ids;
+
+    function __construct($ids) {
+            $this->ids = $ids;
+    }
+    public function array(): array{
+
+       if($this->ids){
+        $crapports = Crapport::findMany($this->ids);
+
+       }else{
         $crapports = Crapport::all();
+       }
         $standards=Standardtype::find(3);
         $values = Value::all();
         $nutriments=Nutriment::all();
-        $collection = collect([]);
-
-        foreach($crapports as $crapport)
-        
+        foreach($crapports as $crapport){
+            $collectionA = array(
+                'Id'=>$crapport->id,
+                'Num'=>$crapport->Num,
+                'Client'=>$crapport->client->name,
+                'Commercial'=>$crapport->commercial->name,
+                'Date_reception'=>$crapport->date_reception,
+                'Date_analyse'=>$crapport->date_analyse,
+                'Produit'=>$crapport->produit->name,
+                'Cout'=>$crapport->Cout
+            );
+            $arraysA=[];
             foreach($standards->nutriments as $nutriment){
+               
                 foreach($values as $value){
-                    $collectionA = collect([
-                        [   'Num'=>$crapport->Num,
-                            'Produit'=>$crapport->produit->name,
-                            'Client'=>$crapport->client->name,
-                            'Commercial'=>$crapport->commercial->name,
-                            'Conformite' => $crapport->conformite,
-                            'Date_reception'=>$crapport->date_reception,
-                            'Date_analyse'=>$crapport->date_analyse,
-                            'Cout'=>$crapport->cout,
-                            'Nutriment'=>$nutriment->name,
-                            'valeur_surbrute'=>$value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute'),
-                            'valeur_surseche'=>$value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche')
-        
-                        ]
-                    ]);    
-          
-            
-        }
-        $collection = $collection->values()->merge($collectionA);
+                    $record1 = [];
+                    $record2 = [];
+                    $record1 = $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute');
+                    $record2 = $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche');
+                    }
+                    $arraysA[] = $record1;
+                    $arraysA[] = $record2;
 
-          
+            
+            }
+        $result [] = $collectionA+$arraysA;
     }
-    return $collection;
+
+    return $result;
+ 
+    }
+    public function headings() :array
+    {
+        $standards=Standardtype::find(3);
+        $nutriments=Nutriment::all();
+        $arraysA=  array("id", "N° d’Ech","Client","Commercial","Date_Reception","Date_analyse","Produit","Cout"); 
+        
+        foreach($standards->nutriments as $nutriment){
+            $record1 = [];
+            $var_1 = "_SB";
+            $var_2 = "_SS";
+            $record1 = $nutriment->name." ".$var_1." ";
+            $record2 = $nutriment->name." ".$var_2." ";
+
+            $arraysA[] = $record1;
+            $arraysA[] = $record2;
+        }
+
+        
+        return $arraysA;
     }
 }

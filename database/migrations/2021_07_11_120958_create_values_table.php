@@ -16,8 +16,8 @@ class CreateValuesTable extends Migration
         Schema::create('values', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('nutriment_id');
-            $table->float('value_surbrute')->nullable();
-            $table->float('value_surseche')->nullable();
+            $table->string('value_surbrute')->nullable();
+            $table->string('value_surseche')->nullable();
             $table->integer('crapport_id')->nullable()->unsigned();
             $table->integer('pfrapport_id')->nullable()->unsigned();
             $table->integer('mprapport_id')->nullable()->unsigned();

@@ -130,6 +130,11 @@
             </tr>
         </thead>
         <tbody>
+        @if ($fournisseurs->count() == 0)
+        <tr>
+            <td colspan="5"><center>Aucun résultat à afficher.</center></td>
+        </tr>
+        @endif
         @foreach ($fournisseurs as $fournisseur)
             <tr>
                 <th scope="row">

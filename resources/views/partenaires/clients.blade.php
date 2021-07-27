@@ -124,6 +124,11 @@
             </tr>
         </thead>
         <tbody>
+        @if ($clients->count() == 0)
+        <tr>
+            <td colspan="4"><center>Aucun résultat à afficher.</center></td>
+        </tr>
+        @endif
         @foreach ($clients as $client)
             <tr>
                 <th scope="row">
@@ -134,10 +139,17 @@
                 <td>
                     <center>{{ $client->name }}</center>
                 </td>
-                <td>
+                @if ($client->commercial()->exists())
+                
+                    <td>
                     <center>{{ $client->commercial->name }}</center>
                 </td>
-
+                @else
+                    <td>
+                    <center>-</center>
+                </td>
+                @endif
+                
                 <td>
                     <center>
                         <form action="{{ route('clients.destroy',$client->id) }}" method="POST">

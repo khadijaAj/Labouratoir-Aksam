@@ -18,15 +18,14 @@ class MatierePremiereImport implements ToCollection
         foreach ($rows as $row) 
         {
             Mprapport::create([
-                'num' => $row[0],
-                'num_bon' => $row[1],
-                'origine_id' => $row[2],
-                'produit_id' => $row[3],
-                'fournisseur_id' => $row[4],
-                'navire_id' => $row[5],
-               'date_reception'=>  $row[6],
-               'conformite'=>  $row[7],
-               'Commentaire'=>  $row[8]
+                'num' => $row['num'],
+                'num_bon' => $row['num_bon'],
+                'origine_id' => $row['origine_id'],
+                'produit_id' => $row['produit_id'],
+                'fournisseur_id' => $row['fournisseur_id'],
+                'navire_id' => $row['navire_id'],
+               'date_reception'=>  $row['date_reception'],
+               'Commentaire'=>  $row['commentaire']
              
 
             ]);
@@ -36,15 +35,14 @@ class MatierePremiereImport implements ToCollection
             $i=1;
             $j =0;
             foreach($standards->nutriments as $nutriment){
-                $r = 9+$j;
-                Value::create([
-                    'mprapport_id' => $id,
-                    'nutriment_id' => $row[$r] ,
-                    'value_surbrute' => $row[$r+1] ?? null , 
-                    'value_surseche' => $row[$r+2] ?? null,
-                ]);
-                $j+=3;
             
+                $record1 = $nutriment->name;
+                $record1 = strtolower($record1); 
+                Value::create([
+                    'crapport_id' => $id,
+                    'nutriment_id' => $nutriment->id ,
+                    'value_surbrute' => $row[$record1] ?? null , 
+                ]);
             }
 
               

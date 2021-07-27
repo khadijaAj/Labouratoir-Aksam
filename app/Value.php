@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Value extends Model
 {
+    
     protected $guarded = [];
       /**
      * The attributes that are mass assignable.
@@ -25,4 +26,10 @@ class Value extends Model
     {
         return $this->belongsTo(Pfrapport::class);
     }
+
+    public function enrapport()
+    {
+        return $this->belongsTo(Enrapport::class);
+    }
+    
 }

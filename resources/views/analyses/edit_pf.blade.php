@@ -53,8 +53,13 @@
     @csrf
     @method('PUT')
     <div class="form-row">
-
+    <div class="form-group col-md-6">
+            <label for="date_reception"> Date de fabrication </label>
+            <input type="date" class="form-control" value="{{ $pfrapport->date_fabrication}}" name="date_fabrication">
+        </div>
+    
 <div class="form-group col-md-6">
+    
     <label for="produit">Nom de produit</label>
     <select class="custom-select mr-sm-2" name="produit_id">
     <option selected value="{{ $pfrapport->produit->id}}">{{ $pfrapport->produit->name}}</option>
@@ -63,37 +68,50 @@
             @endforeach
     </select>
 </div>
+
+
+</div>
+<div class="form-row">
 <div class="form-group col-md-6">
     <label for="num_ech"> N° d’échantillon </label>
     <input type="text" class="form-control" name="num" value="{{ $pfrapport->Num }}" placeholder="Entrer le num d’échantillon">
 </div>
-
-</div>
-<div class="form-row">
     <div class="form-group col-md-6">
         <label for="identification">Identification</label>
         <input type="text" class="form-control" name="identification" value="{{ $pfrapport->Identification}}" placeholder="Entrer l'identification">
     </div>
-    <div class="form-group col-md-6">
-        <label for="commentaire">Commentaire</label>
-        <input type="text" class="form-control" name="commentaire" value="{{ $pfrapport->Commentaire}}" placeholder="Enter le nom du commentaire">
-    </div>
+    
 
 
 </div>
 <div class="form-row">
+
+<div  class="form-group col-md-6">
+        <label for="PS">Activité d'eau</label>
+        <input type="text" class="form-control" name="ACE" value="{{ $pfrapport->ACE }}" placeholder="Entrer la valeur du poids">
+
+
+    </div>
+    <div class="form-group col-md-6">
+        <label for="PS">Moisissure</label>
+        <input type="text" class="form-control" name="MSR" value="{{ $pfrapport->MSR }}" placeholder="Entrer la valeur du poids">
+
+
+    </div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-6">
+        <label for="commentaire">Commentaire</label>
+        <input type="text" class="form-control" name="commentaire" value="{{ $pfrapport->Commentaire}}" placeholder="Enter le nom du commentaire">
+    </div>
     <div class="form-group col-md-6">
         <label for="oonformité">Conformité </label>
         <select class="custom-select mr-sm-2" name="conformite">
             <option selected value="{{ $pfrapport->conformite}}">{{ $pfrapport->conformite}}</option>
-            <option value="Oui">Oui</option>
-            <option value="Non">Non</option>
+            <option value="Conforme">Conforme</option>
+            <option value="Non Conforme">Non Conforme</option>
         </select>
     </div>
-    <div class="form-group col-md-6">
-            <label for="date_reception"> Date de fabrication </label>
-            <input type="date" class="form-control" value="{{ $pfrapport->date_fabrication}}" name="date_fabrication">
-        </div>
         <div class="form-group col-md-6">
             <label for="PJ">Piece jointe</label>
                     <input type="file" class="form-control-file" name="path" id="path" aria-describedby="fileHelp">
@@ -129,21 +147,14 @@
                                     <center>Incertitude</center>
                                 </th>
                                 <th>
+                                    <center>Valeur</center>
+                                </th>
+                                <th>
                                     <center>Méthode</center>
                                 </th>
-                                <th>
-                                    <center>Sur brute</center>
-                                </th>
-                                <th>
-                                    <center>Sur séche</center>
-                                </th>
+                        
                                 <th>
                                     <center>Cible</center>
-                                </th>
-
-
-                                <th>
-                                    <center>Prix</center>
                                 </th>
 
                             </tr>
@@ -164,11 +175,7 @@
                                 <td>
                                     <center>{{ $nutriment->incertitude }}</center>
                                 </td>
-                                <td>
-                                    <center>
-                                        {{ $mesure->where('standardtype_id','=',$standards->id,)->where('nutriment_id','=',$nutriment->id,)->value('methode') }}
-                                    </center>
-                                </td>
+                              
                                 <input name="nutriment_id[]" value="{{ $nutriment->id }}" hidden />
                                 <input name="value_id_{{ $nutriment->id }}"
                                     value="{{ $value->where('pfrapport_id','=',$pfrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('id') }}"
@@ -183,19 +190,14 @@
                                     </center>
                                 </td>
                                 <td>
-                                    <center><input class='typeD data-analyse-id-seche-{{ $nutriment->id }}'
-                                            data-id='{{ $nutriment->id }}' data-count="false" type="text"
-                                            data-valeur="{{ $nutriment->cout }}"
-                                            name="valeur_surseche_{{ $nutriment->id }}"
-                                            value="{{ $value->where('pfrapport_id','=',$pfrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche') }}" />
+                                    <center>
+                                        {{ $mesure->where('standardtype_id','=',$standards->id,)->where('nutriment_id','=',$nutriment->id,)->value('methode') }}
                                     </center>
                                 </td>
                                 <td>
                                     <center>{{ $nutriment->cible }}</center>
                                 </td>
-                                <td>
-                                    <center>{{ $nutriment->cout }}</center>
-                                </td>
+                                
 
 
                             </tr>
@@ -204,21 +206,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="form-row">
-
-<div  style="margin-left:20px;" class="form-group col-md-6">
-        <label for="PS">Activité d'eau</label>
-        <input type="text" class="form-control" name="ACE" value="{{ $pfrapport->ACE }}" placeholder="Entrer la valeur du poids">
-
-
-    </div>
-    <div class="form-group col-md-5">
-        <label for="PS">Moisissure</label>
-        <input type="text" class="form-control" name="MSR" value="{{ $pfrapport->MSR }}" placeholder="Entrer la valeur du poids">
-
-
-    </div>
-</div>
+              
    </div>
    <div class="tab-pane" id="b">
        <br>

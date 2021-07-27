@@ -107,6 +107,82 @@ class CrapportController extends Controller
                         ->with('success','Rapport Client ajouté avec success.');
     }
 
+
+/**
+     * Show the form for creating multiple resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_multiple()
+    {
+        $produits=Produit::all();
+        $nutriments=Nutriment::all();
+        $commerciaux=Commercial::all();
+        $clients=Client::all();
+        $standards=Standardtype::find(3); // Id1 is created for Raw Material Model
+      
+        $data = [
+            'produits'  => $produits,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+            'commerciaux'  => $commerciaux,
+            'clients'  => $clients
+
+        ];
+       
+        return view('analyses.add_ra_m')->with($data);
+    
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_multiple(Request $request)
+    {
+        $input = request()->all();
+        $lines = $request['line'];
+    
+        foreach ($lines as $line => $key) {
+            
+            if(!$request->input($key.'_num') == NULL) {
+                $Crapport = new Crapport;
+                $Crapport->num = $request->input($key.'_num');
+                $Crapport->client_id  = $request->input($key.'_client_id');
+                $Crapport->commercial_id = $request->input($key.'_commercial_id');
+                $Crapport->date_reception= $request->input($key.'_date_reception');
+                $Crapport->date_analyse = $request->input($key.'_date_analyse');
+                $Crapport->produit_id = $request->input($key.'_produit_id');       
+                $Crapport->Cout = $request->input($key.'_cout');                       
+                $Crapport->save();
+                $id = Crapport::where('num', $request->input($key.'_num'))->first()->id;
+                foreach($request->input($key.'_nutriment_id', [])  as $r ){
+                  
+                
+                if(!$request->input($key.'_valeur_surbrute_'.$r) == NULL || !$request->input($key.'_valeur_surseche_'.$r) == NULL ) {
+                    $value = new Value();    
+                    $value->value_surbrute = $request->input($key.'_valeur_surbrute_'.$r);
+                    $value->value_surseche = $request->input($key.'_valeur_surseche_'.$r);
+                    $value->crapport_id = $id;
+                    $value->nutriment_id = $r;
+                    $value->save();   
+                }
+                }
+            }
+          
+            
+ 
+        
+    
+            }
+        
+        return redirect()->route('crapports.index')
+                        ->with('success','Rapport Client ajoutée avec success.');
+
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -182,15 +258,25 @@ class CrapportController extends Controller
             $value_surseche  = $request->input("valeur_surseche_".$r);
             $nutriment_id = $r;
 
-            $data = [
-            'crapport_id'=>$id,
-            'nutriment_id'=> $nutriment_id,
-            'value_surbrute' => $value_surbrute,
-            'value_surseche'=> $value_surseche] ;
+            $value = Value::where('crapport_id', $id)->where('nutriment_id', $nutriment_id)->first();
+            
+            if(!$request->input("valeur_surbrute_".$r) == NULL || !$request->input("valeur_surseche_".$r) == NULL) {
+              if ($value !== null) {
+                  $value->update(['value_surbrute' => $value_surbrute],['value_surseche' => $value_surseche]);
+              } else {
+                  $value = Value::create([
+                      'crapport_id'=>$id,
+                      'nutriment_id'=> $nutriment_id,
+                      'value_surbrute' => $value_surbrute,
+                      'value_surseche'=> $value_surseche
+                  ]);
+              }
+             
+            }if($request->input("valeur_surbrute_".$r) == 0 && $request->input("valeur_surseche_".$r) == 0)
+              Value::where('crapport_id', $id)->where('nutriment_id', $nutriment_id)->delete();
+  
+            }
            
-            DB::table('values')->where('id', $request->input("value_id_".$r))->update($data);
-
-           }
          
             return redirect()->route('crapports.index')->with('success','Rapport client modifié avec success');
     }
@@ -208,9 +294,15 @@ class CrapportController extends Controller
         return redirect()->route('crapports.index')
                         ->with('success','Rapport client supprimé avec success');
     }
-    public function export() 
+    public function export(Request $request) 
     {
-        return Excel::download(new RapportsclientsExport, 'Rapportsclients.xlsx');
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+        }else{
+            $ids_array = array();
+        }
+        return Excel::download(new RapportsclientsExport($ids_array), 'Rapportsclients.xlsx');
     }
     public function import(Request $request) 
     {
@@ -224,10 +316,15 @@ class CrapportController extends Controller
     }
     public function generatePDF(Request $request)
     {
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+            $rapports=Crapport::findMany($ids_array);
+        }else{
+            $rapports=Crapport::all();
+        }
    
-        $id = $request->input('id');
         
-        $rapport=Crapport::find($id);
         $date = date('Y-m-d');
         $nutriments=Nutriment::all();
         $standards=Standardtype::find(3);
@@ -235,7 +332,7 @@ class CrapportController extends Controller
         $clients=Client::all();
 
         $data = [
-        'rapport' => $rapport,
+        'rapports' => $rapports,
         'standards'=>$standards,
         'nutriments'=>$nutriments,  
         'date'=>$date

@@ -17,7 +17,7 @@ class CreateNutrimentsTable extends Migration
         Schema::create('nutriments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('Reference')->unique();
+            $table->string('Reference')->nullable()->unique();
             $table->string('cible')->nullable();
             $table->float('cout')->nullable();
 
@@ -274,6 +274,126 @@ class CreateNutrimentsTable extends Migration
                 'cible'=>'',
                 'Incertitude'=>'0',
                  'cout'=>'300'
+                
+            ],[
+                'name' => 'UEL',
+                'Reference'=> '36',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'UEB',
+                'Reference'=> '37',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'MAT',
+                'Reference'=> '38',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Protéine solubles',
+                'Reference'=> '39',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'PDIE',
+                'Reference'=> '40',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'PDIN',
+                'Reference'=> '41',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'PDIA',
+                'Reference'=> '42',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ]
+            ,[
+                'name' => 'NFC',
+                'Reference'=> '43',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Sucre solubles',
+                'Reference'=> '44',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Matieres grasses',
+                'Reference'=> '45',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'UFL',
+                'Reference'=> '46',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'UFV',
+                'Reference'=> '47',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Calcium',
+                'Reference'=> '48',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Phosphore',
+                'Reference'=> '49',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Magnesium',
+                'Reference'=> '50',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Potassium',
+                'Reference'=> '51',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Souffre',
+                'Reference'=> '52',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
                 
             ]
         );

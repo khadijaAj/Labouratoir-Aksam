@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Fournisseur;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class FournisseurImport implements ToModel
+class FournisseurImport implements ToModel , WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,8 +16,7 @@ class FournisseurImport implements ToModel
     public function model(array $row)
     {
         return new Fournisseur([
-            'name'  => $row[0], 'adresse'  => $row[1], 'tele'=> $row[2] , 'Reference'=> $row[3]
-
+            'name'  => $row['nom'], 'Reference'=> $row['reference'], 'tele'=> $row['tele'] ,'adresse'  => $row['adresse']
         ]);
     }
 }

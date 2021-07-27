@@ -15,16 +15,17 @@ class CreateMprapportsTable extends Migration
     {
         Schema::create('mprapports', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('Num')->unique();
+            $table->string('Num')->unique();
             $table->string('Num_bon')->nullable();
-            $table->integer('origine_id')->unsigned();
-            $table->integer('produit_id')->unsigned();
+            $table->integer('origine_id')->nullable()->unsigned();
+            $table->integer('produit_id')->nullable()->unsigned();
             $table->integer('fournisseur_id')->nullable()->unsigned();
             $table->integer('navire_id')->nullable()->unsigned();
-            $table->enum('conformite' , array('Oui', 'Non'))->default('Oui');
+            $table->enum('conformite' , array('Conforme', 'Non Conforme'))->default('Conforme');
+            $table->string('certificat')->nullable();
             $table->date('date_reception')->nullable();
             $table->string('path')->nullable();
-            $table->enum('commentaire' , array('intern', 'extern'))->nullable();
+            $table->enum('commentaire' , array('interne', 'externe'))->nullable();
             $table->integer('PS')->nullable();
             $table->foreign('fournisseur_id')->references('id')->on('fournisseurs');
             $table->foreign('origine_id')->references('id')->nullable()->on('origines');

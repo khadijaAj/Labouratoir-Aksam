@@ -34,9 +34,20 @@ class MprapportController extends Controller
     public function index()
     {
         $Mprapports = Mprapport::all();
+        $nutriments=Nutriment::all();
+        $standards=Standardtype::find(1);
+        $values = Value::all();
+
+        $data = [
+            'Mprapports'  => $Mprapports,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+            'values'   => $values,
 
 
-        return view('analyses.matierepremiere',compact('Mprapports'));
+        ];
+
+        return view('analyses.matierepremiere')->with($data);;
     }
 
     /**
@@ -82,7 +93,8 @@ class MprapportController extends Controller
             'fournisseur_id' => 'required',
             'origine_id' => 'nullable',
             'navire_id' => 'nullable',
-            'conformite' => 'required',
+            'conformite' => 'nullable',
+            'certificat' => 'sometimes',
             'path'  => 'nullable|mimes:png,doc,docx,pdf,txt|max:2048',
             'date_reception' => 'nullable',
             'commentaire' => 'nullable',
@@ -99,7 +111,8 @@ class MprapportController extends Controller
          }else{
             $insert['title'] = "";
          }
-          
+
+         $request->certificat = isset($request->certificat) ? 1 : 0;
  
         
         Mprapport::create([
@@ -111,6 +124,7 @@ class MprapportController extends Controller
             'navire_id' => $request->navire_id,
             'date_reception' => $request->date_reception,
             'conformite' => $request->conformite,
+            'certificat' => $request->certificat,
             'commentaire' => $request->commentaire,
             'path' => $insert['title']  ,
             'PS' => $request->PS
@@ -123,15 +137,127 @@ class MprapportController extends Controller
         $value = new Value();    
         $value->value_surbrute = $request->input("valeur_surbrute_".$r);
         $value->mprapport_id = $id;
-        $value->value_surseche  = $request->input("valeur_surseche_".$r);
         $value->nutriment_id = $r;
-        $value->save(); 
+        if(!$request->input("valeur_surbrute_".$r) == NULL ) {
+            $value->save();   
+        }
        }
         
         return redirect()->route('mprapports.index')
                         ->with('success','Rapport Matiere Premiere ajouté avec success.');
 
     }
+
+    
+    public function PDF(Request $request,$id)
+    {  
+       
+        $id = $request->id;
+        $rapport=Mprapport::find($id);
+        $date = date('Y-m-d');
+        $nutriments=Nutriment::all();
+        $produits=Produit::all();
+        $origines=Origine::all();
+        $fournisseurs=Fournisseur::all();
+        $navires=Navire::all();
+        $standards=Standardtype::find(1);
+        $values = Value::all();
+
+        $data = [
+        'rapport' => $rapport,
+        'standards'=>$standards,
+        'produits'=>$produits,
+        'origines'=>$origines, 
+        'fournisseurs'=>$fournisseurs, 
+        'navires'=>$navires,
+        'nutriments'=>$nutriments,  
+        'date'=>$date
+
+
+        ];
+        $pdf = PDF::loadView('PDFtemplate.PDF_MP_UNIQUE', $data);
+        return  $pdf->download('rapport_Mp.pdf'); 
+    }
+
+
+     /**
+     * Show the form for creating multiple resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_multiple()
+    {
+        $produits=Produit::all();
+        $nutriments=Nutriment::all();
+        $fournisseurs=Fournisseur::all();
+        $origines=Origine::all();
+        $navires=Navire::all();
+        $standards=Standardtype::find(1); // Id1 is created for Raw Material Model
+      
+        $data = [
+            'produits'  => $produits,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+            'fournisseurs'  => $fournisseurs,
+            'origines'  => $origines,
+            'navires'  => $navires
+        ];
+       
+        return view('analyses.add_mp_m')->with($data);
+    
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_multiple(Request $request)
+    {
+        $input = request()->all();
+        $lines = $request['line'];
+    
+        foreach ($lines as $line => $key) {
+            
+            if(!$request->input($key.'_num') == NULL) {
+                $Mprapport = new Mprapport;
+                $Mprapport->num = $request->input($key.'_num');
+               
+                $Mprapport->date_reception = $request->input($key.'_date_reception');
+                $Mprapport->Num_bon = $request->input($key.'_nbon');
+                $Mprapport->produit_id = $request->input($key.'_produit_id');
+                $Mprapport->fournisseur_id = $request->input($key.'_fournisseur_id');
+                $Mprapport->origine_id = $request->input($key.'_origine_id');
+                $Mprapport->navire_id = $request->input($key.'_navire_id');
+                $Mprapport->conformite = $request->input($key.'_conformite');
+                $Mprapport->commentaire = $request->input($key.'_commentaire');
+                $Mprapport->certificat = $request->input($key.'_certificat');
+                $Mprapport->save();
+                $id = Mprapport::where('num', $request->input($key.'_num'))->first()->id;
+                foreach($request->input($key.'_nutriment_id', [])  as $r ){
+                  
+                
+                if(!$request->input($key.'_valeur_surbrute_'.$r) == NULL) {
+                    $value = new Value();    
+                    $value->value_surbrute = $request->input($key.'_valeur_surbrute_'.$r);
+                    $value->mprapport_id = $id;
+                    $value->nutriment_id = $r;
+                    $value->save();   
+                }
+                }
+            }
+          
+            
+ 
+        
+    
+            }
+        
+        return redirect()->route('mprapports.index')
+                        ->with('success','Rapport Matiere Premiere ajoutée avec success.');
+
+    }
+
 
     /**
      * Display the specified resource.
@@ -146,6 +272,17 @@ class MprapportController extends Controller
 
         return view('analyses.show_mp',compact('mprapport','standards','values'));
     }
+
+
+    public function search(Request $request)
+    {
+          $search = $request->get('term');
+      
+          $result = Produit::where('name', 'LIKE', '%'. $search. '%')->get();
+ 
+          return response()->json($result);
+            
+    } 
 
     /**
      * Show the form for editing the specified resource.
@@ -193,15 +330,19 @@ class MprapportController extends Controller
             'fournisseur_id' => 'required',
             'origine_id' => 'nullable',
             'navire_id' => 'nullable',
-            'conformite' => 'required',
+            'certificat' => 'sometimes',
+            'conformite' => 'nullable',
             'path'  => 'nullable|mimes:png,doc,docx,pdf,txt|max:2048',
             'date_reception' => 'nullable',
             'commentaire' => 'nullable',
             'PS' => 'nullable'
     
         ]);
+        $request->certificat = isset($request->certificat) ? 1 : 0;
+ 
+       
         $mprapport->update($request->all());
-
+        Mprapport::where('num', $request->num)->update(['certificat' => $request->certificat]);
         if ($files = $request->file('path')) {
             $destinationPath = 'public/pj/'; // upload path
             $profilefile = date('YmdHis') . "." . $files->getClientOriginalExtension();
@@ -213,23 +354,33 @@ class MprapportController extends Controller
           
          
         $id = Mprapport::where('num', $request->num)->first()->id;
-      
+       
+       
         foreach($request->input('nutriment_id', []) as $r){
 
    
             
             $value_surbrute = $request->input("valeur_surbrute_".$r);
-            $value_surseche  = $request->input("valeur_surseche_".$r);
             $nutriment_id = $r;
-
-            $data = [
-            'mprapport_id'=>$id,
-            'nutriment_id'=> $nutriment_id,
-            'value_surbrute' => $value_surbrute,
-            'value_surseche'=> $value_surseche] ;
-            DB::table('values')->where('id', $request->input("value_id_".$r))->update($data);
-
-           }
+            $value = Value::where('mprapport_id', $id)->where('nutriment_id', $nutriment_id)->first();
+            
+            if(!$request->input("valeur_surbrute_".$r) == NULL) {
+  
+              if ($value !== null) {
+                  $value->update(['value_surbrute' => $value_surbrute]);
+              } else {
+                  $value = Value::create([
+                      'mprapport_id'=>$id,
+                      'nutriment_id'=> $nutriment_id,
+                      'value_surbrute' => $value_surbrute
+                  ]);
+              }
+             
+            }if($request->input("valeur_surbrute_".$r) == 0)
+              Value::where('mprapport_id', $id)->where('nutriment_id', $nutriment_id)->delete();
+  
+            }
+           
             return redirect()->route('mprapports.index')->with('success','Rapport Matiere premiere modifié avec success');
     }
 
@@ -255,9 +406,18 @@ class MprapportController extends Controller
         return redirect()->route('mprapports.index')
                         ->with('success','Rapport Matiere Premiere supprimé avec success');
     }
-    public function export() 
+    public function export(Request $request) 
     {
-        return Excel::download(new MatieresPremieresExport, 'matierespremires.xlsx');
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+        }else{
+            $ids_array = array();
+        }
+        return Excel::download(new MatieresPremieresExport($ids_array), 'matierespremires.xlsx');
+
+        
+
     }
     public function import(Request $request) 
     {
@@ -271,9 +431,15 @@ class MprapportController extends Controller
     }
 
     public function generatePDF(Request $request)
-    {
-   
-        $mprapports=Mprapport::all();
+    {   
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+            $mprapports=Mprapport::findMany($ids_array);
+        }else{
+            $mprapports=Mprapport::all();
+        }
+       
         $date = date('Y-m-d');
         $nutriments=Nutriment::all();
         $standards=Standardtype::find(1);
@@ -294,7 +460,14 @@ class MprapportController extends Controller
     }
     public function generatePDF_mycotoxine(Request $request)
     {
-        $mprapports=Mprapport::all();
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+            $mprapports=Mprapport::findMany($ids_array);
+        }else{
+            $mprapports=Mprapport::all();
+        }
+       
         $date = date('Y-m-d');
         $nutriments=Nutriment::all();
         $standards=Standardtype::find(1);

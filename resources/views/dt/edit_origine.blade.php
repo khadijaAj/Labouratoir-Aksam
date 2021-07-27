@@ -37,36 +37,38 @@
 
 @section('content')
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="alert alert-danger">
+    <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
-   
-<form action="{{ route('origines.update',$origine->id) }}" method="POST"> 
+
+<form action="{{ route('origines.update',$origine->id) }}" method="POST">
     @csrf
     @method('PUT')
 
-  
+
 
     <div class="form-group">
         <label for="nom_origine">Nom d'origine</label>
-        <input type="text" class="form-control" name="name" value="{{ $origine->name }}" placeholder="Enter le nom d'origine">
+        <input type="text" class="form-control" name="name" value="{{ $origine->name }}"
+            placeholder="Enter le nom d'origine">
     </div>
 
     <div class="form-group">
         <label for="ref_origine">Référence</label>
-        <input type="text" class="form-control" name="Reference" value="{{ $origine->Reference }}"  placeholder="Entrer la référence">
+        <input type="text" class="form-control" name="Reference" value="{{ $origine->Reference }}"
+            placeholder="Entrer la référence">
     </div>
 
     <br>
 
     <div class="card-action">
-        <center><button type="submit"  class="btn btn-success">Enregistrer</button></center>
+        <center><button type="submit" class="btn btn-success">Enregistrer</button></center>
     </div>
 </form>
 @endsection

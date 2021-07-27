@@ -59,19 +59,7 @@
             <input type="text" class="form-control" name="num" value="{{ old('num') }}" placeholder="Entrer le num">
         </div>
 
-        <div class="form-group col-md-6">
-            <label for="nom_produit">Nom de produit</label>
-            <select class="custom-select mr-sm-2" name="produit_id">
-                <option selected>Choisir un produit ...</option>
-                @foreach( $produits as $produit)
-                <option value="{{ $produit['id'] }}">{{ $produit['name'] }}</option>
-                @endforeach
-            </select>
-        </div>
-
-
-    </div>
-    <div class="form-row">
+        
         <div class="form-group col-md-6">
             <label for="nom_produit">Nom du client</label>
             <select class="custom-select mr-sm-2" name="client_id">
@@ -82,17 +70,29 @@
 
             </select>
         </div>
+
+    </div>
+    <div class="form-row">
+    
         <div class="form-group col-md-6">
             <label for="nom_produit">Nom de Commercial</label>
             <select class="custom-select mr-sm-2" name="commercial_id">
-                <option selected value>Choisir un commercial ...</option>
+                <option selected >Choisir un commercial ...</option>
                 @foreach( $commerciaux as $commercial)
                 <option value="{{ $commercial['id'] }}">{{ $commercial['name'] }}</option>
                 @endforeach
 
             </select>
         </div>
-
+        <div class="form-group col-md-6">
+            <label for="nom_produit">Nom de produit</label>
+            <select class="custom-select mr-sm-2" name="produit_id">
+                <option selected>Choisir un produit ...</option>
+                @foreach( $produits as $produit)
+                <option value="{{ $produit['id'] }}">{{ $produit['name'] }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     <div class="form-row">
@@ -107,18 +107,18 @@
             <input type="date" class="form-control" value="{{ old('date_analyse') }}" name="date_analyse">
         </div>
 
-
-        <div class="form-group col-md-6">
-            <label for="commentaire">Commentaire</label>
-            <select class="custom-select mr-sm-2"  name="commentaire">
-                <option selected>Choisir ..</option>
-                <option value="intern">Intern</option>
-                <option value="extern">Extern</option>
-            </select>     </div>
         <div class="form-group col-md-6">
             <label for="commentaire">Cout</label>
             <input type="text" class="form-control" name="Cout" id="cout_total"  placeholder="le cout total" >
         </div>
+        <div class="form-group col-md-6">
+            <label for="commentaire">Commentaire</label>
+            <select class="custom-select mr-sm-2"  name="commentaire">
+                <option selected>Choisir ..</option>
+                <option value="interne">Intern</option>
+                <option value="externe">Extern</option>
+            </select>     </div>
+   
 
     </div>
     <br>
@@ -211,9 +211,7 @@
                     </table>
                 </div>
             </div>
-            <div class="tab-pane fade" id="profile">
-                Emptyy
-            </div>
+           
             <br>
             <div class="card-action">
                 <center><button type="submit" class="btn btn-success">Enregistrer</button></center>

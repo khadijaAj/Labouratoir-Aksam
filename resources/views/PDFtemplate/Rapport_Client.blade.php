@@ -9,7 +9,7 @@
 
 </head>
 
-<body>
+
 
     <style>
     html,
@@ -196,214 +196,83 @@
 
    
     </style>
+            @foreach ($rapports as $rapport)
+            <body>
 
-
-    <div id="container" style=" position: relative;
+<div id="container" style=" position: relative;
         padding: 4%;">
         <div id="header" style="  margin: 0;
         padding: 0;
         border: 0;
         font-size: 100%;
         font: inherit;
-        ">
-            <center>
-                <div style="height: 50px;width:60%;
-  margin-top:10px; margin-left:200px;border: 1px solid black;"> <br><strong>
-                        <h4 style="font-size: 20px;"><b>Rapport D'analyse client</b>
-                    </strong></b></div>
-            </center>
+        vertical-align: baseline;">
 
-
-
-        </div>
-
-        <div id="logo" style="margin-top: -100px;
+            <div id="logo" style="width: 70%;
         float: left;">
-            <img height="100px;" src="images/logo.png" alt="">
+                <img src="images/logo.png" alt="">
 
+                <div style="margin-top:-110px; margin-left:143px;
+       ">
+                    <br> <br> <br>
+                    <h5 style="">Aksam Lab</h5>
+                    <br>
+                    <h5 style="font-size:10px;margin-bottom:5px;">Km 42,6 , Laghdira-cercle Bir Jdid <br>24152 El Jadida
+                        - Maroc.
+                    </h5>
+                    <h5 style="font-size:10px;">Téléphone: +212 661-966607
+                        <br> Email: Contact@aksam.ma
+                    </h5>
+                </div>
+            </div>
+
+            <div id="reference" style=" float: right;
+        text-align: left;">
+                <br>
+                <p style="margin:0;margin-top:1%;font-size:85%;">Date d'exportation : {{ $date }}</p>
+            </div>
         </div>
 
-    </div>
+        <hr style=" border: 2px solid green;
+  border-radius: 1px;">
+        <div>
+            <center>
+                <p style="font-size:16px;"><b><u>Rapport D'analyse client</u></b></p>
+            </center>
+        </div>
+      
+<div id="container"> 
+<table align="center" width="100%"  border="0"> 
+<tr >
+<td style="padding-right: 32px;"><label style="font-size: 11px;" for="num">N° : {{ $rapport->Num }}</label></td>
+<td style="padding-right: 23px;"><label  style="font-size: 11px;" for="client">Client : {{ $rapport->client->name }}</label></td> <td> 
+<td ><label  style="font-size: 11px;" for="echantillon">Echantillon : {{ $rapport->produit->name}}</label></td> <td> 
+
+</tr> 
 
 
-    <br> <br><br>
-    <div id="container">
+</tr> 
+</table>
+<table align="center" width="100%" cellpadding="40" cellspacing="60" border="0"> 
+ 
 
-        <table class="table " style="float: left;
-  width: 25%;
-  height: 45px;
-  margin: 15px;">
-            <thead>
-                <tr>
-                    <th
-                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; color: #FFFFFF;;background-color: #94CE82;     border: 0px solid #FFFFFF;;padding: 8px;">
-                        <center><strong> N° </strong></center>
-                    </th>
+<tr> 
+<td  ><label  style="font-size: 11px;" for="ref_client">Référence Client : {{ $rapport->client->Reference }}</label></td> 
+<td ><label style="font-size: 11px;"  for="date_reception">&nbsp;	&nbsp;	Date de reception : {{ $rapport->date_reception}}</label></td> 
+<td ><label style="font-size: 11px;" for="date_analyse">	&nbsp;	&nbsp;	&nbsp;	&nbsp;Date d'analyse  : {{ $rapport->date_analyse}}</label></td> 
+</tr> 
+<tr> 
 
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="table-light">
-                        <center> {{ $rapport->Num }}</center>
-                    </th>
+</tr> 
+</table>  
+    
+   
 
+    </div>   
+   
+    <p style=" font-weight: 700;text-align: right;margin-bottom: 1%;font-size: 14px;">Coût D'analyse : {{ $rapport->Cout}}</p>
 
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-hover" style="float: left;
-  width: 25%;
-  height: 45px;
-  margin: 15px;">
-            <thead>
-                <tr>
-                    <th class="table-light"
-                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; ;background-color: #94CE82;color : #FFFFFF;     border: 1px solid #FFFFFF;;padding: 8px;">
-                        <center><strong> Client </strong></center>
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th  class="table-light"style=" border-right: 1px solid #FFFFFF;;border-left: 1px solid #FFFFFF;;border-bottom: 1px solid #FFFFFF;;">
-                        <center> {{ $rapport->client->name }}</center>
-                    </th>
-
-
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-hover" style="float: left;
-  width: 25%;
-  height: 45px;
-  margin: 15px;">
-            <thead>
-                <tr>
-                    <th
-                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #94CE82;color: #FFFFFF;   border: 1px solid #FFFFFF;;padding: 8px;">
-                        <center>Echantillon</center>
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="table-light">
-                        <center>{{ $rapport->produit->name}}</center>
-                    </th>
-
-
-                </tr>
-            </tbody>
-        </table>
-
-        <table class="table table-hover" style="float: left;
-  width: 25%;
-  height: 65px;
-  margin: 15px;">
-            <thead>
-                <tr>
-                    <th
-                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #94CE82;color: #FFFFFF;   border: 1px solid #FFFFFF;;padding: 8px;">
-                        <center>Cout </center>
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="table-light" scope="row">
-                        <center> {{ $rapport->Cout}} </center>
-                    </th>
-
-
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-    <br> <br><br>
-    <div id="container">
-
-        <table class="table table-hover" style="float: left;
-  width: 25%;
-  height: 45px;
-  margin: 15px;">
-            <thead>
-                <tr>
-                    <th
-                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #94CE82;color: #FFFFFF;padding: 8px;">
-                        <center>Référence Client</center>
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th  class="table-light" scope="row">
-                        <center>{{ $rapport->client->Reference }}</center>
-                        </center>
-                    </th>
-
-
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-stripped" style="float: left;
-  width: 25%;
-  height: 45px;
-  margin: 15px;">
-            <thead>
-                <tr>
-                    <th
-                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #94CE82;color: #FFFFFF;  border: 1px solid #F8F8F8;padding: 8px;">
-                        <center>Date de reception</center>
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row" class="table-light">
-                        <center> {{ $rapport->date_reception}}</center>
-                    </th>
-
-
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-hover" style="float: left;
-  width: 25%;
-  height: 45px;
-  margin: 15px;">
-            <thead>
-                <tr>
-                    <th
-                        style="padding-top: 12px; padding-bottom: 12px; text-align: left;background-color: #94CE82;color: #FFFFFF;  border: 1px solid #FFFFFF;padding: 8px;">
-                        <center> Date d'analyse
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row" class="table-light" >
-                        <center> {{ $rapport->date_analyse}}</center>
-                    </th>
-
-
-                </tr>
-            </tbody>
-        </table>
-
-
-
-    </div>
-
-    <br><br><br><br>  <br><br><br><br>
-
+    </div> 
 
     <table style="border-left: 1px solid #F2F4F3;
     border-right: 1px solid #F2F4F3;border-bottom: 1px solid #F2F4F3;" class="table table-bordered  ">
@@ -510,10 +379,11 @@
    bottom:0;
    width:100%;
    height:100px;   
- "><br>
+ "><br><br>
 <p>   <strong>AKSAM SARL:</strong> KM. 5,3, RP. 3475, Laghdira - Cercle Bir Jdid - El Jadida - Tél : 06 28 39 85 00 - Fax : 06 28 39 84 00 </p><br>
  <p style=" font-weight: 5px;">Rc : 223975 - PATENTE : 37985675 - IF : 40226585 - CNSS : 8553283 - ICE : 000204094000032 - Email : alfaksam@gmail.com  </p></div>
+ 
 </body>
-
+@endforeach
 
 </html>

@@ -19,10 +19,10 @@ class CreateCrapportsTable extends Migration
             $table->integer('produit_id')->unsigned();
             $table->integer('client_id')->unsigned();
             $table->integer('commercial_id')->unsigned();
-            $table->enum('Commentaire' , array('intern', 'extern'))->nullable();
+            $table->enum('Commentaire' , array('interne', 'externe'))->nullable();
             $table->float('Cout');
-            $table->date('date_reception');
-            $table->date('date_analyse');
+            $table->date('date_reception')->nullable();
+            $table->date('date_analyse')->nullable();
             $table->foreign('produit_id')->references('id')->on('produits');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('commercial_id')->references('id')->on('commercials');

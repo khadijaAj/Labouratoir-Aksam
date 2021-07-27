@@ -128,6 +128,11 @@
             </tr>
         </thead>
         <tbody>
+        @if ($navires->count() == 0)
+        <tr>
+            <td colspan="4"><center>Aucun résultat à afficher.</center></td>
+        </tr>
+        @endif
             @foreach ($navires as $navire)
             <tr>
                 <th scope="row">

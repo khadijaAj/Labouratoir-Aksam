@@ -37,14 +37,14 @@
 
 @section('content')
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="alert alert-danger">
+    <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
 <form action="{{ route('produits.store') }}" method="POST">
     @csrf
@@ -60,10 +60,10 @@
     <div class="form-group">
         <label for="categorie">Catégorie</label>
         <select class="custom-select mr-sm-2" name="categorie_id">
-        <option selected>Choisir une catégorie ...</option>
-        @foreach( $categories as $cat)
+            <option selected>Choisir une catégorie ...</option>
+            @foreach( $categories as $cat)
             <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
-        @endforeach
+            @endforeach
         </select>
     </div>
 
@@ -71,7 +71,7 @@
 
 
     <div class="card-action">
-        <center><button type="submit"  class="btn btn-success">Enregistrer</button></center>
+        <center><button type="submit" class="btn btn-success">Enregistrer</button></center>
     </div>
 </form>
 @endsection

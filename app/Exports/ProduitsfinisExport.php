@@ -7,50 +7,70 @@ use App\Standardtype;
 use App\Value;
 use App\Nutriment;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromArray;
 
-class ProduitsfinisExport implements FromCollection,WithHeadings
+class ProduitsfinisExport implements FromArray, WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
-    {
-        $pfrapports = Pfrapport::all();
+    protected $ids;
+
+    function __construct($ids) {
+            $this->ids = $ids;
+    }
+    public function array(): array{
+
+       if($this->ids){
+        $pfrapports=Pfrapport::findMany($this->ids);
+
+       }else{
+        $pfrapports=Pfrapport::all();
+       }
+
         $standards=Standardtype::find(2);
         $values = Value::all();
         $nutriments=Nutriment::all();
-        $collection = collect([]);
-
-        foreach($pfrapports as $pfrapport)
         
+        foreach($pfrapports as $pfrapport){
+
+        
+            $collectionA = array(
+            'Id'=>$pfrapport->id,
+            'Num_echantillon'=>$pfrapport->Num,
+            'Produit'=>$pfrapport->produit->name,
+            'Identification'=>$pfrapport->Identification,
+            'Date_fabrication'=>$pfrapport->date_fabrication
+            );
+            $arraysA=[];
             foreach($standards->nutriments as $nutriment){
+               
                 foreach($values as $value){
-                    $collectionA = collect([
-                        [   'Num_echantillon'=>$pfrapport->Num,
-                            'Produit'=>$pfrapport->produit->name,
-                            'Identification'=>$pfrapport->Identification,
-                            'Conformite' => $pfrapport->conformite,
-                            'Date_fabrication'=>$pfrapport->date_fabrication,
-                            'Nutriment'=>$nutriment->name,
-                            'valeur_surbrute'=>$value->where('pfrapport_id','=',$pfrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute'),
-                            'valeur_surseche'=>$value->where('pfrapport_id','=',$pfrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche')
-        
-                        ]
-                    ]);    
-          
-            
-        }
-        $collection = $collection->values()->merge($collectionA);
+                    $record1 = [];
+                    $record1 = $value->where('pfrapport_id','=',$pfrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute');
+                    }
+                    $arraysA[] = $record1;
 
-          
+            
+            }
+        $result [] = $collectionA+$arraysA;
     }
-    return $collection;
-}   
-    
-    
+
+    return $result;
+ 
+    }
     public function headings() :array
     {
-        return ["id", "Produit", "N Echantillon","conformité","date_fabrication", "Nutriment","valeur_surbrute","valeur_surseche"];
+        $standards=Standardtype::find(2);
+        $nutriments=Nutriment::all();
+        $arraysA=  array("id", "N° d’Ech","Produit","Identification","Date_fabrication"); 
+        
+        foreach($standards->nutriments as $nutriment){
+            $record1 = [];
+           
+            $record1 = $nutriment->name;
+
+            $arraysA[] = $record1;
+        }
+
+        
+        return $arraysA;
     }
 }

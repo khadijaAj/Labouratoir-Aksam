@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Origine;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class OrigineImport implements ToModel
+class OrigineImport implements ToModel , WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,7 +16,7 @@ class OrigineImport implements ToModel
     public function model(array $row)
     {
         return new Origine([
-            'name'  => $row[0], 'Reference'  => $row[1]
+            'name'  => $row['nom'], 'Reference'  => $row['reference']
         ]);
     }
 }

@@ -115,8 +115,8 @@
             <select class="custom-select mr-sm-2" name="commentaire">
 
                 <option selected value="{{ $crapport->commentaire}}">{{ $crapport->Commentaire}}</option>
-            <option value="Intern">Intern</option>
-            <option value="Extern">Extern</option>
+            <option value="interne">Intern</option>
+            <option value="externe">Extern</option>
         </select>
         </div>
         <div class="form-group col-md-6">

@@ -101,12 +101,17 @@ a.wrimagecard:hover, .wrimagecard-topimage:hover {
 .nav-pills > li > a {
   margin-left: -1px;
   border-radius: 0 !important;
-  border: 1px solid #1D62F0;
-  color: #1D62F0;
+  border: 1px solid #8a8a8a;
+  color: #000000;
 }
-.nav-pills > li > a.active {
-  background: #1D62F0;
+.nav-pills > .active > a, .nav-pills > .active > a:hover {
+  background-color: #039735;
 }
+.green .active a,
+.green .active a:hover {
+    background-color: #039735; 
+}
+
 .nav-pills > li > a:hover {
   background: #fafafa;
 }
@@ -194,6 +199,75 @@ label {
   font-size: 14px !important;
 }
 
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+.pagination > li {
+  display: inline;
+}
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+  color: #000000;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  color: #289b0b;
+  background-color: #eee;
+  border-color: #ddd;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #289b0b;
+  border-color: #289b0b;
+}
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #777;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: green; 
+  border-color: green; 
+}
 /*   Scroll Configuration   */
 
 
@@ -3688,7 +3762,7 @@ body {
   border-bottom-width: 2px;
 }
 .table td, .table th {
-  font-size: 14px;
+  font-size: 13px;
   border-color: #ebedf2 !important;
   padding: 0.75rem !important;
 }

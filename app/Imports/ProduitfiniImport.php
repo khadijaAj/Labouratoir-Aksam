@@ -18,30 +18,27 @@ class ProduitfiniImport implements ToCollection
         foreach ($rows as $row) 
         {
             Pfrapport::create([
-                'num' => $row[0],
-                'produit_id' => $row[1],
-                'identification' => $row[2],
-                'date_fabrication' => $row[3],
-               'conformite'=>  $row[4],
-               'Commentaire' =>  $row[5] ?? null
+                'num' => $row['num'],
+                'produit_id' => $row['produit_id'],
+                'identification' => $row['identification'],
+                'date_fabrication' => $row['date_fabrication'],
+               'conformite'=>  $row['conformite'] ?? null,
+               'Commentaire' =>  $row['commentaire'] ?? null
              
 
             ]);
             $id = Pfrapport::where('num', $row[0])->first()->id;
 
             $standards=Standardtype::find(2);
-            $i=1;
-            $j =0;
-            foreach($standards->nutriments as $nutriment){
-                $r = 6+$j;
-                Value::create([
-                    'pfrapport_id' => $id,
-                    'nutriment_id' => $row[$r] ,
-                    'value_surbrute' => $row[$r+1] ?? null , 
-                    'value_surseche' => $row[$r+2] ?? null,
-                ]);
-                $j+=3;
             
+            foreach($standards->nutriments as $nutriment){
+                $record1 = $nutriment->name;
+                $record1 = strtolower($record1); 
+                Value::create([
+                    'crapport_id' => $id,
+                    'nutriment_id' => $nutriment->id ,
+                    'value_surbrute' => $row[$record1] ?? null , 
+                ]);
             }
 
               

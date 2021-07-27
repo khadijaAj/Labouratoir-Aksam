@@ -37,37 +37,39 @@
 
 @section('content')
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="alert alert-danger">
+    <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
-   
-<form action="{{ route('produits.update',$produit->id) }}" method="POST"> 
+
+<form action="{{ route('produits.update',$produit->id) }}" method="POST">
     @csrf
     @method('PUT')
 
-  
+
 
     <div class="form-group">
         <label for="nom_produit">Nom du produit</label>
-        <input type="text" class="form-control" name="name" value="{{ $produit->name }}" placeholder="Enter le nom du produit">
+        <input type="text" class="form-control" name="name" value="{{ $produit->name }}"
+            placeholder="Enter le nom du produit">
     </div>
     <div class="form-group">
         <label for="ref_produit">Référence</label>
-        <input type="text" class="form-control" name="Reference" value="{{ $produit->Reference }}" placeholder="Entrer la référence">
+        <input type="text" class="form-control" name="Reference" value="{{ $produit->Reference }}"
+            placeholder="Entrer la référence">
     </div>
     <div class="form-group">
         <label for="categorie">Catégorie</label>
         <select class="custom-select mr-sm-2" name="categorie_id">
-        <option selected>{{ $produit->categorie->name }}</option>
-        @foreach( $categories as $cat)
+            <option selected>{{ $produit->categorie->name }}</option>
+            @foreach( $categories as $cat)
             <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
-        @endforeach
+            @endforeach
         </select>
     </div>
 
@@ -75,7 +77,7 @@
 
 
     <div class="card-action">
-        <center><button type="submit"  class="btn btn-success">Enregistrer</button></center>
+        <center><button type="submit" class="btn btn-success">Enregistrer</button></center>
     </div>
 </form>
 @endsection

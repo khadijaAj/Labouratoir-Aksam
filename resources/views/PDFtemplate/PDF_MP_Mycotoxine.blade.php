@@ -141,9 +141,9 @@
         font: inherit;
         ">
             <center>
-                <div style="height: 50px;width:60%;
+                <div style="height: 60px;width:60%;
   margin-top:10px; margin-left:200px;background-color:#B5E0FA;border: 1px solid black;"> <br><strong>
-                        <p style="font-size: 20px;"><b> <br>Rapport d'analyse MP Mycotoxine</p><br>
+                        <p style="font-size: 20px;"><b> <br>Rapport d'analyse MP Mycotoxine<br></p><br>
                     </strong></b><br></div>
             </center>
 

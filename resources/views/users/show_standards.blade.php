@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Journalisation - Aksam Labs')
+@section('title', 'Standards - Aksam Labs')
 
 @section('links')
 

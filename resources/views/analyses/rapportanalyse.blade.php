@@ -80,8 +80,13 @@
     <div class="col-auto">
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="{{ route('crapports.create') }}">Ajouter une
+                style="color: #ffffff; text-decoration: none; " href="{{ route('crapports.create') }}">Ajouter
                 RA</a></button>
+    </div>
+    <div class="col-auto">
+        <br>
+        <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+                style="color: #ffffff; text-decoration: none; " href="/add_ra_m">Insertion multiple</a></button>
     </div>
     <div class="col-auto">
         <br>
@@ -95,8 +100,8 @@
             Exporter
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="{{ route('exportrc') }}">Excel</a>
-            <a class="dropdown-item" id="export-pdf" name="export-pdf" >PDF</a>
+        <a class="dropdown-item" id="export-excel" name="export-excel" >Excel</a>
+            <a class="dropdown-item" id="export-pdf" name="export-pdf">PDF</a>
         </div>
     </div>
 
@@ -120,15 +125,14 @@
 
         <thead style="background-color:#FAFAFA;">
             <tr>
-                <th>#</th>
-                <th><center>N° d’échantillon</center></th>
+                <th><center>#</center></th>
+                <th><center>N° Ech</center></th>
                 <th><center>Client</center></th>
                 <th><center>Commercial</center></th>
-
-                <th><center>Produit</center></th>
                 <th><center>Date de reception</center></th>
-
                 <th><center>Date d'analyse</center></th>
+                <th><center>Produit</center></th>
+                <th><center>Cout</center></th>
 
                 <th>
                     <center>Operations</center>
@@ -137,13 +141,18 @@
             </tr>
         </thead>
         <tbody>
+        @if ($Crapports->count() == 0)
+            <tr>
+                <td colspan="9"><center>Aucun résultat à afficher.</center></td>
+            </tr>
+            @endif
         @foreach ($Crapports as $crapport)
             <tr>
                 <td>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                    <center> &nbsp;&nbsp; <input class="idradio" type="radio" name="id"  value="{{ $crapport->id}}" id="flexRadioDefault1">
-</center>
+                <center><input type="checkbox" class="id" name="id" value="{{ $crapport->id }}">
+                    </center>
                 </td>
 
 
@@ -152,9 +161,11 @@
                 <td><center>{{ $crapport->Num}}</center></td>
                 <td>{{ $crapport->client->name}}</td>
                 <td>{{ $crapport->commercial->name  }}</td>
-                <td>{{ $crapport->produit->name  }}</td>
                 <td><center>{{ $crapport->date_reception }}</center></td>
                 <td><center>{{ $crapport->date_analyse }}</center></td>
+                <td>{{ $crapport->produit->name  }}</td>
+                <td><center>{{ $crapport->Cout  }}</center></td>
+
                 <td>
                         <center>
                             <form action="{{ route('crapports.destroy',$crapport->id) }}" method="POST">
@@ -208,12 +219,42 @@ $("#example").toggleClass('display-none');
 </style>
 
 <script>  
-            $(document).ready(function(){  
-                    $('#export-pdf').click(function(){  
-                        var id = $('.idradio:checked').val(); 
-                        window.open("{{URL::to('/')}}/PDF_RC?id="+id, "_blank");
-                   
-                    });  
-            });  
+            $(document).ready(function(even){
+			   $("#export-pdf").click(function(){
+            var checkvalue = [];
+            $.each($("input[name='id']:checked"), function(){            
+                checkvalue.push($(this).val());
+            });
+            
+            if(checkvalue.length>0){
+                window.open("{{URL::to('/')}}/PDF_RC?ids="+checkvalue, "_blank");
+            }else{
+                window.open("{{URL::to('/')}}/PDF_RC");
+
+            }
+
+            
+    });
+            return false;
+        });
+
+ 
+        $(document).ready(function(even){
+			   $("#export-excel").click(function(){
+            var checkvalue = [];
+            $.each($("input[name='id']:checked"), function(){            
+                checkvalue.push($(this).val());
+            });
+            if(checkvalue.length>0){
+                window.open("{{URL::to('/')}}/exportrc?ids="+checkvalue, "_blank");
+            }else{
+                window.open("{{URL::to('/')}}/exportrc");
+
+            }
+
+            
+    });
+            return false;
+        });
     </script>  
 @endsection

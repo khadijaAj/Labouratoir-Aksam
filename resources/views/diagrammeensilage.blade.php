@@ -4,7 +4,7 @@
 
 @section('links')
 <li class="nav-item">
-    <a href="/evolution_proteine">
+    <a href="/home">
         <i class="la la-random"></i>
         <p>Evolution Proteine</p>
     </a>

@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class Standardtype extends Model
 {
+    use Loggable;
     public $table = "analyse_standards";
 
       /**

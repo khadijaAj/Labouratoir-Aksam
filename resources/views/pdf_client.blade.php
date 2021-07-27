@@ -52,8 +52,7 @@
     canvas,
     details,
     footer,
-    header
-     {
+    header {
         margin: 0;
         padding: 0;
         border: 0;
@@ -306,20 +305,29 @@
                 <p style="font-size:20px;"><b>Liste des {{ $title }}</b></p>
             </center>
         </div>
-        <br>        <br>
+        <br> <br>
 
 
-        <div >
-            <p style=" font-weight: 700;text-align: right;margin-bottom: 1%;font-size: 65%;">Total des elements : {{ $count }}</p>
+        <div>
+            <p style=" font-weight: 700;text-align: right;margin-bottom: 1%;font-size: 65%;">Total des elements :
+                {{ $count }}</p>
             <table id="customers" style="border-collapse: collapse;width: 100%;">
                 <tr>
-                    <th style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50;color: white;   border: 1px solid #ddd;padding: 8px;">ID</th>
-                    <th style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50; color: white;  border: 1px solid #ddd;padding: 8px;">Nom</th>
-                    <th style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50; color: white;  border: 1px solid #ddd;padding: 8px;">Référence</th>
-                    <th style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50; color: white;  border: 1px solid #ddd;padding: 8px;">Commercial</th>
+                    <th
+                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50;color: white;   border: 1px solid #ddd;padding: 8px;">
+                        ID</th>
+                    <th
+                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50; color: white;  border: 1px solid #ddd;padding: 8px;">
+                        Nom</th>
+                    <th
+                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50; color: white;  border: 1px solid #ddd;padding: 8px;">
+                        Référence</th>
+                    <th
+                        style="padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50; color: white;  border: 1px solid #ddd;padding: 8px;">
+                        Commercial</th>
 
                 </tr>
-				@foreach($elements as $data)
+                @foreach($elements as $data)
                 <tr><?php $CommercialName = App\Commercial::find($data->commercial_id); ?>
                     <td style="  border: 1px solid #ddd;
   padding: 8px;">{{ $data->id}}</td>
@@ -327,7 +335,7 @@
   padding: 8px;">{{ $data->name }}</td>
                     <td style="  border: 1px solid #ddd;
   padding: 8px;">{{ $data->Reference }}</td>
-   <td style="  border: 1px solid #ddd;
+                    <td style="  border: 1px solid #ddd;
   padding: 8px;">{{ $CommercialName->name }}</td>
                 </tr>
                 @endforeach
@@ -336,17 +344,17 @@
 
 
 
-<div id="footer" style="     margin: auto;
+        <div id="footer" style="     margin: auto;
         position: absolute;
         left: 4%;
         bottom: 4%;
         right: 4%;
         ">
 
-	<br>	<br>
-	<img src="images/logo.png" height="50px;" alt="">
+            <br> <br>
+            <img src="images/logo.png" height="50px;" alt="">
 
-</div>
+        </div>
 </body>
 
 </html>

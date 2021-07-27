@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Navire;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class NaviresImport implements ToModel
+class NaviresImport implements ToModel  , WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,7 +16,8 @@ class NaviresImport implements ToModel
     public function model(array $row)
     {
         return new Navire([
-             'name'  => $row[0], 'Reference'  => $row[1]
+            'name'  => $row['nom'], 'Reference'  => $row['reference']
+
         ]);
     }
 }

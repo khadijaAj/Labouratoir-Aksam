@@ -52,7 +52,10 @@
 
 
     <div class="form-row">
-
+        <div class="form-group col-md-6">
+            <label for="date_reception"> Date de reception </label>
+            <input type="date" class="form-control" name="date_reception" value="{{ old('date_reception') }}">
+        </div>
         <div class="form-group col-md-6">
             <label for="nom_produit">Nom de produit</label>
             <select class="custom-select mr-sm-2" name="produit_id">
@@ -62,19 +65,25 @@
                 @endforeach
             </select>
         </div>
+
+
+    </div>
+    <div class="form-row">
         <div class="form-group col-md-6">
             <label for="num_ech"> N° d’échantillon </label>
             <input type="text" class="form-control" name="num" value="{{ old('num') }}"
                 placeholder="Entrer le num d’échantillon">
         </div>
-
-    </div>
-    <div class="form-row">
         <div class="form-group col-md-6">
             <label for="num_bon">N° de bon</label>
             <input type="text" class="form-control" name="num_bon" value="{{ old('num_bon') }}"
                 placeholder="Entrer le num de bon">
         </div>
+
+
+
+    </div>
+    <div class="form-row">
         <div class="form-group col-md-6">
             <label for="fournisseur">Fournisseur</label>
             <select class="custom-select mr-sm-2" name="fournisseur_id">
@@ -84,10 +93,6 @@
                 @endforeach
             </select>
         </div>
-
-
-    </div>
-    <div class="form-row">
         <div class="form-group col-md-6">
             <label for="origne">Origine </label>
             <select class="custom-select mr-sm-2" name="origine_id">
@@ -97,6 +102,11 @@
                 @endforeach
             </select>
         </div>
+
+
+
+    </div>
+    <div class="form-row">
         <div class="form-group col-md-6">
             <label for="navire">Navire</label>
             <select class="custom-select mr-sm-2" name="navire_id">
@@ -106,29 +116,33 @@
                 @endforeach
             </select>
         </div>
+        <div class="form-group col-md-6">
+            <label for="PS">Poids Spécifique</label>
+            <input type="text" class="form-control" name="PS" value="{{ old('PS') }}"
+                placeholder="Entrer la valeur du poids">
 
 
-    </div>
-    <div class="form-row">
+        </div>
         <div class="form-group col-md-6">
             <label for="conformite">Conformité </label>
             <select class="custom-select mr-sm-2" name="conformite">
-                <option selected>Choisir ..</option>
-                <option value="Oui">Oui</option>
-                <option value="Non">Non</option>
+                <option value="Conforme">Conforme</option>
+                <option value="Non Conforme">Non Conforme</option>
             </select>
         </div>
         <div class="form-group col-md-6">
             <label for="commentaire">Commentaire</label>
             <select class="custom-select mr-sm-2" name="commentaire">
                 <option selected>Choisir ..</option>
-                <option value="intern">Intern</option>
-                <option value="extern">Extern</option>
+                <option value="interne">interne</option>
+                <option value="externe">externe</option>
             </select>
         </div>
+
+
         <div class="form-group col-md-6">
-            <label for="date_reception"> Date de reception </label>
-            <input type="date" class="form-control" name="date_reception" value="{{ old('date_reception') }}">
+            Certificat : &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+            <input type="checkbox" name="certificat" checked>
         </div>
         <div class="form-group col-md-6">
             <label for="PJ">Piece jointe</label>
@@ -169,22 +183,19 @@
                                     <center>Incertitude</center>
                                 </th>
                                 <th>
+                                    <center>Valeur</center>
+                                </th>
+                                <th>
                                     <center>Méthode</center>
                                 </th>
-                                <th>
-                                    <center>Sur brute</center>
-                                </th>
-                                <th>
-                                    <center>Sur séche</center>
-                                </th>
+
+
                                 <th>
                                     <center>Cible</center>
                                 </th>
 
 
-                                <th>
-                                    <center>Prix</center>
-                                </th>
+
 
                             </tr>
                         </thead>
@@ -204,11 +215,6 @@
                                 <td>
                                     <center>{{ $nutriment->incertitude }}</center>
                                 </td>
-                                <td>
-                                    <center>
-                                        {{ $mesure->where('standardtype_id','=',$standards->id,)->where('nutriment_id','=',$nutriment->id,)->value('methode') }}
-                                    </center>
-                                </td>
                                 <td><input name="nutriment_id[]" value="{{ $nutriment->id }}" hidden />
                                     <center><input class='typeD data-analyse-id-brut-{{ $nutriment->id }}'
                                             data-id='{{ $nutriment->id }}' data-count="false" type="text"
@@ -216,17 +222,16 @@
                                             name="valeur_surbrute_{{ $nutriment->id }}" /></center>
                                 </td>
                                 <td>
-                                    <center><input class='typeD data-analyse-id-seche-{{ $nutriment->id }}'
-                                            data-id='{{ $nutriment->id }}' data-count="false" type="text"
-                                            data-valeur="{{ $nutriment->cout }}"
-                                            name="valeur_surseche_{{ $nutriment->id }}" /></center>
+                                    <center>
+                                        {{ $mesure->where('standardtype_id','=',$standards->id,)->where('nutriment_id','=',$nutriment->id,)->value('methode') }}
+                                    </center>
                                 </td>
+
+
                                 <td>
                                     <center>{{ $nutriment->cible }}</center>
                                 </td>
-                                <td>
-                                    <center>{{ $nutriment->cout }}</center>
-                                </td>
+
 
 
                             </tr>
@@ -235,13 +240,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div style="margin-left:20px;" class="form-group col-md-4">
-                    <label for="PS">Poids Spécifique</label>
-                    <input type="text" class="form-control" name="PS" value="{{ old('PS') }}"
-                        placeholder="Entrer la valeur du poids">
 
-
-                </div>
             </div>
 
 

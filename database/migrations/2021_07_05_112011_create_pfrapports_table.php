@@ -17,12 +17,12 @@ class CreatePfrapportsTable extends Migration
             $table->increments('id');
             $table->integer('Num')->unique();
             $table->integer('produit_id')->unsigned();
-            $table->string('Identification');
-            $table->enum('Commentaire' , array('intern', 'extern'))->nullable();
+            $table->string('Identification')->nullable();
+            $table->enum('Commentaire' , array('interne', 'externe'))->nullable();
             $table->string('path')->nullable();
             $table->float('ACE')->nullable();
             $table->float('MSR')->nullable();
-            $table->enum('conformite' , array('Oui', 'Non'))->default('Oui');
+            $table->enum('conformite' , array('Conforme', 'Non Conforme'))->default('Conforme');
             $table->date('date_fabrication')->nullable();
             $table->foreign('produit_id')->references('id')->on('produits');
             $table->timestamps();

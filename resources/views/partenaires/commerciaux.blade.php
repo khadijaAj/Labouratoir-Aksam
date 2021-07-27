@@ -2,9 +2,6 @@
 
 @section('title', 'Commerciaux - Aksam Labs')
 
-
-
-
 @section('links')
 
 <li class="nav-item active">
@@ -34,6 +31,7 @@
 @endsection
 
 @section('Page_infos')
+
 <div class="card-title"><b><i class="la la-user-plus"></i>
         Commerciaux</b></div>
 @endsection
@@ -139,6 +137,11 @@
             </tr>
         </thead>
         <tbody>
+        @if ($commerciaux->count() == 0)
+        <tr>
+            <td colspan="4"><center>Aucun résultat à afficher.</center></td>
+        </tr>
+        @endif
             @foreach ($commerciaux as $commercial)
             <tr>
                 <th scope="row">
@@ -175,7 +178,6 @@
             @endforeach
         </tbody>
     </table>
-    
 </div>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
@@ -235,6 +237,25 @@ $(document).ready(function () {
   $('.dataTables_length').addClass('bs-select');
 });
 </script>
+<script>
+   $(document).ready(function() {
+    $('#example').dataTable();
+    
+     $("[data-toggle=tooltip]").tooltip();
+    
+} );
+
+
+
+function checkAll(bx) {
+  var cbs = document.getElementsByTagName('input');
+  for(var i=0; i < cbs.length; i++) {
+    if(cbs[i].type == 'checkbox') {
+      cbs[i].checked = bx.checked;
+    }
+  }
+}
+    </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="js/bootstrap-table-pagination.js"></script>

@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class Commercial extends Model
-{
+{   
+    
+    use Loggable;
       /**
      * The attributes that are mass assignable.
      *
@@ -22,5 +25,9 @@ class Commercial extends Model
     public function Crapports()
     {
         return $this->hasMany(Rpclient::class);
+    }
+    public function Enrapports()
+    {
+        return $this->hasMany(Enrapport::class);
     }
 }

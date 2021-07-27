@@ -1,9 +1,6 @@
 @extends('layouts.app')
-
 @section('title', 'Matieres Premieres - Aksam Labs')
-
 @section('links')
-
 <li class="nav-item active">
     <a href="/matieres_premieres">
         <i class="la la-cart-arrow-down"></i>
@@ -28,8 +25,6 @@
         <p>Rapport D'ensilage</p>
     </a>
 </li>
-
-
 @endsection
 
 @section('Page_infos')
@@ -59,8 +54,8 @@
 
             </div>
 
-            <input type="text" class="form-control" style="border: 1px solid #ced4da" id="myInput" onkeyup="myFunction()"
-                placeholder="Chercher ...">
+            <input type="text" class="form-control" style="border: 1px solid #ced4da" id="myInput"
+                onkeyup="myFunction()" placeholder="Chercher ...">
             <div class="input-group-btn search-panel" style="background-color:#FAFAFA;border: 1px solid #ced4da;">
                 <select name="search_param" id="search_param" class="btn btn-light dropdown-toggle"
                     data-toggle="dropdown">
@@ -79,9 +74,14 @@
 
     <div class="col-auto">
         <br>
-        <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="{{ route('mprapports.create') }}">Ajouter une
+        <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-1"><a
+                style="color: #ffffff; text-decoration: none; " href="{{ route('mprapports.create') }}">Ajouter
                 MP</a></button>
+    </div>
+    <div class="col-auto">
+        <br>
+        <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+                style="color: #ffffff; text-decoration: none; " href="/add_mp_m">Insertion multiple</a></button>
     </div>
     <div class="col-auto">
         <br>
@@ -95,14 +95,13 @@
             Exporter
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="{{ route('exportmp') }}">Excel</a>
-            <a class="dropdown-item" href="/PDF_MP">PDF</a>
-            <a class="dropdown-item" href="/PDF_MP_Mycotoxine">PDF ( Rapport Mycotoxine ) </a>
+            <a class="dropdown-item" id="export-excel" name="export-excel">Excel</a>
+            <a class="dropdown-item" id="export-pdf" name="export-pdf">PDF</a>
+            <a class="dropdown-item" id="export-pdf-mycotoxine" name="export-pdf-mycotoxine">PDF ( Rapport Mycotoxine )
+            </a>
 
         </div>
     </div>
-
-
 
 </div>
 </div>
@@ -119,7 +118,7 @@
 </div>
 <div class="table-responsive">
 
-    <table id="MP" class="table">
+    <table class="table "  id="dataTable" width="100%" cellspacing="0">
 
         <thead style="background-color:#FAFAFA;">
             <tr>
@@ -127,17 +126,26 @@
                     <center> # </center>
                 </th>
                 <th>
-                    <center>N° de bon</center>
+                    <center>D Reception</center>
                 </th>
                 <th>
                     <center>Produit</center>
                 </th>
                 <th>
-                    <center>Fournisseur</center>
+                    <center>N° bon</center>
                 </th>
                 <th>
-                    <center>Date de Reception</center>
+                    <center>Fournisseur</center>
                 </th>
+                @inject('value','App\Value') {{-- inject before foreach --}}
+                @inject('mesure','App\Mesure') {{-- inject before foreach --}}
+                @foreach($standards->nutriments as $nutriment)
+                @if(strpos($nutriment->name, 'NIR') !== false || $nutriment->name=="Amidon")
+                <th>
+                    <center>{{ $nutriment->name }}</center>
+                </th>
+                @endif
+                @endforeach
 
                 <th>
                     <center>Operations</center>
@@ -145,27 +153,45 @@
 
             </tr>
         </thead>
-        <tbody>
+        <tbody >
+            @if ($Mprapports->count() == 0)
+            <tr>
+                <td colspan="12"><center>Aucun résultat à afficher.</center></td>
+            </tr>
+            @endif
             @foreach ($Mprapports as $mprapport)
             <tr>
                 <td>
-                    <center> {{ $mprapport->id}}
+                    <center> <input type="checkbox" class="id" name="id" value="{{ $mprapport->id}}">
                     </center>
                 </td>
 
-
                 <td>
-                    <center>{{ $mprapport->Num_bon}}</center>
+                    <center>{{ $mprapport->date_reception}}</center>
                 </td>
+
                 <td>
                     <center>{{ $mprapport->produit->name}}</center>
                 </td>
                 <td>
-                    <center>{{ $mprapport->fournisseur->name}}</center>
+                    <center>{{ $mprapport->Num_bon}}</center>
                 </td>
                 <td>
-                    <center>{{ $mprapport->date_reception}}</center>
+                    <center>{{ $mprapport->fournisseur->name}}</center>
                 </td>
+                @inject('value','App\Value') {{-- inject before foreach --}}
+                @inject('mesure','App\Mesure') {{-- inject before foreach --}}
+                @foreach($standards->nutriments as $nutriment)
+
+                @if(strpos($nutriment->name, 'NIR') !== false || $nutriment->name=="Amidon")
+                <th>
+                    <center>
+                        {{ $value->where('mprapport_id','=',$mprapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute') }}
+                    </center>
+                </th>
+                @endif
+                @endforeach
+
                 <td>
                     <center>
                         <form action="{{ route('mprapports.destroy',$mprapport->id) }}" method="POST">
@@ -191,7 +217,11 @@
         </tbody>
     </table>
 
+
 </div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+
 <script type="text/javascript">
 $("#example1").click(function() {
 
@@ -199,8 +229,6 @@ $("#example1").click(function() {
 
 });
 </script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-
 <style type="text/css">
 .display-none {
 
@@ -209,4 +237,66 @@ $("#example1").click(function() {
 }
 </style>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(even) {
+    $("#export-pdf").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/PDF_MP?ids=" + checkvalue, "_blank");
+        } else {
+            window.open("{{URL::to('/')}}/PDF_MP");
+
+        }
+
+
+    });
+    return false;
+});
+
+$(document).ready(function(even) {
+    $("#export-pdf-mycotoxine").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/PDF_MP_Mycotoxine?ids=" + checkvalue, "_blank");
+        } else {
+            window.open("{{URL::to('/')}}/PDF_MP_Mycotoxine");
+
+        }
+
+
+    });
+    return false;
+});
+
+
+$(document).ready(function(even) {
+    $("#export-excel").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/exportmp?ids=" + checkvalue, "_blank");
+        } else {
+            window.open("{{URL::to('/')}}/exportmp");
+
+        }
+
+
+    });
+    return false;
+});
+</script>
+<script>
+$(document).ready(function() {
+    $('#MP').DataTable();
+});
+</script>
 @endsection

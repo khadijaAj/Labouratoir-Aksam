@@ -18,7 +18,7 @@ class CreateFournisseursTable extends Migration
             $table->string('name');
             $table->string('adresse')->nullable();
             $table->string('tele')->nullable();
-            $table->string('Reference')->unique();
+            $table->string('Reference')->nullable()->unique();
             $table->timestamps();
         });
     }

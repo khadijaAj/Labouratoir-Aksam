@@ -60,7 +60,7 @@ class UserController extends Controller
 
         ]);
         return redirect()->route('users.index')
-                        ->with('success','User created successfully.');
+                        ->with('success','User ajouté avec success.');
 
 
         
@@ -107,11 +107,19 @@ class UserController extends Controller
             'Reference' => 'required',
             'type' => 'required'
         ]);
-  
-        $user->update($request->all());
+        
+       
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'Reference' => $request->Reference,
+            'type' => $request->type
+
+        ]);
   
         return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
+                        ->with('success','User modifié avec success');
     }
 
     /**
@@ -125,6 +133,6 @@ class UserController extends Controller
         $user->delete();
   
         return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+                        ->with('success','User supprimé avec success');
     }
 }

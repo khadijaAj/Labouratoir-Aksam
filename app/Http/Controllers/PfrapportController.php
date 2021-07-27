@@ -13,6 +13,8 @@ use DB;
 use Illuminate\Http\Request;
 use App\Imports\ProduitfiniImport; 
 use PDF;
+
+
 class PfrapportController extends Controller
 {
     public function __construct()
@@ -51,6 +53,101 @@ class PfrapportController extends Controller
         return view('analyses.add_pf')->with($data);
     
     }
+
+      /**
+     * Show the form for creating multiple resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_multiple()
+    {
+        $produits=Produit::all();
+        $nutriments=Nutriment::all();
+        $standards=Standardtype::find(2); // Id 2 is created for Final Product Model
+      
+        $data = [
+            'produits'  => $produits,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+
+        ];
+       
+        return view('analyses.add_pf_m')->with($data);
+    
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_multiple(Request $request)
+    {
+        $input = request()->all();
+        $lines = $request['line'];
+        foreach ($lines as $line => $key) {
+            
+            if(!$request->input($key.'_num') == NULL) {
+                $Pfrapport = new Pfrapport;
+                $Pfrapport->num = $request->input($key.'_num');
+               
+                $Pfrapport->date_fabrication = $request->input($key.'_date_fabrication');
+                $Pfrapport->Identification = $request->input($key.'_identification');
+                $Pfrapport->produit_id = $request->input($key.'_produit_id');
+                $Pfrapport->conformite = $request->input($key.'_conformite');
+                $Pfrapport->MSR = $request->input($key.'_MSR');
+                $Pfrapport->ACE = $request->input($key.'_ACE');
+                $Pfrapport->save();
+                $id = Pfrapport::where('num', $request->input($key.'_num'))->first()->id;
+                foreach($request->input($key.'_nutriment_id', [])  as $r ){
+                  
+                
+                if(!$request->input($key.'_valeur_surbrute_'.$r) == NULL) {
+                    $value = new Value();    
+                    $value->value_surbrute = $request->input($key.'_valeur_surbrute_'.$r);
+                    $value->pfrapport_id = $id;
+                    $value->nutriment_id = $r;
+                    $value->save();   
+                }
+                }
+            }
+          
+            
+ 
+        
+    
+            }
+        
+        return redirect()->route('pfrapports.index')
+                        ->with('success','Rapport Produit fini ajouté avec success.');
+
+    }
+
+    public function PDF(Request $request,$id)
+    {  
+   
+        $id = $request->id;
+        $rapport=Pfrapport::find($id);
+        $date = date('Y-m-d');
+        $nutriments=Nutriment::all();
+        $produits=Produit::all();
+        $standards=Standardtype::find(2);
+        $values = Value::all();
+
+        $data = [
+        'rapport' => $rapport,
+        'standards'=>$standards,
+        'produits'=>$produits,
+        'nutriments'=>$nutriments,  
+        'date'=>$date
+
+
+        ];
+        $pdf = PDF::loadView('PDFtemplate.PDF_PF_UNIQUE', $data);
+        return  $pdf->download('rapport_Pf.pdf'); 
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -110,9 +207,11 @@ class PfrapportController extends Controller
         $value = new Value();    
         $value->value_surbrute = $request->input("valeur_surbrute_".$r);
         $value->pfrapport_id = $id;
-        $value->value_surseche  = $request->input("valeur_surseche_".$r);
         $value->nutriment_id = $r;
-        $value->save(); 
+        if(!$request->input("valeur_surbrute_".$r) == NULL) {
+            $value->save();   
+        }
+       
        }
         
         return redirect()->route('pfrapports.index')
@@ -198,18 +297,30 @@ class PfrapportController extends Controller
    
             
             $value_surbrute = $request->input("valeur_surbrute_".$r);
-            $value_surseche  = $request->input("valeur_surseche_".$r);
             $nutriment_id = $r;
 
-            $data = [
-            'pfrapport_id'=>$id,
-            'nutriment_id'=> $nutriment_id,
-            'value_surbrute' => $value_surbrute,
-            'value_surseche'=> $value_surseche] ;
+        
+          $value = Value::where('pfrapport_id', $id)->where('nutriment_id', $nutriment_id)->first();
             
-            DB::table('values')->where('id', $request->input("value_id_".$r))->update($data);
+          if(!$request->input("valeur_surbrute_".$r) == NULL) {
 
-           }
+            if ($value !== null) {
+                $value->update(['value_surbrute' => $value_surbrute]);
+            } else {
+                $value = Value::create([
+                    'pfrapport_id'=>$id,
+                    'nutriment_id'=> $nutriment_id,
+                    'value_surbrute' => $value_surbrute
+                ]);
+            }
+           
+          }if($request->input("valeur_surbrute_".$r) == 0)
+            Value::where('pfrapport_id', $id)->where('nutriment_id', $nutriment_id)->delete();
+
+          }
+      
+           
+
                  return redirect()->route('pfrapports.index')
                         ->with('success','Rapport Produit fini modifié avec success');
     }
@@ -227,9 +338,15 @@ class PfrapportController extends Controller
         return redirect()->route('pfrapports.index')
                         ->with('success','Rapport Produit fini supprimé avec success');
     }
-    public function export() 
+    public function export(Request $request) 
     {
-        return Excel::download(new ProduitsfinisExport, 'produitsfinis.xlsx');
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+        }else{
+            $ids_array = array();
+        }
+        return Excel::download(new ProduitsfinisExport($ids_array), 'produitsfinis.xlsx');
     }
     public function import(Request $request) 
     {
@@ -243,8 +360,16 @@ class PfrapportController extends Controller
     }
     public function generatePDF(Request $request)
     {
-   
-        $pfrapports=Pfrapport::all();
+        
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+            $pfrapports=Pfrapport::findMany($ids_array);
+        }else{
+            $pfrapports=Pfrapport::all();
+        }
+       
+
         $date = date('Y-m-d');
         $nutriments=Nutriment::all();
         $standards=Standardtype::find(2);
@@ -267,7 +392,14 @@ class PfrapportController extends Controller
     public function generatePDF_mycotoxine(Request $request)
     {
    
-        $pfrapports=Pfrapport::all();
+        $ids = $request->input('ids');
+        if($request->has('ids')){
+            $ids_array = explode(",",$request->get('ids'));
+            $pfrapports=Pfrapport::findMany($ids_array);
+        }else{
+            $pfrapports=Pfrapport::all();
+        }
+       
         $date = date('Y-m-d');
         $nutriments=Nutriment::all();
         $standards=Standardtype::find(2);

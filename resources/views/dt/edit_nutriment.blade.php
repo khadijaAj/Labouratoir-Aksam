@@ -38,31 +38,32 @@
 
 @section('content')
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="alert alert-danger">
+    <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
-   
-<form action="{{ route('Nutriment.update',$nutriment->id) }}" method="POST"> 
+
+<form action="{{ route('Nutriment.update',$nutriment->id) }}" method="POST">
     @csrf
     @method('PUT')
-  
+
 
 
     <div class="form-row">
 
         <div class="form-group col-md-6">
             <label for="nom_nutriment">Nom de nutriment</label>
-            <input type="text" class="form-control" name="name"  value="{{ $nutriment->name }}" >
+            <input type="text" class="form-control" name="name" value="{{ $nutriment->name }}">
         </div>
         <div class="form-group col-md-6">
             <label for="ref_nutriment">Référence</label>
-            <input type="text" class="form-control" name="Reference" value="{{ $nutriment->Reference }}" placeholder="Entrer la référence">
+            <input type="text" class="form-control" name="Reference" value="{{ $nutriment->Reference }}"
+                placeholder="Entrer la référence">
         </div>
 
     </div>
@@ -70,20 +71,23 @@
 
         <div class="form-group col-md-6">
             <label for="cout">Coût</label>
-            <input type="text" class="form-control" name="cout"  value="{{ $nutriment->cout}}" placeholder="Enter le coût ">
+            <input type="text" class="form-control" name="cout" value="{{ $nutriment->cout}}"
+                placeholder="Enter le coût ">
         </div>
         <div class="form-group col-md-6">
             <label for="Incertitude">Incertitude</label>
-            <input type="text" class="form-control" name="incertitude" value="{{ $nutriment->incertitude }}"  placeholder="Entrer l'incertitude">
+            <input type="text" class="form-control" name="incertitude" value="{{ $nutriment->incertitude }}"
+                placeholder="Entrer l'incertitude">
         </div>
         <div class="form-group col-md-6">
             <label for="cible">Cible</label>
-            <input type="text" class="form-control" name="cible" value="{{ $nutriment->cible }}" placeholder="Entrer la cible">
+            <input type="text" class="form-control" name="cible" value="{{ $nutriment->cible }}"
+                placeholder="Entrer la cible">
         </div>
 
 
     </div>
-    
+
     <br>
 
     <div class="card-action">

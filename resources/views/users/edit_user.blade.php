@@ -15,6 +15,12 @@
         <p>Journalisation</p>
     </a>
 </li>
+<li class="nav-item ">
+    <a href="/standards">
+        <i class="la la-key"></i>
+        <p>Standards Rapports</p>
+    </a>
+</li>
 @endsection
 
 @section('Page_infos')

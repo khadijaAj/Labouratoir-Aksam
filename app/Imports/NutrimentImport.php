@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Nutriment;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class NutrimentImport implements ToModel
+class NutrimentImport implements ToModel  , WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,7 +16,7 @@ class NutrimentImport implements ToModel
     public function model(array $row)
     {
         return new Nutriment([
-            'name'  => $row[0], 'Reference'  => $row[1],'cible'  => $row[2], 'incertitude'  => $row[3], 'cout'  => $row[4]
+            'name'  => $row['nom'], 'Reference'  => $row['reference'],'cible'  => $row['cible'], 'incertitude'  => $row['incertitude'], 'cout'  => $row['cout']
 
 
         ]);

@@ -15,9 +15,9 @@
         <p>Journalisation</p>
     </a>
 </li>
-<li class="nav-item ">
+<li class="nav-item">
     <a href="/standards">
-        <i class="la la-save"></i>
+        <i class="la la-key"></i>
         <p>Standards Rapports</p>
     </a>
 </li>

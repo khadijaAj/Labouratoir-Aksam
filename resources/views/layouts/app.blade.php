@@ -11,11 +11,9 @@
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}" crossorigin="anonymous">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
-<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -168,58 +166,14 @@ function myFunction() {
 }
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </script>
-<script src="{{ asset('js/core/jquery.3.2.1.min.js')}}"></script>
-<script src="{{ asset('js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
 <script src="{{ asset('js/core/popper.min.js')}}"></script>
 <script src="{{ asset('js/core/bootstrap.min.js')}}"></script>
 <script src="{{ asset('js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 <script src="{{ asset('js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')}}"></script>
-<script src="{{ asset('js/plugin/chart-circle/circles.min.js')}}"></script>
 <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
 <script src="{{ asset('js/file.min.js')}}"></script>
-<script type="text/javascript">
-   var typingTimer;                //timer identifier
-var doneTypingInterval = 500;  //time in ms, 5 second for example
-var $input = $('.typeD');
 
-//on keyup, start the countdown
-$input.on('keyup', function () {
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(doneTyping, doneTypingInterval);
-});
-
-//on keydown, clear the countdown 
-$input.on('keydown', function () {
-  clearTimeout(typingTimer);
-});
-
-//user is "finished typing," do something
-function doneTyping () {
- var counting = 0;
- $(".typeD").each(function(){
-    var prix = $(this).attr('data-valeur');
-    var id_input = $(this).attr('data-id');
-    var count_status_seche = $(".data-analyse-id-seche-"+id_input).attr('data-count');
-    var count_status_brut = $(".data-analyse-id-brut-"+id_input).attr('data-count');
-    var value_inpt_sech = $(".data-analyse-id-seche-"+id_input).val();
-    var value_inpt_brut = $(".data-analyse-id-brut-"+id_input).val();
-    if(count_status_brut === "false" ){
-        if(value_inpt_brut !== "" || value_inpt_sech !== ""){         
-            counting += Number(prix);           
-            $(".data-analyse-id-brut-"+id_input).attr('data-count','true');
-            
-        }
-    }
-    
-    
- });
- $("#cout_total").val(counting);
- $(".typeD").attr('data-count',"false");
- 
- }
-</script>
 
 </html>

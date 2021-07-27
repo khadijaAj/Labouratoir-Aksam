@@ -33,8 +33,11 @@
 @endsection
 
 @section('Page_infos')
-<div class="card-title"><b><i class="la la-plus"></i>
-        Formulaire</b></div>
+<h5 style="float:right;color:black;font-size:10px;padding-left: 20px;"  > Rapport Id : {{ $crapport->id}}  </h5> 
+
+<div class="card-title" style="color:#F19818;"><b><i class="la la-plus"></i> Produit : </b>{{ $crapport->produit->name}} 
+ <button style="float:right;background-color:#11B247;color:white;" class="btn ">Imprimer le rapport </button></div>
+       
 @endsection
 
 @section('content')
@@ -47,16 +50,6 @@
         </div>
 
         <div class="form-group col-md-6">
-            <label for="nom_produit">Nom de produit</label>
-            <select class="custom-select mr-sm-2" name="produit_id" disabled>
-                <option selected>{{ $crapport->produit->name}}</option>
-            </select>
-        </div>
-
-
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
             <label for="nom_produit">Nom du client</label>
             <select class="custom-select mr-sm-2" name="client_id" disabled>
             <option selected>{{ $crapport->client->name}}</option>
@@ -64,6 +57,11 @@
 
             </select>
         </div>
+
+
+    </div>
+    <div class="form-row">
+    
         <div class="form-group col-md-6">
             <label for="nom_produit">Nom de Commercial</label>
             <select class="custom-select mr-sm-2" name="commercial_id" disabled>
@@ -72,30 +70,30 @@
 
             </select>
         </div>
-
+        <div class="form-group col-md-6">
+            <label for="date_reception"> Date de reception </label>
+            <input type="date" class="form-control" value="{{ $crapport->date_reception}}" name="date_reception" disabled>
+        </div>
     </div>
 
     <div class="form-row">
 
 
-        <div class="form-group col-md-6">
-            <label for="date_reception"> Date de reception </label>
-            <input type="date" class="form-control" value="{{ $crapport->date_reception}}" name="date_reception" disabled>
-        </div>
+        
         <div class="form-group col-md-6">
             <label for="date_analyse"> Date d'analyse</label>
             <input type="date" class="form-control" name="date_analyse" value="{{ $crapport->date_analyse}}" disabled>
         </div>
 
-
-        <div class="form-group col-md-6">
-            <label for="commentaire">Commentaire</label>
-            <input type="text" class="form-control" name="commentaire" value="{{ $crapport->Commentaire}}" placeholder="Entrer le commentaire" disabled>
-        </div>
         <div class="form-group col-md-6">
             <label for="commentaire">Cout</label>
             <input type="text" class="form-control" name="Cout" id="cout_total" value="{{ $crapport->Cout}}"  placeholder="le cout total" disabled >
         </div>
+        <div class="form-group col-md-6">
+            <label for="commentaire">Commentaire</label>
+            <input type="text" class="form-control" name="commentaire" value="{{ $crapport->Commentaire}}" placeholder="Entrer le commentaire" disabled>
+        </div>
+       
 
     </div>
     <br>
