@@ -23,7 +23,7 @@ class NavireController extends Controller
      */
     public function index()
     {
-        $navires = Navire::all();
+        $navires = Navire::paginate(30);
   
         return view('partenaires.navires',compact('navires'));
             
@@ -49,7 +49,7 @@ class NavireController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             
         ]);
   
@@ -103,7 +103,7 @@ class NavireController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
           
         ]);
   

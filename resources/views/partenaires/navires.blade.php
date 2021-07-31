@@ -168,6 +168,10 @@
 
         </tbody>
     </table>
+    {{-- Pagination --}}
+        <div class="d-flex justify-content-center">
+            {!! $navires->links() !!}
+        </div>
 
 </div>
 

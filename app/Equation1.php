@@ -3,11 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
-class Equation extends Model
+class Equation1 extends Model
 {
-    protected $table = 'equations';
+    protected $table = 'equations1';
 
        /**
      * The attributes that are mass assignable.

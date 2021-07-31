@@ -21,10 +21,12 @@ class CreateValuesTable extends Migration
             $table->integer('crapport_id')->nullable()->unsigned();
             $table->integer('pfrapport_id')->nullable()->unsigned();
             $table->integer('mprapport_id')->nullable()->unsigned();
+            $table->integer('enrapport_id')->nullable()->unsigned();
 
             $table->foreign('crapport_id')->references('id')->nullable()->on('crapports')->onDelete('cascade');
             $table->foreign('pfrapport_id')->references('id')->nullable()->on('pfrapports')->onDelete('cascade');
             $table->foreign('mprapport_id')->references('id')->nullable()->on('mprapports')->onDelete('cascade');
+            $table->foreign('enrapport_id')->references('id')->nullable()->on('enrapports')->onDelete('cascade');
 
             $table->timestamps();
         });

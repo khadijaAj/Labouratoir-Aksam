@@ -14,6 +14,8 @@ class StandardtypeController extends Controller
     public function __construct()
 {
     $this->middleware('auth');
+    $this->middleware('admin');
+
 }
     /**
      * Display a listing of the resource.
@@ -60,8 +62,9 @@ class StandardtypeController extends Controller
         $methode = $request->methode;
         $unite = $request->unite;
         $equation = $request->equation;
-
-        DB::insert('insert into mesures (methode,equation,unite,standardtype_id,nutriment_id) values(?,?,?,?,?)',[$methode,$equation,$unite,$id,$nutriment_id]);
+        $equation1 = $request->equation1;
+        $xml_equivalent = $request->xml_equivalent;
+        DB::insert('insert into mesures (methode,equation,equation1,xml_equivalent,unite,standardtype_id,nutriment_id) values(?,?,?,?,?,?,?)',[$methode,$equation,$unite,$id,$nutriment_id]);
 
         return redirect()->route('Analysestype.index')
         ->with('success','Opération faite avec success.');

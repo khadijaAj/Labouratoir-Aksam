@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Ajout Produits finis - Aksam Labs')
+@section('title', 'Modifier Produits finis - Aksam Labs')
 
 @section('links')
 <li class="nav-item">
@@ -32,7 +32,7 @@
 @endsection
 
 @section('Page_infos')
-<div class="card-title"><b><i class="la la-plus"></i> Insertion Multiple </b></div>
+<div class="card-title"><b><i class="la la-plus"></i> Modification Multiple </b></div>
 @endsection
 
 @section('content')
@@ -49,7 +49,7 @@
 </div>
 @endif
 
-<form action="{{ route('pfrapports.store_multiple') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('pfrapports.update_multiple') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="table-responsive">
@@ -93,67 +93,77 @@
                 </tr>
             </thead>
             <tbody>
+            @php
+            $i = 1
+            @endphp
+            @foreach ($pfrapports as $pfrapport)
+                <tr class="rows" data-id="{{$i}}">
 
-                <tr class="rows" data-id="1">
+                    <td>
+                        <input type="hidden" name="line[]" value="L{{$i}}">
+                        <input type="hidden" value="{{ $pfrapport->id }}" name="L{{$i}}_id">
 
-                    <td>
-                        <input type="hidden" name="line[]" value="L1">
-                        <input type="date" value="{{ old('date_reception') }}" name="L1_date_fabrication">
+                        <input type="date" value="{{ $pfrapport->date_fabrication }}" name="L{{$i}}_date_fabrication">
                     </td>
                     <td>
-                    <input class="tags_products" name="L1_produit_id"/>
+                    <input class="tags_products" value='{{ $pfrapport->produit->name }}' name="L{{$i}}_produit_id">
 
                     </td>
                     <td>
-                        <input type="text" autocomplete="off" name="L1_num" value="{{ old('num') }}">
+                        <input type="text" name="L{{$i}}_num" value="{{ $pfrapport->Num }}">
                     </td>
                     <td>
-                        <input type="text" autocomplete="off" name="L1_identification" value="{{ old('identification') }}">
+                        <input type="text" name="L{{$i}}_identification" value="{{ $pfrapport->Identification }}">
                     </td>
+                    @inject('value','App\Value') {{-- inject before foreach --}}
+                    @inject('mesure','App\Mesure') {{-- inject before foreach --}}
                     @foreach($standards->nutriments as $nutriment)
 
 
-                    <td>                    <input autocomplete="off" name="L1_nutriment_id[]" value="{{ $nutriment->id }}" hidden />
+                    <td>                    <input name="L{{$i}}_nutriment_id[]" value="{{ $nutriment->id }}" hidden />
 
-                                    <input autocomplete="off"
-                                            data-id='{{ $nutriment->id }}'  type="text"
+                                    <input
+                                            data-id='{{ $nutriment->id }}'  type="text" value="{{ $value->where('pfrapport_id','=',$pfrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute') }}"
                                             
-                                            name="L1_valeur_surbrute_{{ $nutriment->id }}" />
+                                            name="L{{$i}}_valeur_surbrute_{{ $nutriment->id }}" />
                                 </td>
                     </td>
                     @endforeach
                     <td>
-                        <input type="text" autocomplete="off" name="L1_ACE" value="{{ old('ACE') }}">
+                        <input type="text" name="L{{$i}}_ACE" value="{{ $pfrapport->ACE }}">
                     </td>
                     <td>
-                        <input type="text" autocomplete="off" name="L1_MSR" value="{{ old('MSR') }}">
+                        <input type="text" name="L{{$i}}_MSR" value="{{ $pfrapport->MSR }}">
                     </td>
                     <td>
-                        <select name="L1_commentaire">
-                            <option value="interne">Interne</option>
-                            <option value="externe">Externe</option>
+                        <select name="L{{$i}}_commentaire">
+                            <option selected value="{{ $pfrapport->Commentaire }}">{{ $pfrapport->Commentaire }}</option>
+                            <option value="intern">Interne</option>
+                            <option value="extern">Externe</option>
                         </select>
                     </td>
                     <td>
-                        <select name="L1_conformite">
+                        <select name="L{{$i}}_conformite">
+                            <option selected value="{{ $pfrapport->conformite }}">{{ $pfrapport->conformite }}</option>
                             <option value="Conforme">Conforme</option>
                             <option value="Non Conforme">Non Conforme</option>
                         </select>
                     </td>
                 </tr>
-
-
+                @php
+                $i += 1
+                @endphp
+@endforeach
             </tbody>
         </table>
         <div class="card-action">
-        <center><button type="button" id="addLines" class="btn btn-secondary" style="margin-right: 10px">Ajouter un ligne</button><button type="submit" class="btn btn-success">Enregistrer</button></center>
+        <center><button type="submit" class="btn btn-success">Enregistrer</button></center>
     </div>
     <br>
 </form>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 <script>
 $( function() {
     var availableTags = [
@@ -164,25 +174,14 @@ $( function() {
     $( ".tags_products" ).autocomplete({
       source: availableTags
     });
-} );
-		$("#addLines").click(function(e){
-            var last_tr = $('#tableAnalyse tbody tr:last-child').html();
-            var last_id = $('#tableAnalyse tbody tr:last-child').attr("data-id");
-            var next_id = parseInt(last_id) + 1;
-            var new_line = last_tr.split("L"+last_id).join("L"+next_id);
-            $('#tableAnalyse tbody').append('<tr class="rows" data-id="'+next_id+'">'+new_line+'</tr>');
-            var availableTags = [
-        @foreach( $produits as $produit)
-                             "<?=$produit['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_products" ).autocomplete({
-      source: availableTags
-    });
-        });
 
-   
  
+
+  
+  } );
+
+ 
+
 $(document).on("keydown","input",function (e) {
 
 var cellindex = $(this).parents('td').index();
@@ -195,5 +194,5 @@ $(e.target).closest('tr').prevAll('tr').first().find('td').eq(cellindex).find(':
 }
 
 });
-	</script>
+</script>
 @endsection

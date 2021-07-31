@@ -24,7 +24,7 @@ class FournisseurController extends Controller
      */
     public function index()
     {
-        $fournisseurs = Fournisseur::all();
+        $fournisseurs = Fournisseur::paginate(30);
   
         return view('partenaires.fournisseurs',compact('fournisseurs'));
     }
@@ -50,7 +50,7 @@ class FournisseurController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'adresse' => 'nullable',
             'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
             
@@ -105,7 +105,7 @@ class FournisseurController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'adresse' => 'nullable',
             'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
         ]);

@@ -25,8 +25,7 @@ class CommercialController extends Controller
      */
     public function index()
     {
-        $commerciaux = Commercial::all();
-  
+        $commerciaux = Commercial::paginate(30);
         return view('partenaires.commerciaux',compact('commerciaux'));
     }
 
@@ -51,7 +50,7 @@ class CommercialController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'adresse' => 'nullable',
             'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
             
@@ -102,7 +101,7 @@ class CommercialController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'adresse' => 'nullable',
             'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
         ]);

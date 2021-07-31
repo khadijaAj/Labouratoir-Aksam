@@ -28,7 +28,7 @@ class PfrapportController extends Controller
      */
     public function index()
     {
-        $pfrapports = Pfrapport::all();
+        $pfrapports = Pfrapport::orderBy('created_at','DESC')->paginate(30);
         return view('analyses.produitfini',compact('pfrapports'));
     }
 
@@ -93,8 +93,11 @@ class PfrapportController extends Controller
                
                 $Pfrapport->date_fabrication = $request->input($key.'_date_fabrication');
                 $Pfrapport->Identification = $request->input($key.'_identification');
-                $Pfrapport->produit_id = $request->input($key.'_produit_id');
+                $id_produit = Produit::where('name','=',$request->input($key.'_produit_id'))->first()->id;
+
+                $Pfrapport->produit_id =$id_produit ;
                 $Pfrapport->conformite = $request->input($key.'_conformite');
+                $Pfrapport->Commentaire = $request->input($key.'_commentaire');
                 $Pfrapport->MSR = $request->input($key.'_MSR');
                 $Pfrapport->ACE = $request->input($key.'_ACE');
                 $Pfrapport->save();
@@ -122,6 +125,105 @@ class PfrapportController extends Controller
                         ->with('success','Rapport Produit fini ajouté avec success.');
 
     }
+
+
+    
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_multiple(Request $request)
+    {
+        
+        $ids_array = explode(",",$request->get('ids'));
+        $pfrapports=Pfrapport::findMany($ids_array);
+        $produits=Produit::all();
+        $nutriments=Nutriment::all();
+    
+        $standards=Standardtype::find(2); // Id1 is created for Raw Material Model
+      
+        
+
+        $data = [
+            'pfrapports' => $pfrapports ,
+            'produits'  => $produits,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+            
+          
+
+        ];
+
+        return view('analyses.edit_pf_m')->with($data);
+            
+            
+ 
+        
+    }
+/**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update_multiple(Request $request)
+    {
+        $input = request()->all();
+        $lines = $request['line'];
+        foreach ($lines as $line => $key) {
+            $id=$request->input($key.'_id');
+           
+            $Pfrapport = Pfrapport::find($id);
+                $Pfrapport->num = $request->input($key.'_num');
+               
+                $Pfrapport->date_fabrication = $request->input($key.'_date_fabrication');
+                $Pfrapport->Identification = $request->input($key.'_identification');
+                $id_produit = Produit::where('name','=',$request->input($key.'_produit_id'))->first()->id;
+
+                $Pfrapport->produit_id =$id_produit ;                $Pfrapport->conformite = $request->input($key.'_conformite');
+                $Pfrapport->Commentaire = $request->input($key.'_commentaire');
+                $Pfrapport->MSR = $request->input($key.'_MSR');
+                $Pfrapport->ACE = $request->input($key.'_ACE');
+                $Pfrapport->update();
+                foreach($request->input($key.'_nutriment_id', [])  as $r ){
+                    
+                    if(!$request->input($key.'_valeur_surbrute_'.$r) == NULL) {
+                        $value = Value::where('pfrapport_id', $id)->where('nutriment_id', $r)->first();
+
+                        if ($value !== null) {
+                            $value->update(['value_surbrute' => $request->input($key.'_valeur_surbrute_'.$r)]);
+                        }
+                         else {
+                            $value = Value::create([
+                                'pfrapport_id'=>$id,
+                                'nutriment_id'=> $r,
+                                'value_surbrute' => $request->input($key.'_valeur_surbrute_'.$r)]);
+                           
+                        }
+                        
+                    }
+                    if($request->input($key.'_valeur_surbrute_'.$r) == 0){
+                        Value::where('pfrapport_id', $id)->where('nutriment_id', $r)->delete();
+                    }
+
+                    
+            }
+            }
+          
+            
+ 
+        
+    
+            
+        
+        return redirect()->route('pfrapports.index')
+                        ->with('success','Rapport Produit fini ajouté avec success.');
+
+    }
+
+    
 
     public function PDF(Request $request,$id)
     {  
@@ -161,7 +263,7 @@ class PfrapportController extends Controller
         $request->validate([
             'num' => 'required',
             'produit_id' => 'required',
-            'identification' => 'required',
+            'identification' => 'nullable',
             'conformite' => 'nullable',
             'path'  => 'nullable|mimes:png,doc,docx,pdf,txt|max:2048',
             'date_fabrication' => 'nullable',
@@ -271,10 +373,10 @@ class PfrapportController extends Controller
         $request->validate([
             'num' => 'required',
             'produit_id' => 'required',
-            'identification' => 'required',
-            'conformite' => 'required',
+            'identification' => 'nullable',
+            'conformite' => 'nullable',
             'path'  => 'nullable|mimes:png,doc,docx,pdf,txt|max:2048',
-            'date_fabrication' => 'required',
+            'date_fabrication' => 'nullable',
             'commentaire' => 'nullable',
            
         ]);
@@ -417,4 +519,6 @@ class PfrapportController extends Controller
 
         return  $pdf->download('rapport_mp.pdf'); 
     }
+
+  
 }

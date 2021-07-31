@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Auth;
 use App\Http\Controllers\ReadXmlController;
+use App\Http\Middleware\AdminMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,22 +50,30 @@ Route::group(['middleware' => 'auth'], function () {
 Route::post('/chart', 'ChartController@index' )->name('charts.index');
 
 /* Administration*/
-Route::get('/users','UserController@index' )->name('users.index');
+Route::get('/users','UserController@index' )->name('users.index')->middleware(AdminMiddleware::class);
 
 
 Route::get('/add_mp_m', 'MprapportController@create_multiple' );
 Route::post('/add_mp_m', 'MprapportController@store_multiple' )->name('mprapports.store_multiple');
+Route::get('/edit_mp_m', 'MprapportController@edit_multiple' )->name('mprapports.edit_multiple');
+Route::post('/update_mp_m', 'MprapportController@update_multiple' )->name('mprapports.update_multiple');
 
 
 Route::get('/add_pf_m', 'PfrapportController@create_multiple' );
 Route::post('/add_pf_m', 'PfrapportController@store_multiple' )->name('pfrapports.store_multiple');
+Route::get('/edit_pf_m', 'PfrapportController@edit_multiple' )->name('pfrapports.edit_multiple');
+Route::post('/update_pf_m', 'PfrapportController@update_multiple' )->name('pfrapports.update_multiple');
+
 
 Route::get('/add_ra_m', 'CrapportController@create_multiple' );
 Route::post('/add_ra_m', 'CrapportController@store_multiple' )->name('crapports.store_multiple');
+Route::get('/edit_ra_m', 'CrapportController@edit_multiple' )->name('crapports.edit_multiple');
+Route::post('/update_ra_m', 'CrapportController@update_multiple' )->name('crapports.update_multiple');
 
 
 Route::get('/add_en_m', 'EnrapportController@create_multiple' );
-Route::post('/add_en_m', 'ENrapportController@store_multiple' )->name('Enrapports.store_multiple');
+Route::get('/edit_en_m', 'EnrapportController@edit_multiple' )->name('enrapports.edit');
+Route::post('/update_en_m', 'EnrapportController@update_multiple' )->name('enrapports.update_multiple');
 
 /* Dashboard*/
 Route::get('/home', 'HomeController@index' )->name('home.index');
@@ -103,6 +112,7 @@ Route::get('exportnt', 'NutrimentController@export')->name('exportnt');
 Route::get('/exportpf', 'PfrapportController@export')->name('exportpf');
 Route::get('/exportmp', 'MprapportController@export')->name('exportmp');
 Route::get('/exportrc', 'CrapportController@export')->name('exportrc');
+Route::get('/exporten', 'EnrapportController@export')->name('exporten');
 Route::get('exportp', 'ProduitController@export')->name('exportp');
 Route::get('exporto', 'OrigineController@export')->name('exporto');
 Route::get('exportct', 'CategorieController@export')->name('exportct');
@@ -123,6 +133,10 @@ Route::get('/PDF_PF_UNIQUE/{id}', 'PfrapportController@PDF')->name('pfrapports.p
 Route::get('/PDF_MP_Mycotoxine', 'MprapportController@generatePDF_mycotoxine');
 Route::get('/PDF_PF', 'PfrapportController@generatePDF');
 Route::get('/PDF_PF_Mycotoxine', 'PfrapportController@generatePDF_mycotoxine');
+Route::get('/PDF_EN', 'EnrapportController@generatePDF');
+Route::get('/PDF_EN_RATION', 'EnrapportController@generate_rations');
+Route::get('/PDF_EN_FOURRAGE', 'EnrapportController@generate_fourrages');
+Route::get('/PDF_EN_TRITICAL', 'EnrapportController@generate_tritical');
 
 /* Actions : IMPORT EXCEL */
 Route::post('importExcelNavire', 'NavireController@import');
@@ -150,3 +164,6 @@ Route::post('standardtype/delete', 'StandardtypeController@destroy')->name('Stan
 Route::match(["get", "post"], "read-xml", 'XMLController@index')->name('xml-upload');
 
 Route::get('autocomplete', 'MprapportController@search');
+
+
+

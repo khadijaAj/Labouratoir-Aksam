@@ -58,11 +58,19 @@
         </div>
     <div class="form-group">
         <label for="methode">Methode</label>
-        <input type="text" class="form-control" name="methode" value="{{ old('methode') }}" placeholder="Enter l'Email ">
+        <input type="text" class="form-control" name="methode" value="{{ old('methode') }}" placeholder="Enter la méthode ">
     </div>
     <div class="form-group">
-        <label for="equation">Equation</label>
+        <label for="equation">Equation ( Type = CORN SILAGE )</label>
         <input type="text" class="form-control" name="equation" placeholder="Entrer l'equation">
+    </div>
+    <div class="form-group">
+        <label for="equation1">Equation ( Type = SMALL GRAIN SILAGE )</label>
+        <input type="text" class="form-control" name="equation1" placeholder="Entrer l'equation">
+    </div>
+    <div class="form-group">
+        <label for="xml_equivalent">Element Equivalent ( XML ) </label>
+        <input type="text" class="form-control" name="xml_equivalent" placeholder="Entrer l'element equivalent ">
     </div>
     <div class="form-group">
         <label for="unite">Unite</label>

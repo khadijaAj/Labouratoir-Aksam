@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Ajout Rapports clients - Aksam Labs')
+@section('title', 'Modifier Rapport Client - Aksam Labs')
 
 @section('links')
 <li class="nav-item">
@@ -62,7 +62,7 @@ div.inline div:nth-child(n+2) {
     padding-left: 10px;
 }
 </style>
-<form action="{{ route('crapports.store_multiple') }}" method="POST">
+<form action="{{ route('crapports.update_multiple') }}" method="POST">
     @csrf
 
     <div class="table-responsive">
@@ -104,95 +104,121 @@ div.inline div:nth-child(n+2) {
                 </tr>
             </thead>
             <tbody>
-
-                <tr class="rows" data-id="1">
-
-                    <td>
-                        <input type="hidden" name="line[]" value="L1">
-                        <input type="text" autocomplete="off" name="L1_num" value="{{ old('num') }}">
-                    </td>
-                    <td>
-                    <input class="tags_clients" name="L1_client_id"/>
-                 
-                    </td>
-                    <td>
-                    <input class="tags_commerciaux" name="L1_commercial_id" />
-                       
-                    </td>
-                    <td><input type="date" autocomplete="off" value="{{ old('date_reception') }}" name="L1_date_reception">
-                    </td>
-                    <td><input type="date" value="{{ old('date_analyse') }}" name="L1_date_analyse">
-                    </td>
+                @php
+                $i = 1
+                @endphp
+                @inject('value','App\Value') {{-- inject before foreach --}}
+                @inject('mesure','App\Mesure') {{-- inject before foreach --}}
+                @foreach ($crapports as $crapport)
+                <tr class="rows" data-id="{{ $i }}">
 
                     <td>
-                    <input class="tags_products" name="L1_produit_id"/>
+                        <input type="hidden" name="line[]" value="L{{ $i }}">
+                        <input type="hidden" value="{{ $crapport->id }}" name="L{{$i}}_id">
+                        <input type="text" name="L{{ $i }}_num" value="{{ $crapport->Num }}">
                     </td>
-                    <td><input type="text" CLASS="L1_cout_total" name="L1_cout">
+                    @if(!is_null($crapport->client)) 
+                    <td>
+                    <input class="tags_clients" value="{{ $crapport->client->name }}"  name="L{{$i}}_client_id">
+
+                    </td>
+                    @else 
+                    <td>
+                    <input class="tags_clients"  name="L{{$i}}_client_id">
+
+                    </td>
+                    @endif
+
+                    @if(!is_null($crapport->commercial)) 
+                    <td>
+                    <input class="tags_commerciaux" value="{{ $crapport->commercial->name }}"  name="L{{$i}}_commercial_id">
+
+                    </td>
+                    @else
+                    <td>
+                    <input class="tags_commerciaux"  name="L{{$i}}_commercial_id">
+
+                    </td>
+                    @endif
+                    <td><input type="date" value="{{ $crapport->date_reception }}" name="L{{ $i }}_date_reception">
+                    </td>
+                    <td><input type="date" value="{{ $crapport->date_analyse }}" name="L{{ $i }}_date_analyse">
+                    </td>
+
+                    <td>
+                    <input class="tags_products" value='{{ $crapport->produit->name }}' name="L{{$i}}_produit_id">
+
+                    </td>
+                    <td><input type="text" CLASS="L{{ $i }}_cout_total"  value="{{ $crapport->Cout }}" name="L{{ $i }}_cout">
                     </td>
                     @foreach($standards->nutriments as $nutriment)
-                            @if($nutriment->name == 'CB' || $nutriment->name == 'Pb' )
-                            <td>
+
+                    @if($nutriment->name == 'CB' || $nutriment->name == 'Pb' )
+
+                    <td>
 
                         <div class="inline">
-                            <input name="L1_nutriment_id[]" value="{{ $nutriment->id }}" hidden />
+                            <input name="L{{ $i }}_nutriment_id[]" value="{{ $nutriment->id }}" hidden />
 
                             <div>
-                                <input data-line="L1_"
-                                    class='typeD L1_typeD L1_data-analyse-id-brut-{{ $nutriment->id }}'
+                                <input data-line="L{{ $i }}_"
+                                    class='typeD L{{ $i }}_typeD L{{ $i }}_data-analyse-id-brut-{{ $nutriment->id }}'
                                     data-count="false" data-valeur="{{ $nutriment->cout }}"
-                                    data-id='{{ $nutriment->id }}' type="text"
-                                    name="L1_valeur_surbrute_{{ $nutriment->id }}" placeholder="Valeur sur brute" />
+                                    data-id='{{ $nutriment->id }}' type="text" value ="{{ $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute') }}"
+                                    name="L{{ $i }}_valeur_surbrute_{{ $nutriment->id }}" placeholder="Valeur sur brute" />
                             </div>
                             <div>
-                                <input data-line="L1_"
-                                    class='typeD L1_typeD L1_data-analyse-id-seche-{{ $nutriment->id }}'
+                                <input data-line="L{{ $i }}_"
+                                    class='typeD L{{ $i }}_typeD L{{ $i }}_data-analyse-id-seche-{{ $nutriment->id }}'
                                     data-count="false" type="text" data-valeur="{{ $nutriment->cout }}"
-                                    data-id='{{ $nutriment->id }}' type="text"
-                                    name="L1_valeur_surseche_{{ $nutriment->id }}" placeholder="Valeur sur seche" />
+                                    data-id='{{ $nutriment->id }}' type="text" value="{{ $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche') }}"
+                                    name="L{{ $i }}_valeur_surseche_{{ $nutriment->id }}" placeholder="Valeur sur seche" />
                             </div>
                         </div>
 
 
 
                     </td>
-                    @else <td>
+                    @else
+                    <td>
 
-<div class="inline">
-    <input name="L1_nutriment_id[]" value="{{ $nutriment->id }}" hidden />
+                    <div class="inline">
+                        <input name="L{{ $i }}_nutriment_id[]" value="{{ $nutriment->id }}" hidden />
 
-    <div>
-        <input data-line="L1_"
-            class='typeD L1_typeD L1_data-analyse-id-brut-{{ $nutriment->id }}'
-            data-count="false" data-valeur="{{ $nutriment->cout }}"
-            data-id='{{ $nutriment->id }}' type="hidden"
-            name="L1_valeur_surbrute_{{ $nutriment->id }}" placeholder="Valeur sur brute" />
-    </div>
-    <div>
-        <input data-line="L1_"
-            class='typeD L1_typeD L1_data-analyse-id-seche-{{ $nutriment->id }}'
-            data-count="false" type="text" data-valeur="{{ $nutriment->cout }}"
-            data-id='{{ $nutriment->id }}' type="text"
-            name="L1_valeur_surseche_{{ $nutriment->id }}" placeholder="Valeur sur seche" />
-    </div>
-</div>
+                        <div>
+                            <input data-line="L{{ $i }}_"
+                                class='typeD L{{ $i }}_typeD L{{ $i }}_data-analyse-id-brut-{{ $nutriment->id }}'
+                                data-count="false" data-valeur="{{ $nutriment->cout }}"
+                                data-id='{{ $nutriment->id }}' type="hidden" value ="{{ $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute') }}"
+                                name="L{{ $i }}_valeur_surbrute_{{ $nutriment->id }}" placeholder="Valeur sur brute" />
+                        </div>
+                        <div>
+                            <input data-line="L{{ $i }}_"
+                                class='typeD L{{ $i }}_typeD L{{ $i }}_data-analyse-id-seche-{{ $nutriment->id }}'
+                                data-count="false" type="text" data-valeur="{{ $nutriment->cout }}"
+                                data-id='{{ $nutriment->id }}' type="text" value="{{ $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche') }}"
+                                name="L{{ $i }}_valeur_surseche_{{ $nutriment->id }}" placeholder="Valeur sur seche" />
+                        </div>
+                    </div>
 
 
 
-</td>
-                            @endif
-                   
+                    </td>
+                    @endif
 
                     @endforeach
 
 
                 </tr>
-
+                @php
+                $i += 1
+                @endphp
+                @endforeach
 
             </tbody>
         </table>
         <div class="card-action">
-            <center><button type="button" id="addLines" class="btn btn-secondary" style="margin-right: 10px">Ajouter un
-                    ligne </button><button type="submit" class="btn btn-success">Enregistrer</button></center>
+            <center><button type="submit" class="btn btn-success">Enregistrer</button></center>
         </div>
         <br>
 </form>
@@ -201,6 +227,7 @@ div.inline div:nth-child(n+2) {
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script>
+
 $( function() {
     var availableTags = [
         @foreach( $produits as $produit)
@@ -230,40 +257,6 @@ $( function() {
     });
 } );
 
-$("#addLines").click(function(e) {
-    var last_tr = $('#tableAnalyse tbody tr:last-child').html();
-    var last_id = $('#tableAnalyse tbody tr:last-child').attr("data-id");
-    var next_id = parseInt(last_id) + 1;
-    var new_line = last_tr.split("L" + last_id).join("L" + next_id);
-    $('#tableAnalyse tbody').append('<tr class="rows" data-id="' + next_id + '">' + new_line + '</tr>');
-    var availableTags = [
-        @foreach( $produits as $produit)
-                             "<?=$produit['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_products" ).autocomplete({
-      source: availableTags
-    });
-    var availableTags1 = [
-        @foreach( $commerciaux as $commercial)
-                             "<?=$commercial['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_commerciaux" ).autocomplete({
-      source: availableTags1
-    });
-
-    var availableTags2 = [
-        @foreach( $clients as $client)
-                             "<?=$client['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_clients" ).autocomplete({
-      source: availableTags2
-    });
-});
-
-
 
 $(document).on("keydown","input",function (e) {
 
@@ -277,6 +270,8 @@ $(e.target).closest('tr').prevAll('tr').first().find('td').eq(cellindex).find(':
 }
 
 });
+
+
 
 // Counting ' Cout '
 $(document).ready(function(){

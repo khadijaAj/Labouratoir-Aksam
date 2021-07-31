@@ -44,13 +44,22 @@ class RapportsclientsExport implements FromArray, WithHeadings
             );
             $arraysA=[];
             foreach($standards->nutriments as $nutriment){
-               
+
                 foreach($values as $value){
-                    $record1 = [];
-                    $record2 = [];
-                    $record1 = $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute');
-                    $record2 = $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche');
+                    if($nutriment->name=="Pb" || $nutriment->name=="CB" ){
+                        $record1 = [];
+                        $record2 = [];
+                        $record1 = $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute');
+                        $record2 = $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche');
+                    }else{
+                        $record2 = [];
+                        $record1 = NULL;
+
+                        $record2 = $value->where('crapport_id','=',$crapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche');
                     }
+                   
+                    }
+
                     $arraysA[] = $record1;
                     $arraysA[] = $record2;
 
@@ -72,11 +81,18 @@ class RapportsclientsExport implements FromArray, WithHeadings
             $record1 = [];
             $var_1 = "_SB";
             $var_2 = "_SS";
-            $record1 = $nutriment->name." ".$var_1." ";
-            $record2 = $nutriment->name." ".$var_2." ";
+            if($nutriment->name=="Pb" || $nutriment->name=="CB" ){
+                $record1 = $nutriment->name." ".$var_1." ";
+                $record2 = $nutriment->name." ".$var_2." ";
+    
+                $arraysA[] = $record1;
+                $arraysA[] = $record2;
+            }else{
+                $record2 = $nutriment->name;
+                $arraysA[] = $record2;
 
-            $arraysA[] = $record1;
-            $arraysA[] = $record2;
+            }
+            
         }
 
         

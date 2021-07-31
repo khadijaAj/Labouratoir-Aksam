@@ -22,7 +22,7 @@ class NutrimentController extends Controller
      */
     public function index()
     {
-        $nutriments = Nutriment::all();
+        $nutriments = Nutriment::paginate(30);
   
         return view('dt.nutriments',compact('nutriments'));
     }
@@ -47,7 +47,7 @@ class NutrimentController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'cout' => 'nullable',
             'incertitude' => 'nullable',
             'cible' => 'nullable',
@@ -110,7 +110,7 @@ class NutrimentController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'cout' => 'nullable',
             'incertitude' => 'nullable',
             'cible' => 'nullable',

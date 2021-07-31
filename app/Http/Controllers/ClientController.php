@@ -27,7 +27,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::paginate(30);
         return view('partenaires.clients',compact('clients'));
 
 
@@ -59,10 +59,10 @@ class ClientController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'adresse' => 'nullable',
             'Region' => 'nullable',
-            'commercial_id' => 'required',
+            'commercial_id' => 'nullable',
             'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
             
         ]);
@@ -119,10 +119,10 @@ class ClientController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'adresse' => 'nullable',
             'Region' => 'nullable',
-            'commercial_id' => 'required',
+            'commercial_id' => 'nullable',
             'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
         ]);
   

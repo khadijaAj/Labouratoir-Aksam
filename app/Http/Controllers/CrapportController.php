@@ -30,7 +30,7 @@ class CrapportController extends Controller
      */
     public function index()
     {
-        $Crapports = Crapport::all();
+        $Crapports = Crapport::orderBy('created_at','DESC')->paginate(30);
         return view('analyses.rapportanalyse',compact('Crapports'));
     }
 
@@ -133,6 +133,38 @@ class CrapportController extends Controller
         return view('analyses.add_ra_m')->with($data);
     
     }
+
+
+/**
+     * Show the form for creating multiple resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_multiple(Request $request)
+    {
+        $ids_array = explode(",",$request->get('ids'));
+        $crapports=Crapport::findMany($ids_array);
+        $produits=Produit::all();
+        $nutriments=Nutriment::all();
+        $commerciaux=Commercial::all();
+        $clients=Client::all();
+        $standards=Standardtype::find(3); // Id1 is created for Raw Material Model
+      
+        $data = [
+            'crapports' => $crapports,
+            'produits'  => $produits,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+            'commerciaux'  => $commerciaux,
+            'clients'  => $clients
+
+        ];
+       
+        return view('analyses.edit_ra_m')->with($data);
+    
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -149,11 +181,15 @@ class CrapportController extends Controller
             if(!$request->input($key.'_num') == NULL) {
                 $Crapport = new Crapport;
                 $Crapport->num = $request->input($key.'_num');
-                $Crapport->client_id  = $request->input($key.'_client_id');
-                $Crapport->commercial_id = $request->input($key.'_commercial_id');
+                $id_produit = Produit::where('name','=',$request->input($key.'_produit_id'))->first()->id;
+                $id_client = Client::where('name','=',$request->input($key.'_client_id'))->first()->id;
+                $id_commercial = Commercial::where('name','=',$request->input($key.'_commercial_id'))->first()->id;
+                $Crapport->commercial_id = $id_commercial;
+
+                $Crapport->client_id  =   $id_client;
                 $Crapport->date_reception= $request->input($key.'_date_reception');
                 $Crapport->date_analyse = $request->input($key.'_date_analyse');
-                $Crapport->produit_id = $request->input($key.'_produit_id');       
+                $Crapport->produit_id = $id_produit;       
                 $Crapport->Cout = $request->input($key.'_cout');                       
                 $Crapport->save();
                 $id = Crapport::where('num', $request->input($key.'_num'))->first()->id;
@@ -181,6 +217,75 @@ class CrapportController extends Controller
                         ->with('success','Rapport Client ajoutée avec success.');
 
     }
+
+
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update_multiple(Request $request)
+    {
+        $input = request()->all();
+        $lines = $request['line'];
+    
+        foreach ($lines as $line => $key) {
+            $id=$request->input($key.'_id');
+            $Crapport = Crapport::find($id);
+
+                $Crapport->num = $request->input($key.'_num');
+                $id_produit = Produit::where('name','=',$request->input($key.'_produit_id'))->first()->id;
+                $id_client = Client::where('name','=',$request->input($key.'_client_id'))->first()->id;
+                $id_commercial = Commercial::where('name','=',$request->input($key.'_commercial_id'))->first()->id;
+                $Crapport->commercial_id = $id_commercial;
+
+                $Crapport->client_id  =   $id_client;
+                $Crapport->date_reception= $request->input($key.'_date_reception');
+                $Crapport->date_analyse = $request->input($key.'_date_analyse');
+                $Crapport->produit_id = $id_produit;       
+                $Crapport->Cout = $request->input($key.'_cout');                       
+                $Crapport->update();
+                foreach($request->input($key.'_nutriment_id', [])  as $r ){
+                  
+                
+                if(!$request->input($key.'_valeur_surbrute_'.$r) == NULL || !$request->input($key.'_valeur_surseche_'.$r) == NULL ) {
+                    
+                    $value = Value::where('crapport_id', $id)->where('nutriment_id', $r)->first();
+
+                        if ($value !== null) {
+                            $value->update(['value_surbrute' => $request->input($key.'_valeur_surbrute_'.$r),'value_surseche' => $request->input($key.'_valeur_surseche_'.$r)]);
+                        }
+                         else {
+                            $value = Value::create([
+                                'mprapport_id'=>$id,
+                                'nutriment_id'=> $r,
+                                'value_surbrute' => $request->input($key.'_valeur_surbrute_'.$r),
+                                'value_surseche' => $request->input($key.'_valeur_surseche_'.$r)]);
+                           
+                        }
+                        
+                    }if($request->input($key.'_valeur_surbrute_'.$r) == 0 && $request->input($key.'_valeur_surseche_'.$r) == 0){
+                        Value::where('mprapport_id', $id)->where('nutriment_id', $r)->delete();
+                    }
+                     
+                
+                }
+            
+          
+            
+ 
+        
+    
+            }
+        
+        return redirect()->route('crapports.index')
+                        ->with('success','Rapports Client modifiés avec success.');
+
+    }
+
 
 
     /**

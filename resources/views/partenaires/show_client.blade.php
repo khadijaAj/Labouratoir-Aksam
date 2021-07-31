@@ -64,11 +64,19 @@
 
     </div>
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="region_client">Commercial</label>
-            <input type="text" class="form-control" name="commercial_id" value="{{ $client->commercial->name }}"
-                placeholder="Entrer le commercial" disabled>
-        </div>
+    @if(!is_null($client->commercial)) 
+
+<div class="form-group col-md-6">
+    <label for="date_reception"> Commercial</label>
+    <input type="text" class="form-control" name="commercial" value="{{ $client->commercial->name }}" disabled>
+</div>
+   
+    @else
+    <div class="form-group col-md-6">
+<label for="date_reception"> Commercial</label>
+<input type="text" class="form-control" name="commercial" value="-" disabled>
+</div>               
+    @endif
         <div class="form-group col-md-6">
             <label for="region_client">Région</label>
             <input type="text" class="form-control" name="Region" value="{{ $client->Region }}"

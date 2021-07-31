@@ -13,7 +13,7 @@ class CreatePfrapportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('Pfrapports', function (Blueprint $table) {
+        Schema::create('pfrapports', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('Num')->unique();
             $table->integer('produit_id')->unsigned();

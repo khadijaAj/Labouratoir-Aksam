@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Ajout Matiere Premiere - Aksam Labs')
+@section('title', 'Modifier Matiere Premiere - Aksam Labs')
 
 @section('links')
 <li class="nav-item active">
@@ -30,13 +30,13 @@
 @endsection
 
 @section('Page_infos')
-<div class="card-title"><b><i class="la la-plus"></i> Insertion Multiple</b></div>
+<div class="card-title"><b><i class="la la-plus"></i> Modification Multiple</b></div>
 @endsection
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 @if ($errors->any())
 <div class="alert alert-danger">
     <strong>Ouups !</strong> Il y a eu quelques problèmes avec les champs saisis.<br><br>
@@ -50,12 +50,8 @@
 
 
 
-<form action="{{ route('mprapports.store_multiple') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('mprapports.update_multiple') }}" method="POST" enctype="multipart/form-data">
     @csrf
- 
-</head>
-<body>
-
     <div class="table-responsive">
         <table class="table table-bordered" id="tableAnalyse">
             <thead>
@@ -102,68 +98,111 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="rows" data-id="1">
+            @php
+            $i = 1
+            @endphp
+            @foreach ($mprapports as $mprapport)
+
+           
+                <tr class="rows" data-id="{{$i}}">
                     <td>
-                        <input type="hidden" name="line[]" value="L1">
-                        <input type="date" value="{{ old('date_reception') }}" name="L1_date_reception">
+                        <input type="hidden" name="line[]" value="L{{$i}}">
+                        <input type="hidden" value="{{ $mprapport->id }}" name="L{{$i}}_id">
+
+                        <input type="date" value="{{ $mprapport->date_reception }}" name="L{{$i}}_date_reception">
+                    </td>
+                    <td>
+                    <input class="tags_products" value='{{ $mprapport->produit->name }}' name="L{{$i}}_produit_id">
+
+                    </td>
+                    <td>
+                        <input type="text" autocomplete="off" name="L{{$i}}_num" value="{{ $mprapport->Num }}">
+                    </td>
+                    <td>
+                        <input type="text" autocomplete="off" name="L{{$i}}_nbon" value="{{ $mprapport->Num_bon }}">
                     </td>
                     
-                    <td>
+                        
+                        @if(!is_null($mprapport->fournisseur)) 
+                        <td>
+                        <input class="tags_fournisseurs" value='{{ $mprapport->fournisseur->name }}' name="L{{$i}}_fournisseur_id">
 
-                   <input class="tags_products" name="L1_produit_id"/>
-                
-                   
-                    </td>
-                    <td>
-                        <input type="text" autocomplete="off" name="L1_num" value="{{ old('num') }}">
-                    </td>
-                    <td>
-                        <input type="text"  autocomplete="off" name="L1_nbon" value="{{ old('nbon') }}">
-                    </td>
-                    <td>
-                    <input class="tags_fournisseurs"  name="L1_fournisseur_id" />
+                        </td>
+                        @else 
+                        <td>
+                        <input class="tags_fournisseurs"  name="L{{$i}}_fournisseur_id">
+
+                        </td>
+                        @endif
                        
-                    </td>
-                    <td>
-                    <input class="tags_origines"  name="L1_origine_id"/>
-                          
-                    </td>
-                    <td>
-                    <input class="tags_navires"  name="L1_navire_id" />
-                          
-                    </td>
-                    @foreach($standards->nutriments as $nutriment)
                     
-                    <td> <input name="L1_nutriment_id[]"  autocomplete="off" value="{{ $nutriment->id }}" hidden />
+                           @if(!is_null($mprapport->origine)) 
+                           <td>  
+                           <input class="tags_origines" value='{{ $mprapport->origine->name }}' name="L{{$i}}_origine_id">
 
-                        <input autocomplete="off" data-id='{{ $nutriment->id }}' type="text"
-                            name="L1_valeur_surbrute_{{ $nutriment->id }}" />
+                            </td>
+                            @else 
+                            <td>  
+                            <input class="tags_origines"  name="L{{$i}}_origine_id">
+
+                        </td>
+                            @endif
+                          
+                            @if(!is_null($mprapport->navire)) 
+                           <td>  
+                           <input class="tags_navires" value='{{ $mprapport->navire->name }}' name="L{{$i}}_navire_id">
+
+                            </td>
+                            @else 
+                            <td>  
+                            <input class="tags_navires" name="L{{$i}}_navire_id">
+
+                        </td>
+                            @endif
+
+                     @inject('value','App\Value') {{-- inject before foreach --}}
+                     @inject('mesure','App\Mesure') {{-- inject before foreach --}}
+                    @foreach($standards->nutriments as $nutriment)
+                    <td> <input name="L{{$i}}_nutriment_id[]" value="{{ $nutriment->id }}" hidden />
+
+                        <input data-id='{{ $nutriment->id }}' type="text"
+                            name="L{{$i}}_valeur_surbrute_{{ $nutriment->id }}" value="{{ $value->where('mprapport_id','=',$mprapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute') }}" />
                     </td>
                     </td>
                     @endforeach
                     <td>
-                        <select name="L1_commentaire">
+                        <select name="L{{$i}}_commentaire">
+                        <option selected value="{{ $mprapport->commentaire }}">{{ $mprapport->commentaire }}</option>
+
                             <option value="interne">interne</option>
                             <option value="externe">externe</option>
                         </select>
                     </td>
                     <td>
-                        <select name="L1_conformite">
+                        <select name="L{{$i}}_conformite">
+                        <option selected value="{{ $mprapport->conformite }}">{{ $mprapport->conformite }}</option>
+
                             <option value="Conforme">Conforme</option>
                             <option value="Non Conforme">Non Conforme</option>
                         </select>
                     </td>
                     <td>
-                       <center> <input type="checkbox" name="L1_certificat" value="1" checked> </center>
+                       <center> <input type="checkbox" name="L{{$i}}_certificat" value="1" checked> </center>
                     </td>
                 </tr>
+                @php
+                $i += 1
+                @endphp
+            @endforeach    
             </tbody>
         </table>
+        
         <div class="card-action">
-            <center><button type="button" id="addLines" class="btn btn-secondary" style="margin-right: 10px">Ajouter un ligne</button> <button type="submit" class="btn btn-success">Enregistrer</button></center>
+            <center><button type="submit" class="btn btn-success">Enregistrer</button></center>
         </div>
         <br>
 </form>
+
 
 
 
@@ -210,48 +249,6 @@ $( function() {
 
  
 
-$("#addLines").click(function(e) {
-    var last_tr = $('#tableAnalyse tbody tr:last-child').html();
-    var last_id = $('#tableAnalyse tbody tr:last-child').attr("data-id");
-    var next_id = parseInt(last_id) + 1;
-    var new_line = last_tr.split("L" + last_id).join("L" + next_id);
-    $('#tableAnalyse tbody').append('<tr class="rows" data-id="' + next_id + '">' + new_line + '</tr>');
-    var availableTags = [
-        @foreach( $produits as $produit)
-                             "<?=$produit['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_products" ).autocomplete({
-      source: availableTags
-    });
-    var availableTags1 = [
-        @foreach( $fournisseurs as $fournisseur)
-                             "<?=$fournisseur['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_fournisseurs" ).autocomplete({
-      source: availableTags1
-    });
-
-    var availableTags2 = [
-        @foreach( $origines as $origine)
-                             "<?=$origine['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_origines" ).autocomplete({
-      source: availableTags2
-    });
-
-    var availableTags3 = [
-        @foreach( $navires as $navire)
-                             "<?=$navire['name']?>",
-                            @endforeach
-    ];
-    $( ".tags_navires" ).autocomplete({
-      source: availableTags3
-    });
-});
-
 $(document).on("keydown","input",function (e) {
 
 var cellindex = $(this).parents('td').index();
@@ -266,12 +263,4 @@ $(e.target).closest('tr').prevAll('tr').first().find('td').eq(cellindex).find(':
 });
 </script>
     
-
-  
-  
-  
-
-
-
 @endsection
-

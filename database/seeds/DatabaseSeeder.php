@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(MesureSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(EquationsSeeder::class);
 
     }
 }

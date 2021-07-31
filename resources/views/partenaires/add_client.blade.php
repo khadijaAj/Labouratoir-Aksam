@@ -80,7 +80,7 @@
         <div class="form-group col-md-6">
             <label for="commercial">Commercial</label>
             <select class="custom-select mr-sm-2" name="commercial_id">
-                <option selected>Choisir un commercial ...</option>
+                <option selected value="">Choisir un commercial ...</option>
                 @foreach( $commercials as $comm)
                 <option value="{{ $comm['id'] }}">{{ $comm['name'] }}</option>
                 @endforeach

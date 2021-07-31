@@ -395,6 +395,27 @@ class CreateNutrimentsTable extends Migration
                 'Incertitude'=>'0',
                  'cout'=>'0'
                 
+            ],[
+                'name' => 'Matière séche',
+                'Reference'=> '53',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Matière minérale',
+                'Reference'=> '54',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
+            ],[
+                'name' => 'Matière organique',
+                'Reference'=> '55',
+                'cible'=>'',
+                'Incertitude'=>'0',
+                 'cout'=>'0'
+                
             ]
         );
                 foreach ($data as $datum){

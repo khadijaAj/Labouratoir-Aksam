@@ -76,14 +76,20 @@
     </div>
 
 </div>
-<br>
+<br><br>
 <div class="form-row align-items-right" style="float:left;">
 
 
     <div class="col-auto">
         <br>
         <button id="example1" type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="#">Importer</a></button></div>
+                style="color: #ffffff; text-decoration: none; " href="#">Importer</a></button>
+    </div>
+    <div class="col-auto">
+        <br>
+        <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+                style="color: #ffffff; text-decoration: none; " id="edit_m" name="edit_m">Modification multiple</a></button>
+    </div>
     <div class="col-auto">
         <br>
         <button class="btn btn-secondary dropdown-toggle" style="border-radius: 40px ;background-color:#3A9341;"
@@ -91,10 +97,10 @@
             Exporter
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Excel</a>
-            <a class="dropdown-item" href="#">Rapport fourrage ( PDF)</a>
-            <a class="dropdown-item" href="#">Rapport rations ( PDF)</a>
-            <a class="dropdown-item" href="#">Rapport Ensilage de Tritical ( PDF)</a>
+            <a class="dropdown-item" id="export-excel" name="export-excel" href="#">Excel</a>
+            <a class="dropdown-item" id="export-pdf_fourrages" >Rapport fourrage ( PDF)</a>
+            <a class="dropdown-item" id="export-pdf_rations" >Rapport rations ( PDF)</a>
+            <a class="dropdown-item" id="export-pdf_tritical" >Rapport Ensilage de Tritical ( PDF)</a>
         </div>
     </div>
 
@@ -102,14 +108,16 @@
 
 </div>
 </div>
-<div id="example" style=" margin: 0 auto;"  class="display-none">
-<form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;" action="{{ URL::to('importEN') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
-		{{ csrf_field() }}
-    
-		<input type="file" name="file" />
-		<button class="btn btn-secondary">Importer Fichier</button>
+<div id="example" style=" margin: 0 auto;" class="display-none">
+    <form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;" action="{{ URL::to('importEN') }}"
+        class="form-horizontal" method="post" enctype="multipart/form-data">
+        {{ csrf_field() }}
 
-	</form>
+        <input name="filenames[]" type="file" multiple="multiple" />
+
+        <button class="btn btn-secondary">Importer Fichier</button>
+
+    </form>
     <br>
 </div>
 <div class="table-responsive">
@@ -118,13 +126,25 @@
 
         <thead style="background-color:#FAFAFA;">
             <tr>
-                <th><center>#</center></th>
-                <th><center>Date de reception</center></th>
-                <th><center>Identifiant</center></th>
-                <th><center>Client</center></th>
-                <th><center>Commercial</center></th>
-                <th><center>Produit</center></th>
-           
+                <th>
+                    <center> <input type="checkbox" onclick="toggle(this);" /></center>
+                </th>
+                <th>
+                    <center>Date de reception</center>
+                </th>
+                <th>
+                    <center>Identifiant</center>
+                </th>
+                <th>
+                    <center>Client</center>
+                </th>
+                <th>
+                    <center>Commercial</center>
+                </th>
+                <th>
+                    <center>Produit</center>
+                </th>
+
                 <th>
                     <center>Operations</center>
                 </th>
@@ -134,13 +154,17 @@
         <tbody>
             @if ($Enrapports->count() == 0)
             <tr>
-                <td colspan="7"><center>Aucun résultat à afficher.</center></td>
+                <td colspan="7">
+                    <center>Aucun résultat à afficher.</center>
+                </td>
             </tr>
             @endif
             @foreach ($Enrapports as $enrapport)
             <tr>
                 <td>
-                    <center> <input type="checkbox" class="id" name="id" value="{{ $enrapport->id}}">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                    <center><input type="checkbox" class="id" name="id" value="{{ $enrapport->id }}">
                     </center>
                 </td>
 
@@ -153,21 +177,21 @@
                 <td>
                     <center>{{ $enrapport->client->name}}</center>
                 </td>
-                @if(!is_null($enrapport->commercial)) 
+                @if(!is_null($enrapport->commercial))
                 <td>
                     <center> {{ $enrapport->commercial->name }} </center>
                 </td>
                 @else
                 <td>
                     <center>-</center>
-                </td>                
-                @endif
-                
-                <td>
-                <center>{{ $enrapport->produit->name}}</center>
                 </td>
-                
-            
+                @endif
+
+                <td>
+                    <center>{{ $enrapport->produit->name}}</center>
+                </td>
+
+
 
                 <td>
                     <center>
@@ -175,10 +199,9 @@
 
 
                             <a href="{{ route('enrapports.show',$enrapport->id) }}"><i style="color:#000;"
-                                    class="la la-eye"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    class="la la-eye"></i></a>
 
-                            <a href="{{ route('enrapports.edit',$enrapport->id) }}"><i style="color:#3EB805;"
-                                    class="la la-edit"></i></a>
+                           
 
                             @csrf
                             @method('DELETE')
@@ -191,34 +214,127 @@
             </tr>
 
             @endforeach
-     
+
         </tbody>
     </table>
-
+    {{-- Pagination --}}
+    <div class="d-flex justify-content-center">
+        {!! $Enrapports->links() !!}
+    </div>
 </div>
 
 <script type="text/javascript">
+$("#example1").click(function() {
 
-
-
-$("#example1").click(function(){
-
-$("#example").toggleClass('display-none');
+    $("#example").toggleClass('display-none');
 
 });
-
-
-
 </script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 <style type="text/css">
+.display-none {
 
-    .display-none{
+    display: none;
 
-        display: none;
-
-    }
-
+}
 </style>
+
+
+
+<script>
+$(document).ready(function(even) {
+    $("#export-pdf_rations").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/PDF_EN_RATION?ids=" + checkvalue, "_blank");
+        } else {
+            window.open("{{URL::to('/')}}/PDF_EN_RATION");
+
+        }
+
+
+    });
+    return false;
+});
+$(document).ready(function(even) {
+    $("#export-pdf_fourrages").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/PDF_EN_FOURRAGE?ids=" + checkvalue, "_blank");
+        } else {
+            window.open("{{URL::to('/')}}/PDF_EN_FOURRAGE");
+
+        }
+
+
+    });
+    return false;
+});
+
+$(document).ready(function(even) {
+    $("#export-pdf_tritical").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/PDF_EN_TRITICAL?ids=" + checkvalue, "_blank");
+        } else {
+            window.open("{{URL::to('/')}}/PDF_EN_TRITICAL");
+
+        }
+
+
+    });
+    return false;
+});
+
+$(document).ready(function(even) {
+    $("#export-excel").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/exporten?ids=" + checkvalue, "_blank");
+        } else {
+            window.open("{{URL::to('/')}}/exporten");
+
+        }
+
+
+    });
+    return false;
+});
+
+
+$(document).ready(function(even) {
+    $("#edit_m").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/edit_en_m?ids=" + checkvalue, "_self");
+        } else {
+            alert(" Choisir au moins un rapport à modifier");
+
+        }
+
+
+    });
+    return false;
+});
+</script>
+
 @endsection

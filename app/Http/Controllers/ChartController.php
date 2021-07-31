@@ -68,18 +68,18 @@ class ChartController extends Controller
         
         $date_start = $request->date_start;
         $date_end = $request->date_end;
-        $names = [];
-        $vals=[];
-        $avg=[];
+        
         try{
 
-        
-        if($request->type="Mp"){
-            
+            $names = [];
+            $vals=[];
+            $avg=[];
+        if($request->type=="MP"){
             if($request->filter_name=="date_range"){
 
                 
-                $mprapports = Mprapport::where('produit_id', '=',$produit_id)->whereBetween('date_reception', [$date_start, $date_end])->get();
+                $mprapports = Mprapport::where('produit_id', '=',$produit_id)->orderBy('date_reception','ASC')->whereBetween('date_reception', [$date_start, $date_end])->get();
+                
                 
                 foreach($mprapports as $mprapport){
                     array_push($names,$mprapport->date_reception);
@@ -92,58 +92,64 @@ class ChartController extends Controller
             }
             if($request->filter_name=="origines"){
 
-                $origines = Origine::all();
-                $names = [];
-                $vals=[];
-                $avg=[];
+                $origines = Origine::all();                
+                
                 foreach($origines as $origine){
                     if (count($origine->mprapports->where('produit_id','=',$produit_id)->whereBetween('date_reception', [$date_start, $date_end])))
                     {   array_push($names, $origine->name);
+                        $vals=[];
                         foreach($origine->mprapports as $mprapport){
+                           
                             $v= Value::where('nutriment_id', $nutriment_id)->where('mprapport_id', '=', $mprapport->id)
                             ->value('value_surbrute');
+                            
                             array_push($vals,$v);
+                            
                         }
-                        if(count($vals)) {
-                            $vals = array_filter($vals);
+                        
+                        $vals = array_filter($vals);
                             if(count($vals) != 0){  
                                 $average = array_sum($vals)/count($vals);
                                 array_push($avg,$average);
+                                
+
 
                             }else{
                                 array_push($avg,0);
                             }
-                        } 
 
-                    }else{
-                        
-                    }
+                   
+                        }
                     $vals=$avg;
+                    
+
                 }
             }elseif($request->filter_name=="navires"){
-
             $navires = Navire::all();
             
             foreach($navires as $navire){
                 if (count($navire->mprapports->where('produit_id','=',$produit_id)->whereBetween('date_reception', [$date_start, $date_end])))
                      {   array_push($names, $navire->name);
+                        $vals=[];
+
                         foreach($navire->mprapports as $mprapport){
                             $v= Value::where('nutriment_id', $nutriment_id)->where('mprapport_id', '=', $mprapport->id)
                             ->value('value_surbrute');
                             array_push($vals,$v);
                         }
-                    if(count($vals)) {
                         $vals = array_filter($vals);
                         if(count($vals) != 0){  
                             $average = array_sum($vals)/count($vals);
                             array_push($avg,$average);
+                            
+
 
                         }else{
                             array_push($avg,0);
                         }
-                            
-                    } 
-                   }else{                }
+
+               
+                    }
                 $vals=$avg;
             }
         }
@@ -155,21 +161,27 @@ class ChartController extends Controller
             foreach($fournisseurs as $fournisseur){
                 if (count($fournisseur->mprapports->where('produit_id','=',$produit_id)->whereBetween('date_reception', [$date_start, $date_end])))
                 {   array_push($names, $fournisseur->name);
+                    $vals=[];
+
                     foreach($fournisseur->Mprapports as $mprapport){
                         $v= Value::where('nutriment_id', $nutriment_id)->where('mprapport_id', '=', $mprapport->id)
                         ->value('value_surbrute');
                         array_push($vals,$v);
                     }
-                    if(count($vals)) {
-                        $vals = array_filter($vals);
-                        if(count($vals) != 0){  
-                            $average = array_sum($vals)/count($vals);
-                            array_push($avg,$average);
+                    $vals = array_filter($vals);
+                            if(count($vals) != 0){  
+                                $average = array_sum($vals)/count($vals);
+                                array_push($avg,$average);
+                                
 
-                        }else{
-                            array_push($avg,0);
-                        }
-                    } 
+
+                            }else{
+                                array_push($avg,0);
+                            }
+
+                   
+                        
+                   
 
                 }else{
                     
@@ -184,13 +196,12 @@ class ChartController extends Controller
 
 
   
-if($request->type="PF"){
-            
+if($request->type=="PF"){
     if($request->filter_name=="date_range"){
 
         $date_start = $request->date_start;
         $date_end = $request->date_end;
-        $pfrapports = Pfrapport::where('produit_id', '=',$produit_id)->whereBetween('date_fabrication', [$date_start, $date_end])->get();
+        $pfrapports = Pfrapport::where('produit_id', '=',$produit_id)->orderBy('date_fabrication','ASC')->whereBetween('date_fabrication', [$date_start, $date_end])->get();
         
         foreach($pfrapports as $pfrapport){
             array_push($names,$pfrapport->date_fabrication);
@@ -207,13 +218,13 @@ if($request->type="PF"){
 }
 
  
-if($request->type="EN"){
-            
+if($request->type=="EN"){
+
     if($request->filter_name=="date_range"){
 
         $date_start = $request->date_start;
         $date_end = $request->date_end;
-        $enrapports = Enrapport::where('produit_id', '=',$produit_id)->whereBetween('date_reception', [$date_start, $date_end])->get();
+        $enrapports = Enrapport::where('produit_id', '=',$produit_id)->orderBy('date_reception','ASC')->whereBetween('date_reception', [$date_start, $date_end])->get();
         
         foreach($enrapports as $enrapport){
             array_push($names,$enrapport->date_reception);
@@ -230,51 +241,56 @@ if($request->type="EN"){
         foreach($commerciaux as $commercial){
             if (count($commercial->enrapports->where('produit_id','=',$produit_id)->whereBetween('date_reception', [$date_start, $date_end])))
                  {   array_push($names, $commercial->name);
+                    $vals=[];
+
                     foreach($commercial->enrapports as $enrapport){
                         $v= Value::where('nutriment_id', $nutriment_id)->where('enrapport_id', '=', $enrapport->id)
                         ->value('value_surbrute');
                         array_push($vals,$v);
                     }
-                if(count($vals)) {
+                    $vals = array_filter($vals);
+                    if(count($vals) != 0){  
+                        $average = array_sum($vals)/count($vals);
+                        array_push($avg,$average);
+                        
 
-                     $vals = array_filter($vals);
-                        if(count($vals) != 0){  
-                            $average = array_sum($vals)/count($vals);
-                            array_push($avg,$average);
 
-                        }else{
-                            array_push($avg,0);
-                        }
-                } 
-               }else{                }
+                    }else{
+                        array_push($avg,0);
+                    }
+
+           
+                }
             $vals=$avg;
         }
     }
     if($request->filter_name=="clients"){
 
         $clients = Client::all();
-        $names = [];
-        $vals=[];
-        $avg=[];
+        
         foreach($clients as $client){
             if (count($client->enrapports->where('produit_id','=',$produit_id)->whereBetween('date_reception', [$date_start, $date_end])))
                  {   array_push($names, $client->name);
+                    $vals=[];
+
                     foreach($client->enrapports as $enrapport){
                         $v= Value::where('nutriment_id', $nutriment_id)->where('enrapport_id', '=', $enrapport->id)
                         ->value('value_surbrute');
                         array_push($vals,$v);
                     }
-                if(count($vals)) {
                     $vals = array_filter($vals);
-                        if(count($vals) != 0){  
-                            $average = array_sum($vals)/count($vals);
-                            array_push($avg,$average);
+                    if(count($vals) != 0){  
+                        $average = array_sum($vals)/count($vals);
+                        array_push($avg,$average);
+                        
 
-                        }else{
-                            array_push($avg,0);
-                        }
-                } 
-               }else{                }
+
+                    }else{
+                        array_push($avg,0);
+                    }
+
+           
+                }
             $vals=$avg;
         }
     }
@@ -287,6 +303,7 @@ if($request->type="EN"){
     
             return view('chartjs',['names' => $names, 'Data' => $vals,'Nutriment'=> $nutriment_name,'Filter'=> $request->filter_name])->with($data);
         }
+        
         return view('chartjs',['names' => $names, 'Data' => $vals,'Nutriment'=> $nutriment_name,'Filter'=> $request->filter_name,'date_start'=>$date_start , 'date_end'=>$date_end])->with($data);
         
      }
@@ -302,7 +319,8 @@ if($request->type="EN"){
      */
     public function create()
     {
-        //
+        
+        
     }
 
     /**

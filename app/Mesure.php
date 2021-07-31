@@ -14,7 +14,7 @@ class Mesure extends Model
      * @var array
      */
     protected $fillable = [
-        'methode', 'equation','unite'
+        'methode', 'equation','unite','equation1','xml_equivalent'
     ];
 
     public function nutriment()

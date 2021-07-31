@@ -87,7 +87,7 @@
         <div class="form-group col-md-6">
             <label for="fournisseur">Fournisseur</label>
             <select class="custom-select mr-sm-2" name="fournisseur_id">
-                <option selected>Choisir un fournisseur ...</option>
+                <option selected value="">Choisir un fournisseur ...</option>
                 @foreach( $fournisseurs as $fournisseur)
                 <option value="{{ $fournisseur['id'] }}">{{ $fournisseur['name'] }}</option>
                 @endforeach
@@ -96,7 +96,7 @@
         <div class="form-group col-md-6">
             <label for="origne">Origine </label>
             <select class="custom-select mr-sm-2" name="origine_id">
-                <option selected>Choisir une origine ...</option>
+                <option selected value="">Choisir une origine ...</option>
                 @foreach( $origines as $origine)
                 <option value="{{ $origine['id'] }}">{{ $origine['name'] }}</option>
                 @endforeach
@@ -110,7 +110,7 @@
         <div class="form-group col-md-6">
             <label for="navire">Navire</label>
             <select class="custom-select mr-sm-2" name="navire_id">
-                <option selected>Choisir un navire ...</option>
+                <option selected value="">Choisir un navire ...</option>
                 @foreach( $navires as $navire)
                 <option value="{{ $navire['id'] }}">{{ $navire['name'] }}</option>
                 @endforeach

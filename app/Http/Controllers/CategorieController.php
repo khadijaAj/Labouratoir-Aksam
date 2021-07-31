@@ -23,7 +23,7 @@ class CategorieController extends Controller
     public function index()
     {
         
-        $categories = Categorie::all();
+        $categories = Categorie::paginate(30);
   
         return view('dt.categories',compact('categories'));
     }
@@ -49,7 +49,7 @@ class CategorieController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             
         ]);
   
@@ -97,7 +97,7 @@ class CategorieController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
         ]);
   
         $categorie->update($request->all());

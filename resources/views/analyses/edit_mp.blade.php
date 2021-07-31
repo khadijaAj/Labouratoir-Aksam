@@ -89,16 +89,27 @@
         <div class="form-group col-md-6">
             <label for="fournisseur">Fournisseur</label>
             <select class="custom-select mr-sm-2" name="fournisseur_id">
-                <option selected value="{{ $mprapport->fournisseur->id}}">{{ $mprapport->fournisseur->name}}</option>
-                @foreach( $fournisseurs as $fournisseur)
+            @if(!is_null($mprapport->fournisseur))     
+            <option selected value="{{ $mprapport->fournisseur->id}}">{{ $mprapport->fournisseur->name}}</option>
+            @else 
+            <option selected value=""></option>
+
+            @endif
+            @foreach( $fournisseurs as $fournisseur)
                 <option value="{{ $fournisseur['id'] }}">{{ $fournisseur['name'] }}</option>
                 @endforeach
             </select>
         </div>
+    
         <div class="form-group col-md-6">
             <label for="origne">Origine </label>
             <select class="custom-select mr-sm-2" name="origine_id">
+                @if(!is_null($mprapport->origine))     
                 <option selected value="{{ $mprapport->origine->id}}">{{ $mprapport->origine->name}}</option>
+                @else 
+                <option selected value=""></option>
+
+                @endif
                 @foreach( $origines as $origine)
                 <option value="{{ $origine['id'] }}">{{ $origine['name'] }}</option>
                 @endforeach
@@ -112,7 +123,12 @@
         <div class="form-group col-md-6">
             <label for="navire">Navire</label>
             <select class="custom-select mr-sm-2" name="navire_id">
+               @if(!is_null($mprapport->navire))     
                 <option selected value="{{ $mprapport->navire->id}}">{{ $mprapport->navire->name}}</option>
+                @else 
+                <option selected value=""></option>
+
+                @endif
                 @foreach( $navires as $navire)
                 <option value="{{ $navire['id'] }}">{{ $navire['name'] }}</option>
                 @endforeach

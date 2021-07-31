@@ -9,11 +9,12 @@
         name='viewport' />
     <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://dbrekalo.github.io/fastselect/dist/fastselect.min.css" crossorigin="anonymous">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+ 
 </head>
 
 <body>
@@ -56,13 +57,15 @@
 
 
                     <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-
+                        @if(Auth::user()->type=="Admin")
                         <li class="nav-item ">
                             <a class="nav-link" style="color:#FFFFFF;" href="/users">
                                 <i class="la la-lock"> </i>Administration
                             </a>
 
                         </li>
+                        @endif
+
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"
                                 aria-expanded="false"> <img src="../../images/profile_image.jpg" alt="user-img" width="36"
@@ -72,9 +75,8 @@
                                     <div class="user-box">
                                         <div class="u-img"><img src="./images/profile_image.jpg" alt="user"></div>
                                         <div class="u-text">
-                                            <h4>Username</h4>
-                                            <p class="text-muted">{{ Auth::user()->email }}</p><a href="#"
-                                                class="btn btn-rounded btn-secondary btn-sm">View Profile</a>
+                                            <h4>{{ Auth::user()->name }}</h4>
+                                            <p class="text-muted">{{ Auth::user()->email }}</p>
                                         </div>
                                     </div>
                                 </li>
@@ -175,5 +177,16 @@ function myFunction() {
 <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
 <script src="{{ asset('js/file.min.js')}}"></script>
 
+<script>
+
+function toggle(source) {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i] != source)
+            checkboxes[i].checked = source.checked;
+    }
+}
+    </script>
+ @yield('footer-jquery')
 
 </html>

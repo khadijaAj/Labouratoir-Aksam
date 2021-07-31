@@ -78,7 +78,9 @@
     </div>
     <div class="form-row">
 
-        <div class="form-group col-md-6">
+    @if(!is_null($client->commercial)) 
+
+    <div class="form-group col-md-6">
             <label for="commercial">Commercial</label>
             <select class="custom-select mr-sm-2" name="commercial_id">
                 <option selected value="{{ $client->commercial->id }}">{{ $client->commercial->name }}</option>
@@ -88,6 +90,20 @@
             </select>
             </select>
         </div>
+   
+    @else
+    <div class="form-group col-md-6">
+            <label for="commercial">Commercial</label>
+            <select class="custom-select mr-sm-2" name="commercial_id">
+                <option selected value="">Choisir un commercial..</option>
+                @foreach( $commercials as $comm)
+                <option value="{{ $comm['id'] }}">{{ $comm['name'] }}</option>
+                @endforeach
+            </select>
+            </select>
+        </div>               
+    @endif
+        
         <div class="form-group col-md-6">
             <label for="region_client">Région</label>
             <input type="text" class="form-control" name="Region" value="{{ $client->Region }}"

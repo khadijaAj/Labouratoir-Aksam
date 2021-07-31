@@ -33,7 +33,7 @@ class MprapportController extends Controller
      */
     public function index()
     {
-        $Mprapports = Mprapport::all();
+        $Mprapports = Mprapport::orderBy('created_at','DESC')->paginate(30);
         $nutriments=Nutriment::all();
         $standards=Standardtype::find(1);
         $values = Value::all();
@@ -90,7 +90,7 @@ class MprapportController extends Controller
             'num' => 'required',
             'num_bon' => 'required',
             'produit_id' => 'required',
-            'fournisseur_id' => 'required',
+            'fournisseur_id' => 'nullable',
             'origine_id' => 'nullable',
             'navire_id' => 'nullable',
             'conformite' => 'nullable',
@@ -151,7 +151,6 @@ class MprapportController extends Controller
     
     public function PDF(Request $request,$id)
     {  
-       
         $id = $request->id;
         $rapport=Mprapport::find($id);
         $date = date('Y-m-d');
@@ -225,10 +224,25 @@ class MprapportController extends Controller
                
                 $Mprapport->date_reception = $request->input($key.'_date_reception');
                 $Mprapport->Num_bon = $request->input($key.'_nbon');
-                $Mprapport->produit_id = $request->input($key.'_produit_id');
-                $Mprapport->fournisseur_id = $request->input($key.'_fournisseur_id');
-                $Mprapport->origine_id = $request->input($key.'_origine_id');
-                $Mprapport->navire_id = $request->input($key.'_navire_id');
+                $id_produit = Produit::where('name','=',$request->input($key.'_produit_id'))->first()->id;
+                if(!empty($request->input($key.'_fournisseur_id') )){
+                    $id_fournisseur = Fournisseur::where('name','=', $request->input($key.'_fournisseur_id'))->first()->id;
+                    $Mprapport->fournisseur_id = $id_fournisseur;
+
+                }
+                if(!empty($request->input($key.'_origine_id') )){
+                    
+                    $id_origine = Origine::where('name','=',$request->input($key.'_origine_id'))->first()->id;
+                    $Mprapport->origine_id = $id_origine;
+
+                }
+                if(!empty($request->input($key.'_navire_id') )){
+                    $id_navire = Navire::where('name','=',$request->input($key.'_navire_id'))->first()->id;
+                    $Mprapport->navire_id = $id_navire;
+
+                }
+                $Mprapport->produit_id =$id_produit;
+               
                 $Mprapport->conformite = $request->input($key.'_conformite');
                 $Mprapport->commentaire = $request->input($key.'_commentaire');
                 $Mprapport->certificat = $request->input($key.'_certificat');
@@ -259,6 +273,143 @@ class MprapportController extends Controller
     }
 
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_multiple(Request $request)
+    {
+        
+        $ids_array = explode(",",$request->get('ids'));
+        $mprapports=Mprapport::findMany($ids_array);
+        $produits=Produit::all();
+        $nutriments=Nutriment::all();
+        $fournisseurs=Fournisseur::all();
+        $origines=Origine::all();
+        $navires=Navire::all();
+        $standards=Standardtype::find(1); // Id1 is created for Raw Material Model
+      
+        
+
+        $data = [
+            'mprapports' => $mprapports ,
+            'produits'  => $produits,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+            'fournisseurs'  => $fournisseurs,
+            'origines'  => $origines,
+            'navires'  => $navires
+          
+
+        ];
+
+        return view('analyses.edit_mp_m')->with($data);
+            
+            
+ 
+        
+    }
+        
+        
+
+    
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update_multiple(Request $request)
+    {
+        
+        $input = request()->all();
+        $lines = $request['line'];
+    
+        foreach ($lines as $line => $key) {
+                $id=$request->input($key.'_id');
+                
+                $Mprapport = Mprapport::find($id);
+                $Mprapport->num = $request->input($key.'_num');
+               
+                $Mprapport->date_reception = $request->input($key.'_date_reception');
+                $Mprapport->Num_bon = $request->input($key.'_nbon');
+                $id_produit = Produit::where('name','=',$request->input($key.'_produit_id'))->first()->id;
+                if(!empty($request->input($key.'_fournisseur_id') )){
+                    $id_fournisseur = Fournisseur::where('name','=', $request->input($key.'_fournisseur_id'))->first()->id;
+                    $Mprapport->fournisseur_id = $id_fournisseur;
+
+                }else{
+                    $id_fournisseur= NULL;
+                    $Mprapport->fournisseur_id = $id_fournisseur;
+
+                }
+                if(!empty($request->input($key.'_origine_id') )){
+                    
+                    $id_origine = Origine::where('name','=',$request->input($key.'_origine_id'))->first()->id;
+                    $Mprapport->origine_id = $id_origine;
+
+                }else{
+                    $id_origine= NULL;
+                    $Mprapport->origine_id = $id_origine;
+
+                }
+                if(!empty($request->input($key.'_navire_id') )){
+                    $id_navire = Navire::where('name','=',$request->input($key.'_navire_id'))->first()->id;
+                    $Mprapport->navire_id = $id_navire;
+
+                }else{
+                    $id_navire= NULL;
+                    $Mprapport->navire_id = $id_navire;
+
+                }
+                $Mprapport->produit_id = $id_produit;
+                $Mprapport->conformite = $request->input($key.'_conformite');
+                $Mprapport->commentaire = $request->input($key.'_commentaire');
+                $Mprapport->certificat = $request->input($key.'_certificat');
+                $Mprapport->update();
+                foreach($request->input($key.'_nutriment_id', [])  as $r ){
+                    
+                    if(!$request->input($key.'_valeur_surbrute_'.$r) == NULL) {
+                        $value = Value::where('mprapport_id', $id)->where('nutriment_id', $r)->first();
+
+                        if ($value !== null) {
+                            $value->update(['value_surbrute' => $request->input($key.'_valeur_surbrute_'.$r)]);
+                        }
+                         else {
+                            $value = Value::create([
+                                'mprapport_id'=>$id,
+                                'nutriment_id'=> $r,
+                                'value_surbrute' => $request->input($key.'_valeur_surbrute_'.$r)]);
+                           
+                        }
+                        
+                    }if($request->input($key.'_valeur_surbrute_'.$r) == 0){
+                        Value::where('mprapport_id', $id)->where('nutriment_id', $r)->delete();
+                    }
+                    
+            }
+          
+            
+ 
+        
+    
+            }
+        
+        return redirect()->route('mprapports.index')
+                        ->with('success','les rapports Matiere Premiere modifiés avec success.');
+
+    
+        
+        
+
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -283,6 +434,63 @@ class MprapportController extends Controller
           return response()->json($result);
             
     } 
+
+    function action(Request $request)
+    {
+     if($request->ajax())
+     {  
+      $output = '';
+      $query = $request->get('query');
+      if($query != '')
+      {
+       $data = DB::table('mprapports')
+         ->where('CustomerName', 'like', '%'.$query.'%')
+         ->orWhere('Address', 'like', '%'.$query.'%')
+         ->orWhere('City', 'like', '%'.$query.'%')
+         ->orWhere('PostalCode', 'like', '%'.$query.'%')
+         ->orWhere('Country', 'like', '%'.$query.'%')
+         ->orderBy('CustomerID', 'desc')
+         ->get();
+         
+      }
+      else
+      {
+       $data = DB::table('tbl_customer')
+         ->orderBy('CustomerID', 'desc')
+         ->get();
+      }
+      $total_row = $data->count();
+      if($total_row > 0)
+      {
+       foreach($data as $row)
+       {
+        $output .= '
+        <tr>
+         <td>'.$row->CustomerName.'</td>
+         <td>'.$row->Address.'</td>
+         <td>'.$row->City.'</td>
+         <td>'.$row->PostalCode.'</td>
+         <td>'.$row->Country.'</td>
+        </tr>
+        ';
+       }
+      }
+      else
+      {
+       $output = '
+       <tr>
+        <td align="center" colspan="5">No Data Found</td>
+       </tr>
+       ';
+      }
+      $data = array(
+       'table_data'  => $output,
+       'total_data'  => $total_row
+      );
+
+      echo json_encode($data);
+     }
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -325,9 +533,9 @@ class MprapportController extends Controller
     {
         $request->validate([
             'num' => 'required',
-            'num_bon' => 'required',
+            'num_bon' => 'nullable',
             'produit_id' => 'required',
-            'fournisseur_id' => 'required',
+            'fournisseur_id' => 'nullable',
             'origine_id' => 'nullable',
             'navire_id' => 'nullable',
             'certificat' => 'sometimes',
@@ -380,6 +588,7 @@ class MprapportController extends Controller
               Value::where('mprapport_id', $id)->where('nutriment_id', $nutriment_id)->delete();
   
             }
+            
            
             return redirect()->route('mprapports.index')->with('success','Rapport Matiere premiere modifié avec success');
     }
@@ -485,5 +694,7 @@ class MprapportController extends Controller
 
         return  $pdf->download('rapport_mp.pdf'); 
     }
+
+    
    
 }

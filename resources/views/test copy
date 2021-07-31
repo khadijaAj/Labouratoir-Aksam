@@ -1,0 +1,38 @@
+
+if "SMALL GRAIN SILAGE" in tags_used["Type"]:
+    MO = 1000-Ash*10
+    CB = ((1.01*(ADF*10))-50)/10
+    TDN = 123.6-0.169*(ADF*10)
+    VDMIL = 66.3+(0.655*TDN)+(0.098*CP)+(0.626*DM)-3.7
+    VDMIB = 6.44+(0.782*TDN)+(0.112*(CP*10))+(0.679*DM)-1.7
+    UEL = 140/VDMIL
+    UEB = 95/VDMIB
+    PDIA = ((CP)*10)*(1.11*(1-0.72)*(0.7))
+    PDIMN = (CP*10)*(1-1.11*(1-0.72))*0.9*0.8*0.8
+    MOF = MO*TDN*0.01-Fat_EE*10-CP*10*(1-0.7)
+    PDIME = MOF*0.145*0.8*0.8
+    PDIE = PDIA+PDIME
+    PDIN = PDIA+PDIMN
+    UFL = (NELMcalkg*1000)/1760
+    GE2 = 4722-0.458*Starch*10*MO/1000+1.42*CP*10*MO/1000
+    GE = (GE2*MO)/1000
+    Ed = -2.86+1.001*TDN
+    DE = (Ed*GE)/100
+    EU%GE = 2.9+0.017*CP*10-0.47*1.44
+    EU = EU%GE*GE*0.01
+    CH3/DOM = 37.3848
+    DOM = MO*TDN*0.01
+    ECH4 = CH3/DOM*0.001*DOM*12.5
+    ME = DE-ECH4-EU
+    q = ME/GE
+    KLs = 0.65+0.247*(q-0.63)
+    NEL = ME*KLs
+    Km = 0.287*q+0.554
+    Kf = 0.78*q+0.006
+    Kmf = (Km*Kf*1.5)/(Kf+0.5*Km)
+    NEmg = Kmf*ME
+    UFV = NEmg/1760
+
+
+
+

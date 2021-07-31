@@ -69,7 +69,7 @@
     </div>
 
 </div>
-<br>
+<br><br>
 <div class="form-row align-items-right" style="float:left;">
 
     <div class="col-auto">
@@ -82,6 +82,11 @@
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
                 style="color: #ffffff; text-decoration: none; " href="/add_mp_m">Insertion multiple</a></button>
+    </div>
+    <div class="col-auto">
+        <br>
+        <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+                style="color: #ffffff; text-decoration: none; "  id="edit_m" name="edit_m" >Modification multiple</a></button>
     </div>
     <div class="col-auto">
         <br>
@@ -123,7 +128,7 @@
         <thead style="background-color:#FAFAFA;">
             <tr>
                 <th>
-                    <center> # </center>
+                    <center> <input type="checkbox" onclick="toggle(this);" /></center>
                 </th>
                 <th>
                     <center>D Reception</center>
@@ -176,9 +181,13 @@
                 <td>
                     <center>{{ $mprapport->Num_bon}}</center>
                 </td>
-                <td>
-                    <center>{{ $mprapport->fournisseur->name}}</center>
-                </td>
+                @if(!is_null($mprapport->fournisseur)) 
+                <td><center>{{ $mprapport->fournisseur->name}}</center>
+                    </td>
+                     @else
+<td></td>
+                    @endif
+                
                 @inject('value','App\Value') {{-- inject before foreach --}}
                 @inject('mesure','App\Mesure') {{-- inject before foreach --}}
                 @foreach($standards->nutriments as $nutriment)
@@ -216,7 +225,10 @@
             @endforeach
         </tbody>
     </table>
-
+    {{-- Pagination --}}
+        <div class="d-flex justify-content-center">
+            {!! $Mprapports->links() !!}
+        </div>
 
 </div>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -293,10 +305,29 @@ $(document).ready(function(even) {
     });
     return false;
 });
-</script>
-<script>
-$(document).ready(function() {
-    $('#MP').DataTable();
+
+
+$(document).ready(function(even) {
+    $("#edit_m").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/edit_mp_m?ids=" + checkvalue, "_self");
+        } else {
+            alert(" Choisir au moins un rapport à modifier");
+
+        }
+
+
+    });
+    return false;
 });
+
 </script>
+
+
+
+
 @endsection

@@ -74,7 +74,7 @@
     </div>
 
 </div>
-<br>
+<br><br>
 <div class="form-row align-items-right" style="float:left;">
 
     <div class="col-auto">
@@ -87,6 +87,11 @@
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
                 style="color: #ffffff; text-decoration: none; " href="/add_ra_m">Insertion multiple</a></button>
+    </div>
+    <div class="col-auto">
+        <br>
+        <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+                style="color: #ffffff; text-decoration: none; " id="edit_m" name="edit_m">Modification multiple</a></button>
     </div>
     <div class="col-auto">
         <br>
@@ -125,7 +130,7 @@
 
         <thead style="background-color:#FAFAFA;">
             <tr>
-                <th><center>#</center></th>
+                <th><center> <input type="checkbox" onclick="toggle(this);" /></center></th>
                 <th><center>N° Ech</center></th>
                 <th><center>Client</center></th>
                 <th><center>Commercial</center></th>
@@ -190,7 +195,10 @@
             @endforeach
         </tbody>
     </table>
-
+    {{-- Pagination --}}
+        <div class="d-flex justify-content-center">
+            {!! $Crapports->links() !!}
+        </div>
 </div>
 
 <script type="text/javascript">
@@ -256,5 +264,29 @@ $("#example").toggleClass('display-none');
     });
             return false;
         });
-    </script>  
+
+
+    $(document).ready(function(even) {
+    $("#edit_m").click(function() {
+        var checkvalue = [];
+        $.each($("input[name='id']:checked"), function() {
+            checkvalue.push($(this).val());
+        });
+        if (checkvalue.length > 0) {
+            window.open("{{URL::to('/')}}/edit_ra_m?ids=" + checkvalue, "_self");
+        } else {
+            alert(" Choisir au moins un rapport à modifier");
+
+        }
+
+
+    });
+    return false;
+});
+
+
+</script>
+ 
+
+    
 @endsection

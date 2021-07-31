@@ -170,7 +170,10 @@
             @endforeach
         </tbody>
     </table>
-
+    {{-- Pagination --}}
+        <div class="d-flex justify-content-center">
+            {!! $origines->links() !!}
+        </div>
 </div>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>

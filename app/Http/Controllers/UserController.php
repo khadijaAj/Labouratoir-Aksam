@@ -10,7 +10,10 @@ class UserController extends Controller
         public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('admin');
+
     }
+    
 
     /**
      * Display a listing of the resource.
@@ -47,7 +50,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required',
             'password' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'type' => 'required'
         ]);
   
@@ -104,7 +107,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required',
             'password' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             'type' => 'required'
         ]);
         

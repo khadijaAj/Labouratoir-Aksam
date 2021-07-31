@@ -74,6 +74,12 @@
                         <center>Equation</center>
                     </th>
                     <th>
+                        <center>Equation1</center>
+                    </th>
+                    <th>
+                        <center>Xml Equivalent</center>
+                    </th>
+                    <th>
                         <center>Actions</center>
                     </th>
 
@@ -94,6 +100,8 @@
                     </center></td>
                     <td><center> {{ $mesure->where('standardtype_id','=',$standardtype->id)->where('nutriment_id','=',$nutriment->id,)->value('unite') }}
                     <td><center> {{ $mesure->where('standardtype_id','=',$standardtype->id)->where('nutriment_id','=',$nutriment->id,)->value('equation') }}
+                    <td><center> {{ $mesure->where('standardtype_id','=',$standardtype->id)->where('nutriment_id','=',$nutriment->id,)->value('equation1') }}
+                    <td><center> {{ $mesure->where('standardtype_id','=',$standardtype->id)->where('nutriment_id','=',$nutriment->id,)->value('xml_equivalent') }}
 
                     <td>
                         <center>

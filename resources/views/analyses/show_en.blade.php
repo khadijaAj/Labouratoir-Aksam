@@ -47,13 +47,13 @@
 <div class="form-row">
 
     <div class="form-group col-md-6">
-        <label for="PS">Date de reception</label>
+        <label for="date_reception">Date de reception</label>
         <input type="text" class="form-control"  value="{{ $enrapport->date_reception }}"
              disabled>
 
     </div>
     <div class="form-group col-md-6">
-        <label for="date_reception"> Identifiant </label>
+        <label for="Identifiant"> Identifiant </label>
         <input type="text" class="form-control" name="Identifiant" value="{{ $enrapport->Identifiant }}" disabled>
     </div>
 
@@ -62,7 +62,7 @@
 <div class="form-row">
 
     <div class="form-group col-md-6">
-        <label for="PS">Num  Echantillon</label>
+        <label for="num_ech">Num  Echantillon</label>
         <input type="text" class="form-control" name="num_ech" value="{{ $enrapport->num_ech }}"
              disabled>
 
@@ -86,13 +86,13 @@
     @if(!is_null($enrapport->commercial)) 
 
             <div class="form-group col-md-6">
-                <label for="date_reception"> Commercial</label>
+                <label for="Commercial"> Commercial</label>
                 <input type="text" class="form-control" name="commercial" value="{{ $enrapport->commercial->name }}" disabled>
             </div>
                
                 @else
                 <div class="form-group col-md-6">
-        <label for="date_reception"> Commercial</label>
+        <label for="Commercial"> Commercial</label>
         <input type="text" class="form-control" name="commercial" value="-" disabled>
     </div>               
                 @endif

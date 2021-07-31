@@ -3,11 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class Xml extends Model
 {
-    use Loggable;
     protected $table = 'xml';
     protected $guarded = [];
 
@@ -29,6 +27,8 @@ class Xml extends Model
         'MilktonCSp','NEL_CSnMcallb','NEL_CSpMcallb','NEL_CSnMcalkg','NEL_CSpMcalkg','NEL_CSnMJkg','NEL_CSpMJkg',
         'C160','C180','C181','C182','C183','C160_TFA','C180_TFA','C181_TFA','C182_TFA','C183_TFA','pH'
     ];
+    
+
     
     public function enrapport()
     {

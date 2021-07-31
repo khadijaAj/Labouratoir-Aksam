@@ -18,6 +18,8 @@ class CreateMesuresTable extends Migration
             $table->string('methode')->nullable();
             $table->string('unite')->nullable();
             $table->string('equation')->nullable();
+            $table->string('equation1')->nullable();
+            $table->string('xml_equivalent')->nullable();
             $table->integer('standardtype_id')->unsigned();
             $table->foreign('standardtype_id')->references('id')->on('analyse_standards');
             $table->integer('nutriment_id')->unsigned();

@@ -26,7 +26,7 @@ class ProduitController extends Controller
     public function index()
     {
 
-        $produits = Produit::all();
+        $produits = Produit::paginate(30);
 
 
         return view('dt.produits',compact('produits'));
@@ -57,8 +57,8 @@ class ProduitController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
-            'categorie_id' => 'required'
+            'Reference' => 'nullable',
+            'categorie_id' => 'nullable'
             
         ]);
   
@@ -123,8 +123,8 @@ class ProduitController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
-            'categorie_id' => 'required'
+            'Reference' => 'nullable',
+            'categorie_id' => 'nullable'
             
           
         ]);

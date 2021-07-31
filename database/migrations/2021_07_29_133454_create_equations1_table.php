@@ -3,12 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-Use App\Equation;
+Use App\Equation1;
 
-class CreateEquationsTable extends Migration
-{   
-    
-
+class CreateEquations1Table extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -16,14 +14,14 @@ class CreateEquationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('equations', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('equations1', function (Blueprint $table) {
+            $table->id();
             $table->string('nom');
             $table->string('equation');
             $table->timestamps();
         });
 
-                                
+        
     }
 
     /**
@@ -33,6 +31,6 @@ class CreateEquationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('equations');
+        Schema::dropIfExists('equations1');
     }
 }

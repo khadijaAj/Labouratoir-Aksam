@@ -23,7 +23,7 @@ class OrigineController extends Controller
      */
     public function index()
     {
-        $origines = Origine::all();
+        $origines = Origine::paginate(30);
         return view('dt.origines',compact('origines'));
     }
 
@@ -48,7 +48,7 @@ class OrigineController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
             
         ]);
   
@@ -100,7 +100,7 @@ class OrigineController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'Reference' => 'required',
+            'Reference' => 'nullable',
           
         ]);
   

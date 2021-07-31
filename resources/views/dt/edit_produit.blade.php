@@ -63,6 +63,8 @@
         <input type="text" class="form-control" name="Reference" value="{{ $produit->Reference }}"
             placeholder="Entrer la référence">
     </div>
+
+    @if(!is_null($produit->categorie)) 
     <div class="form-group">
         <label for="categorie">Catégorie</label>
         <select class="custom-select mr-sm-2" name="categorie_id">
@@ -72,7 +74,17 @@
             @endforeach
         </select>
     </div>
-
+    @else
+    <div class="form-group">
+        <label for="categorie">Catégorie</label>
+        <select class="custom-select mr-sm-2" name="categorie_id">
+            <option selected value="" >Choisir une catégorie..</option>
+            @foreach( $categories as $cat)
+            <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
+            @endforeach
+        </select>
+    </div>
+    @endif
 
 
 

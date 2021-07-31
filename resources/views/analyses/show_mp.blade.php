@@ -74,6 +74,7 @@
 
 
 </div>
+@if(!is_null($mprapport->fournisseur)) 
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="fournisseur">Fournisseur</label>
@@ -82,6 +83,17 @@
 
         </select>
     </div>
+    @else
+    <div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="fournisseur">Fournisseur</label>
+        <select class="custom-select mr-sm-2" name="fournissueur_id" disabled>
+            <option selected>-</option>
+
+        </select>
+    </div>
+    @endif
+    @if(!is_null($mprapport->origine)) 
     <div class="form-group col-md-6">
         <label for="origne">Origine </label>
         <select class="custom-select mr-sm-2" name="origine_id" disabled>
@@ -93,6 +105,21 @@
 
 
 </div>
+@else
+<div class="form-group col-md-6">
+        <label for="origne">Origine </label>
+        <select class="custom-select mr-sm-2" name="origine_id" disabled>
+            <option selected>-</option>
+
+        </select>
+    </div>
+
+
+
+</div>
+@endif
+@if(!is_null($mprapport->navire)) 
+
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="navire">Navire</label>
@@ -101,6 +128,16 @@
 
         </select>
     </div>
+@else
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="navire">Navire</label>
+        <select class="custom-select mr-sm-2" name="navire_id" disabled>
+            <option selected>-</option>
+
+        </select>
+    </div>
+@endif
     <div class="form-group col-md-6">
         <label for="conformite">Conformité </label>
         <select class="custom-select mr-sm-2" name="conformite" disabled>

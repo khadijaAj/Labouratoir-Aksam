@@ -51,7 +51,23 @@ a.wrimagecard:hover, .wrimagecard-topimage:hover {
     color: #525c65;
     transition: color 0.3s ease;
 }
-
+.custom-combobox {
+  position: relative;
+  display: inline-block;
+}
+.custom-combobox-toggle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin-left: -1px;
+  padding: 0;
+}
+.custom-combobox-input {
+  margin: 0;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  padding-right: 5px;
+}
 
 /*     User Dropdown    */
 .dropdown-user {
