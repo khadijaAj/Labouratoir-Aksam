@@ -11,6 +11,7 @@ use App\Nutriment;
 use App\Standardtype;
 use App\Value;
 use App\Client;
+use App\Mesure;
 use DB;
 use PDF;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,17 +38,23 @@ class MprapportController extends Controller
         $nutriments=Nutriment::all();
         $standards=Standardtype::find(1);
         $values = Value::all();
-
+        $produits=Produit::all();
+        $fournisseurs=Fournisseur::all();
+        $origines=Origine::all();
+        $navires=Navire::all();
         $data = [
             'Mprapports'  => $Mprapports,
             'standards'  => $standards,
             'nutriments'  => $nutriments,
             'values'   => $values,
-
+            'produits' => $produits,
+            'fournisseurs'=>$fournisseurs,
+            'origines'=>$origines,
+            'navires'=>$navires
 
         ];
 
-        return view('analyses.matierepremiere')->with($data);;
+        return view('analyses.matierepremiere')->with($data);
     }
 
     /**
@@ -179,6 +186,7 @@ class MprapportController extends Controller
     }
 
 
+
      /**
      * Show the form for creating multiple resource.
      *
@@ -186,8 +194,8 @@ class MprapportController extends Controller
      */
     public function create_multiple()
     {
-        $produits=Produit::all();
         $nutriments=Nutriment::all();
+        $produits=Produit::all();
         $fournisseurs=Fournisseur::all();
         $origines=Origine::all();
         $navires=Navire::all();
@@ -425,15 +433,7 @@ class MprapportController extends Controller
     }
 
 
-    public function search(Request $request)
-    {
-          $search = $request->get('term');
-      
-          $result = Produit::where('name', 'LIKE', '%'. $search. '%')->get();
- 
-          return response()->json($result);
-            
-    } 
+  
 
     function action(Request $request)
     {
@@ -639,19 +639,45 @@ class MprapportController extends Controller
         return redirect()->back()->with('success', 'les données sont importées avec success!');
     }
 
+  
     public function generatePDF(Request $request)
     {   
+        function array_average_by_key( $arr )
+{
+    $sums = array();
+    $counts = array();
+    foreach( $arr as $k => &$v )
+    {
+        foreach( $v as $sub_k => $sub_v )
+        {
+            if( !array_key_exists( $sub_k, $counts ) )
+            {
+                $counts[$sub_k] = 0;
+                $sums[$sub_k]   = 0;
+            }
+            $counts[$sub_k]++;
+            $sums[$sub_k]  += $sub_v;
+        }
+    }
+    $avg = array();
+    foreach( $sums as $k => $v )
+    {
+        $avg[$k] = $v / $counts[$k];
+    }
+    return $avg;
+}
         $ids = $request->input('ids');
+        $standards=Standardtype::find(1);
+        $values = Value::all();
         if($request->has('ids')){
             $ids_array = explode(",",$request->get('ids'));
             $mprapports=Mprapport::findMany($ids_array);
         }else{
             $mprapports=Mprapport::all();
         }
-       
+     
         $date = date('Y-m-d');
         $nutriments=Nutriment::all();
-        $standards=Standardtype::find(1);
         $values = Value::all();
         $clients=Client::all();
 
@@ -694,7 +720,134 @@ class MprapportController extends Controller
 
         return  $pdf->download('rapport_mp.pdf'); 
     }
-
     
+
+ 
+
+
+    public function search(Request $request){
+
+        if($request->input('search_param')=="produit"){
+            $date_start = $request->date_start_p;
+            $date_end = $request->date_end_p;
+            $id_produit = Produit::where('name','=',$request->input('produit_name'))->first()->id;
+
+            if($date_start!=NULL && $date_end!=NULL){
+                $mprapports = Mprapport::where('produit_id', '=',$id_produit)->orderBy('date_reception','ASC')->whereBetween('date_reception', [$date_start, $date_end])->get();
+    
+            }else{
+                $mprapports = Mprapport::where('produit_id', '=',$id_produit)->orderBy('date_reception','ASC')->get();
+
+            }
+          
+
+        }
+        if($request->input('search_param')=="origine"){
+            $date_start = $request->date_start_o;
+            dd($request->date_start);
+
+            $date_end = $request->date_end_o;
+
+            $id_origine = Origine::where('name','=',$request->input('origine_name'))->first()->id;
+            if($date_start!=NULL && $date_end!=NULL){
+                $mprapports = Mprapport::where('origine_id', '=',$id_origine)->orderBy('date_reception','ASC')->whereBetween('date_reception', [$date_start, $date_end])->get();
+
+            }else{
+                $mprapports = Mprapport::where('origine_id', '=',$id_origine)->orderBy('date_reception','ASC')->get();
+
+            }
+
+        }
+        if($request->input('search_param')=="fournisseur"){
+            $date_start = $request->date_start_f;
+            $date_end = $request->date_end_f;
+            $id_fournisseur = Fournisseur::where('name','=',$request->input('fournisseur_name'))->first()->id;
+
+            if($date_start!=NULL && $date_end!=NULL){
+                $mprapports = Mprapport::where('fournisseur_id', '=',$id_fournisseur)->orderBy('date_reception','ASC')->whereBetween('date_reception', [$date_start, $date_end])->get();
+
+            }else{
+                $mprapports = Mprapport::where('fournisseur_id', '=',$id_fournisseur)->orderBy('date_reception','ASC')->get();
+
+            }
+
+
+        }
+        if($request->input('search_param')=="navire"){
+            $date_start = $request->date_start_n;
+            $date_end = $request->date_end_n;
+            $id_navire = Navire::where('name','=',$request->input('navire_name'))->first()->id;
+
+            if($date_start!=NULL && $date_end!=NULL){
+                $mprapports = Mprapport::where('navire_id', '=',$id_navire)->orderBy('date_reception','ASC')->whereBetween('date_reception', [$date_start, $date_end])->get();
+
+            }else{
+                $mprapports = Mprapport::where('navire_id', '=',$id_navire)->orderBy('date_reception','ASC')->get();
+
+            }
+
+        }
+        if($request->input('search_param')=="date_reception"){
+            $mprapports = Mprapport::where('date_reception', '=',$request->search)->get();
+
+
+        }
+        if($request->input('search_param')=="multiple"){
+            $date_start = $request->date_start_m;
+            $date_end = $request->date_end_m;
+            $mprapports = Mprapport::where('date_reception', '=',$request->search);
+
+          
+            if($date_start !=NULL && $date_end !=NULL){
+                $mprapports = Mprapport::whereBetween('date_reception', [$date_start, $date_end])
+                ->when(request()->input('produit_name_m'), function ($query) {
+                    $query->where('produit_id', Produit::where('name','=',request()->input('produit_name_m'))->first()->id);
+                })->when($request->input('fournisseur_name_m'), function ($query) {
+                    $query->where('fournisseur_id', Fournisseur::where('name','=',request()->input('fournisseur_name_m'))->first()->id);
+                })  ->when($request->input('origine_name_m'), function ($query) {
+                    $query->where('origine_id', Origine::where('name','=',request()->input('origine_name_m'))->first()->id);
+                })  ->when($request->input('navire_name_m'), function ($query) {
+                    $query->where('navire_id', Navire::where('name','=', request()->input('navire_name_m'))->first()->id);
+                })
+                ->get();
+
+            }else{
+                $mprapports = Mprapport::when(request()->input('produit_name_m'), function ($query) {
+                    $query->where('produit_id', Produit::where('name','=',request()->input('produit_name_m'))->first()->id);
+                })->when($request->input('fournisseur_name_m'), function ($query) {
+                    $query->where('fournisseur_id', Fournisseur::where('name','=',request()->input('fournisseur_name_m'))->first()->id);
+                })  ->when($request->input('origine_name_m'), function ($query) {
+                    $query->where('origine_id', Origine::where('name','=',request()->input('origine_name_m'))->first()->id);
+                })  ->when($request->input('navire_name_m'), function ($query) {
+                    $query->where('navire_id', Navire::where('name','=', request()->input('navire_name_m'))->first()->id);
+                })
+                ->get();
+            }
+       
+        }
+
+        $nutriments=Nutriment::all();
+        $standards=Standardtype::find(1);
+        $values = Value::all();
+        $produits=Produit::all();
+        $fournisseurs=Fournisseur::all();
+        $origines=Origine::all();
+        $navires=Navire::all();
+        $data = [
+            'Mprapports'  => $mprapports,
+            'standards'  => $standards,
+            'nutriments'  => $nutriments,
+            'values'   => $values,
+            'produits' => $produits,
+            'fournisseurs'=>$fournisseurs,
+            'origines'=>$origines,
+            'navires'=>$navires
+
+        ];
+
+        return view('analyses.search_matierepremiere')->with($data);
+
+
+    }   
    
 }

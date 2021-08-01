@@ -165,4 +165,15 @@ class ProduitController extends Controller
         Excel::import(new ProduitImport, $file);
         return redirect()->back()->with('success', 'les données sont importées avec success!');
     }
+
+    public function search(Request $request){
+        $search = $request->input('search');
+    
+        $produits = Produit::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('dt.search_produits', compact('produits'));
+    }
 }

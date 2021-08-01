@@ -150,4 +150,17 @@ class CommercialController extends Controller
     {
         return Excel::download(new CommercialExport, 'commercial.xlsx');
     }
-}
+
+
+    public function search(Request $request){
+        $search = $request->input('search');
+    
+        $commerciaux = Commercial::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('partenaires.search_commerciaux', compact('commerciaux'));
+    }
+
+    }

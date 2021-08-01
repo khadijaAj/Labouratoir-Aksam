@@ -165,4 +165,14 @@ class NutrimentController extends Controller
         Excel::import(new  NutrimentImport, $file);
         return redirect()->back()->with('success', 'les données sont importées avec success!');
     }
+    public function search(Request $request){
+        $search = $request->input('search');
+    
+        $nutriments = Nutriment::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('dt.search_nutriments', compact('nutriments'));
+    }
 }

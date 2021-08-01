@@ -94,7 +94,7 @@
 
     </div>
     
-<div class="form-row" id="multiple" style="float: right;display:none;">
+    <div class="form-row" id="multiple" style="float: right;display:none;">
 
 <div class="form-group col-md-2">
     <label for="start">De : </label>
@@ -277,10 +277,7 @@ text-align: right;" class="btn btn-secondary">- Chercher -</button>
 
         </tbody>
     </table>
-    {{-- Pagination --}}
-    <div class="d-flex justify-content-center">
-        {!! $Enrapports->links() !!}
-    </div>
+   
 </div>
 
 <script type="text/javascript">

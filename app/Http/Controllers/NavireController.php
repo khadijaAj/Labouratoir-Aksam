@@ -155,5 +155,16 @@ class NavireController extends Controller
         return $pdf->download('liste_Navires.pdf');
     }
 
+    public function search(Request $request){
+        $search = $request->input('search');
+    
+        $navires = Navire::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('partenaires.search_navires', compact('navires'));
+    }    
+
 
 }

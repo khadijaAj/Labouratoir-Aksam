@@ -92,11 +92,14 @@
 
     table {
         border-collapse: collapse;
-
+        
         border-spacing: 0;
-        border: none;
+        border: #FFFFFF;
         font-size: 11px
     }
+    tr td {
+    padding-top: 0em;
+}
 
     body {
         height: 840px;
@@ -112,7 +115,7 @@
 
     #container {
         position: relative;
-        padding: 2%
+        padding: 0%;
     }
 
     #header {
@@ -310,7 +313,15 @@
 
     </div>
 
-    <table style="border-left: 1px solid #F2F4F3;
+    <div id="container" style=" position: relative;">
+        <div id="header" style="  margin: 0;
+        margin-left: 20;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;">
+        <center>
+    <table  cellpadding='0' cellspacing='0' style="width: 97%;border-left: 1px solid #F2F4F3;
     border-right: 1px solid #F2F4F3;border-bottom: 1px solid #F2F4F3;" class="table table-bordered  ">
         <thead>
             <tr style="border:none;background-color:#22b14c;color: #ffffff;">
@@ -325,7 +336,7 @@
                 </th>
                 <th style="padding-top: 12px; padding-bottom: 12px; text-align: left; padding: 8px;">
                     <center>Unité</center>
-                </th>
+                </th>   
                 <th style="padding-top: 12px; padding-bottom: 12px; text-align: left; padding: 8px;">
                     <center>Valeurs indicatives</center>
                 </th>
@@ -334,7 +345,7 @@
         <tbody>
 
           
-        <tr colspan="5" style="border:none;;border-right: 1px solid #FFFFFF;border-left: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;border-top: 1px solid #F2F4F3;"><td colspan="5"> Fibre et encombrement
+        <tr colspan="5" ><td style="border:1px solid #FFFFFF;background-color:#FFFFFF;border-right: 1px solid #FFFFFF;border-left: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;border-top: 1px solid #FFFFFF;" colspan="5"> Fibre et encombrement
 </td>
     </tr>
             <tr style="border:none;background-color:#e8f8f3;">
@@ -382,7 +393,7 @@
                 </tr>
             
                 
-                <tr colspan="5" style="border:none;;border-right: 1px solid #FFFFFF;border-left: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;border-top: 1px solid #F2F4F3;"><td colspan="5"> Protéines
+                <tr colspan="5" ><td  style="border:1px solid #FFFFFF;background-color:#FFFFFF;border-right: 1px solid #FFFFFF;border-left: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;border-top: 1px solid #FFFFFF;" colspan="5"> Protéines
 </td>
     </tr>
     <tr style="border:none;background-color:#e8f8f3;">
@@ -417,7 +428,7 @@
                 </tr>
 
           
-                <tr colspan="5" style="border:none;border-right: 1px solid #F2F4F3;"><td colspan="5"> Energie
+                <tr colspan="5" style="border:none;border-right: 1px solid #F2F4F3;"><td style="border:1px solid #FFFFFF;background-color:#FFFFFF;border-right: 1px solid #FFFFFF;border-left: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;border-top: 1px solid #FFFFFF;" colspan="5"> Energie
 </td>
     </tr>
 
@@ -491,7 +502,8 @@
             </tr>
         </tbody>
     </table>
-
+</center>
+</div>
     <div>
 
     </div>
@@ -499,6 +511,7 @@
     <table align="center" width="100%" border="0">
             
             <tr>
+
             <td style="text-align:left;"><img src="images/logo.png" height="50px;" alt=""></td>  
             <td style="font-size:8px;text-align:left;"><br>Les informations et commentaires sont transmis pour application dans les conditions normalesd'utilisation sous la réseve de l'exhaustivé et de l'authenticité des informations communiquées par l'éleveur. Ils ne peuvent tenir compte du stockage de l'ensilage, du compotement silo (chauffage, etc), et des autres particularités propres à chaque élevage.<br> </p>
 </td>  

@@ -1,3 +1,5 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
 @extends('layouts.app')
 
 @section('title', 'Commerciaux - Aksam Labs')
@@ -51,6 +53,8 @@
 
 
 <div>
+<form action="{{ route('search_commercial') }}" method="GET">
+
     <div class="form-row col-sm-6 align-items-right" style="float:right;">
 
         <div class="input-group mb-2">
@@ -58,11 +62,12 @@
             <div class="input-group-prepend">
                 <div class="input-group-text " style="background-color:#FAFAFA;"><i class="la la-search"> </i></div>
             </div>
-
-            <input type="text" id="myInput" onkeyup="myFunction()" class="form-control"
-                style="border: 1px solid #ced4da" id="search_client" placeholder="Chercher ...">
+            <input type="text"  class="form-control"
+                style="border: 1px solid #ced4da" name="search" id="search" placeholder="Chercher ...">
 
         </div>
+        </form>
+
     </div>
 
 </div>
@@ -193,8 +198,9 @@
 }
 </style>
 
-
 <script>
+
+    
 function myFunction() {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue;
@@ -224,22 +230,13 @@ function myFunction() {
 
 <script type="text/javascript">
 
-
-$(document).ready(function () {
-  $('#myTable').DataTable();
-  $('.dataTables_length').addClass('bs-select');
-});
-
 $("#example1").click(function() {
 
     $("#example").toggleClass('display-none');
 
 });
 
-$(document).ready(function () {
-  $('#myTable').DataTable();
-  $('.dataTables_length').addClass('bs-select');
-});
+
 </script>
 <script>
    $(document).ready(function() {
@@ -251,14 +248,6 @@ $(document).ready(function () {
 
 
 
-function checkAll(bx) {
-  var cbs = document.getElementsByTagName('input');
-  for(var i=0; i < cbs.length; i++) {
-    if(cbs[i].type == 'checkbox') {
-      cbs[i].checked = bx.checked;
-    }
-  }
-}
     </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

@@ -28,8 +28,14 @@ class PfrapportController extends Controller
      */
     public function index()
     {
+        $produits=Produit::all();
         $pfrapports = Pfrapport::orderBy('created_at','DESC')->paginate(30);
-        return view('analyses.produitfini',compact('pfrapports'));
+
+        $data = [
+            'pfrapports'  => $pfrapports,
+            'produits'  => $produits
+        ];    
+        return view('analyses.produitfini')->with($data);
     }
 
     /**
@@ -435,6 +441,7 @@ class PfrapportController extends Controller
      */
     public function destroy(Pfrapport $pfrapport)
     {
+
         $pfrapport->delete();
   
         return redirect()->route('pfrapports.index')
@@ -521,4 +528,48 @@ class PfrapportController extends Controller
     }
 
   
+    public function search(Request $request){
+
+        if($request->input('search_param')=="produit"){
+            $date_start = $request->date_start_p;
+            $date_end = $request->date_end_p;
+            $id_produit = Produit::where('name','=',$request->input('produit_name'))->first()->id;
+
+            if($date_start!=NULL && $date_end!=NULL){
+                $pfrapports = Pfrapport::where('produit_id', '=',$id_produit)->orderBy('date_fabrication','ASC')->whereBetween('date_fabrication', [$date_start, $date_end])->get();
+    
+            }else{
+                $pfrapports = Pfrapport::where('produit_id', '=',$id_produit)->orderBy('date_fabrication','ASC')->get();
+
+            }
+          
+
+        }
+       
+        if($request->input('search_param')=="date_fabrication"){
+            $pfrapports = Pfrapport::where('date_fabrication', '=',$request->search)->get();
+
+
+        }
+        if($request->input('search_param')=="identification"){
+            $pfrapports = Pfrapport::where('identification', '=',$request->search)->get();
+
+
+        }
+        
+        
+        $produits=Produit::all();
+        
+        $data = [
+            'pfrapports'  => $pfrapports,
+            'produits' => $produits,
+          
+
+        ];
+
+        return view('analyses.search_produitfini')->with($data);
+
+
+    }   
+ 
 }

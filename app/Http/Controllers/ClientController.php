@@ -162,6 +162,19 @@ class ClientController extends Controller
         Excel::import(new ClientImport, $file);
         return redirect()->back()->with('success', 'les données sont importées avec success!');
     }
+
+
+
+    public function search(Request $request){
+        $search = $request->input('search');
+        $clients = Client::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('partenaires.search_clients', compact('clients'));
+    }
+
     public function pdf()
     {
         $clients = DB::select('select * from clients');
@@ -172,4 +185,6 @@ class ClientController extends Controller
         $pdf->stream();
         return $pdf->download('liste_clients.pdf');
     }
+
+ 
 }

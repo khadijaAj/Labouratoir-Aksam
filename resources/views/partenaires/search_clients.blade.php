@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Navire - Aksam Labs')
+@section('title', 'Clients - Aksam Labs')
 
 @section('links')
 <li class="nav-item ">
@@ -9,19 +9,20 @@
         <p>Commerciaux</p>
     </a>
 </li>
-<li class="nav-item ">
+
+<li class="nav-item active">
     <a href="/clients">
         <i class="la la-users"></i>
         <p>Clients</p>
     </a>
 </li>
-<li class="nav-item  ">
+<li class="nav-item ">
     <a href="/fournisseurs">
         <i class="la la-industry"></i>
         <p>Fournisseurs</p>
     </a>
 </li>
-<li class="nav-item active ">
+<li class="nav-item  ">
     <a href="/navires">
         <i class="la la-ship"></i>
         <p>Navires</p>
@@ -30,8 +31,8 @@
 @endsection
 
 @section('Page_infos')
-<div class="card-title"><b><i class="la la-ship"></i>
-        Navires</b></div>
+<div class="card-title"><b><i class="la la-users"></i>
+        Clients</b></div>
 @endsection
 
 @section('content')
@@ -46,26 +47,23 @@
     @endif
 
 </div>
-<div>
-<form action="{{ route('search_navire') }}" method="GET">
+<form action="{{ route('search_client') }}" method="GET">
 
-<div class="form-row col-sm-6 align-items-right" style="float:right;">
+    <div class="form-row col-sm-6 align-items-right" style="float:right;">
 
-    <div class="input-group mb-2">
+        <div class="input-group mb-2">
 
-        <div class="input-group-prepend">
-            <div class="input-group-text " style="background-color:#FAFAFA;"><i class="la la-search"> </i></div>
+            <div class="input-group-prepend">
+                <div class="input-group-text " style="background-color:#FAFAFA;"><i class="la la-search"> </i></div>
+            </div>
+
+            <input type="text"  class="form-control"
+                style="border: 1px solid #ced4da" name="search" id="search" placeholder="Chercher ...">
+
+
         </div>
-
-        <input type="text"  class="form-control"
-            style="border: 1px solid #ced4da" name="search" id="search" placeholder="Chercher ...">
-
-
-    </div>
-
+    
 </form>
-</div>
-
 </div>
 <br>
 <div class="form-row align-items-right" style="float:left;">
@@ -73,15 +71,12 @@
     <div class="col-auto">
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="{{ route('navires.create') }}">Ajouter un
-                navire</a></button>
+                style="color: #ffffff; text-decoration: none; " href="{{ route('clients.create') }}">Ajouter un client</a></button>
     </div>
     <div class="col-auto">
         <br>
-
-        <button id="example1" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+        <button id="example1" type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
                 style="color: #ffffff; text-decoration: none; " href="#">Importer</a></button>
-
     </div>
     <div class="col-auto">
         <br>
@@ -90,9 +85,8 @@
             Exporter
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="{{ route('exportn') }}">Excel</a>
-            <a class="dropdown-item" href="/PDF_Navire">PDF</a>
-
+            <a class="dropdown-item" href="{{ route('exportcl') }}">Excel</a>
+            <a class="dropdown-item" href="/PDF_Client">PDF</a>
         </div>
     </div>
 
@@ -100,15 +94,14 @@
 
 </div>
 </div>
-<div id="example" style=" margin: 0 auto;" class="display-none">
-    <form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;" action="{{ URL::to('importExcelNavire') }}"
-        class="form-horizontal" method="post" enctype="multipart/form-data">
-        {{ csrf_field() }}
-        <input type="file" name="file" />
-        <button class="btn btn-secondary">Importer Fichier</button>
+<div id="example" style=" margin: 0 auto;"  class="display-none">
+<form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;" action="{{ URL::to('importExcelClient') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
+		{{ csrf_field() }}
+		<input type="file" name="file" />
+		<button class="btn btn-secondary">Importer Fichier</button>
         <a  class="btn btn-danger" href="{{ asset('pdf/guide.pdf') }}">Guide d'importation</a>
 
-    </form>
+	</form>
     <br>
 </div>
 <div class="table-responsive">
@@ -124,7 +117,7 @@
                     <center>Nom</center>
                 </th>
                 <th>
-                    <center>Référence</center>
+                    <center>Commercial</center>
                 </th>
                 <th>
                     <center>Actions</center>
@@ -133,31 +126,40 @@
             </tr>
         </thead>
         <tbody>
-        @if ($navires->count() == 0)
+        @if ($clients->count() == 0)
         <tr>
             <td colspan="4"><center>Aucun résultat à afficher.</center></td>
         </tr>
         @endif
-            @foreach ($navires as $navire)
+        @foreach ($clients as $client)
             <tr>
                 <th scope="row">
-                    <center>{{ $navire->id }}</center>
+                    <center>{{ $client->id }}</center>
                 </th>
 
 
                 <td>
-                    <center>{{ $navire->name }}</center>
+                    <center>{{ $client->name }}</center>
                 </td>
-                <td>
-                    <center>{{ $navire->Reference }}</center>
+                @if ($client->commercial()->exists())
+                
+                    <td>
+                    <center>{{ $client->commercial->name }}</center>
                 </td>
+                @else
+                    <td>
+                    <center>-</center>
+                </td>
+                @endif
+                
                 <td>
                     <center>
-                        <form action="{{ route('navires.destroy',$navire->id) }}" method="POST">
+                        <form action="{{ route('clients.destroy',$client->id) }}" method="POST">
 
+                            <a href="{{ route('clients.show',$client->id) }}"><i style="color:#000;"
+                                    class="la la-eye"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
-
-                            <a href="{{ route('navires.edit',$navire->id) }}"><i style="color:#3EB805;"
+                            <a href="{{ route('clients.edit',$client->id) }}"><i style="color:#3EB805;"
                                     class="la la-edit"></i></a>
 
                             @csrf
@@ -170,24 +172,20 @@
                 </td>
             </tr>
             @endforeach
-
         </tbody>
     </table>
-    {{-- Pagination --}}
-        <div class="d-flex justify-content-center">
-            {!! $navires->links() !!}
-        </div>
-
+  
 </div>
-
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 <style type="text/css">
-.display-none {
 
-    display: none;
+    .display-none{
 
-}
+        display: none;
+
+    }
+
 </style>
 
 
@@ -199,11 +197,16 @@
 
 
 <script type="text/javascript">
-$("#example1").click(function() {
 
-    $("#example").toggleClass('display-none');
+
+
+$("#example1").click(function(){
+
+$("#example").toggleClass('display-none');
 
 });
-</script>
 
+
+
+</script>
 @endsection

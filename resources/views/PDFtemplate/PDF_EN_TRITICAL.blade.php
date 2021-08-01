@@ -49,7 +49,7 @@
         margin: 0;
         padding: 0;
         border: 0;
-        font-size: 100%;
+        font-size: 90%;
         font: inherit;
         vertical-align: baseline
     }
@@ -95,15 +95,15 @@
 
         border-spacing: 0;
         border: none;
-        font-size: 8.5px
+        font-size: 8.2px
     }
 
     body {
-        height: 840px;
+        height: 940px;
         width: 692px;
         margin: auto;
         font-family: 'Open Sans', sans-serif;
-        font-size: 9.5px
+        font-size: 8.3px
     }
 
     strong {
@@ -116,7 +116,7 @@
     }
 
     #header {
-        height: 80px
+        height: 60px
     }
 
     #header>#reference {
@@ -238,7 +238,7 @@
   border-radius: 1px;">
         <div>
             <center>
-                <p style="font-size:16px; font-weight: bold;"><b><u>BULLETIN D'ANALYSE FOURRAGES</u></b></p>
+                <p style="font-size:13px; font-weight: bold;"><b><u>BULLETIN D'ANALYSE FOURRAGES</u></b></p>
             </center>
         </div>
 
@@ -337,13 +337,51 @@
 
                 </td>
                 <td style="border:none;border-right: 1px solid #F2F4F3;">
-                    <center> {{ $value->where('enrapport_id','=',$enrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche') }}</center>
+                    <center> {{  number_format(((real) $value->where('enrapport_id','=',$enrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surseche')) ,2, '.', ',') }}</center>
                 </td>
                 <td style="border:none;border-right: 1px solid #F2F4F3;">
-                    <center>  {{ $mesure->where('standardtype_id','=',$standards->id,)->where('nutriment_id','=',$nutriment->id,)->value('unite') }}</center>
+                    <center>  {{ $mesure->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('unite') }}</center>
                 </td>
 <td style="border:none;border-right: 1px solid #F2F4F3;">
+                @if($nutriment->name=='NDF')
+           <center>     34,83 Min ------- Max 60,05 </center>
+                @endif
 
+                @if($nutriment->name=='ADF')
+           <center>     27,39 Min ------- Max 43,83 </center>
+                @endif
+                @if($nutriment->name=='MAT')
+           <center>     8,97 Min ------- Max 21,92 </center>
+                @endif
+
+                @if($nutriment->name=='AMIDON')
+           <center>     0,1 Min ------- Max  9,41 </center>
+                @endif
+                @if($nutriment->name=='Sucre solubles')
+           <center>     2,31  Min ------- Max  14,7 </center>
+                @endif
+                @if($nutriment->name=='Matières grasses')
+           <center>     2,52 Min ------- Max 4,99 </center>
+                @endif
+
+                @if($nutriment->name=='Calcium')
+           <center>     0,3 Min ------- Max 1,17 </center>
+                @endif
+
+                @if($nutriment->name=='Phosphore')
+           <center>     0,25 Min ------- Max 0,47 </center>
+                @endif
+
+                @if($nutriment->name=='Magnesium')
+           <center>     0,13 Min ------- Max 0,42 </center>
+                @endif
+
+                @if($nutriment->name=='Potassium')
+           <center>     1,75 Min ------- Max 3,99 </center>
+                @endif
+                @if($nutriment->name=='Souffre')
+           <center>     0,12 Min ------- Max 0,30</center>
+                @endif
                 </td>
               
             </tr>
@@ -378,7 +416,7 @@
     <table align="center" width="100%" border="0">
             
             <tr>
-            <td style="text-align:left;"><img src="images/logo.png" height="50px;" alt=""></td>  
+            <td style="text-align:left;"><img src="images/logo.png" height="30px;" alt=""></td>  
             <td style="font-size:8px;text-align:left;"><br>Les informations et commentaires sont transmis pour application dans les conditions normalesd'utilisation sous la réseve de l'exhaustivé et de l'authenticité des informations communiquées par l'éleveur. Ils ne peuvent tenir compte du stockage de l'ensilage, du compotement silo (chauffage, etc), et des autres particularités propres à chaque élevage.<br> </p>
 </td>  
             <td style="font-size:8.8px;text-align:left;"><br>Référence :<br> {{ $date }}<br>

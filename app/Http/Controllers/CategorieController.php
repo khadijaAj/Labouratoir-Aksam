@@ -145,4 +145,15 @@ class CategorieController extends Controller
         return $pdf->download('liste_Categories.pdf');
     }
 
+    public function search(Request $request){
+        $search = $request->input('search');
+    
+        $categories = Categorie::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('dt.search_categories', compact('categories'));
+    }
+
 }

@@ -37,11 +37,17 @@ class EnrapportController extends Controller
     public function index()
     {
         
+        $produits = Produit::all();
+        $commerciaux=Commercial::all();
+        $clients=Client::all();
         $Enrapports = Enrapport::orderBy('created_at','DESC')->paginate(30);
         
 
         $data = [
             'Enrapports'  => $Enrapports,
+            'produits'=>$produits,
+            'clients'=>$clients,
+            'commerciaux'=>$commerciaux
             
 
 
@@ -76,13 +82,11 @@ class EnrapportController extends Controller
     {        
         function ReplaceTxtwithValue($text,$array){
             $texts = strtoupper($text);
-            echo "$texts";
 
             foreach($array as $key => $val){
                 $texts = str_replace(strtoupper($key),$val,$texts);
             }
-            echo "</br>";
-            echo "$texts";
+         
 
 
             $results =   evalmath($texts);
@@ -205,7 +209,7 @@ class EnrapportController extends Controller
 
         ]);
         $xml= Xml::create($data);
-        
+        // IF ERROR FOUND => CLIENT DOESNT EXIST IN DB & CANNOT BE NULL
         try{
             if(Client::where('name','LIKE', strtolower($data['Farm_ID']))->orWhere('Reference',$data['Desc_2'])){
                 $client_id = Client::where('name','LIKE', $data['Farm_ID'])->orWhere('Reference',$data['Desc_2'])->first()->id;
@@ -232,7 +236,7 @@ class EnrapportController extends Controller
         ]); 
 
         $xml->update(['enrapport_id'=>$rapport->id]);
-  
+   
         $equations= Equation::orderBy('id','ASC')->get();
 
         $xml_cal= $data;
@@ -245,11 +249,8 @@ class EnrapportController extends Controller
                 return strlen($b) - strlen($a);
             });
             $result = ReplaceTxtwithValue($equation->equation,$xml_cal);
-            echo "<br>";
-            echo "<br>";
+            $result = number_format($result, 2, '.', ',');
 
-            echo "$nom => $result";
-            echo "<br>";
             $xml_cal[strtoupper($nom)] = "$result";
             //echo "<pre>".print_r($xml_cal)."</pre>";
         } 
@@ -264,7 +265,8 @@ class EnrapportController extends Controller
                 return strlen($b) - strlen($a);
             });
             $result = ReplaceTxtwithValue($equation->equation,$xml_cal1);
-          
+            $result = number_format($result, 2, '.', ',');
+
             $xml_cal1[strtoupper($nom)] = "$result";
 
         }
@@ -277,7 +279,7 @@ class EnrapportController extends Controller
         $mesure = Mesure::all();
         foreach($standards->nutriments as $nutriment){
            
-            // this for calculating Values with Method="Infra rouge"
+          // this for calculating Values with Method="Infra rouge"
             if(DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('methode')=='Infra Rouge' && DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('xml_equivalent') !=NULL){
             $xml_equivalent= DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('xml_equivalent');
             $value = new Value(); 
@@ -286,24 +288,53 @@ class EnrapportController extends Controller
             $value->enrapport_id = $rapport->id;
             $value->nutriment_id = $nutriment->id;
             $value->save();   
-            }
+            } 
             // this for calculating Values with Method="Valeur calculée"
 
             if(DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('methode')=='Valeur calculée'){
               
-                $value = new Value();    
+                $value = new Value(); 
                 $value->value_surbrute = $corn_sil_values[strtoupper($nutriment->name)];
                 $value->value_surseche =  $small_sil_values[strtoupper($nutriment->name)];
-                $value->enrapport_id = $rapport->id;
                 $value->nutriment_id = $nutriment->id;
+                $value->enrapport_id = $rapport->id;
+                $value->save();
+
+                   
+
+            }
+            if($nutriment->name == "CB"){
+                $value = new Value(); 
+                $value->value_surbrute = $corn_sil_values['CB'];
+                $value->value_surseche =  $small_sil_values['CB'];
+                $value->nutriment_id = $nutriment->id;
+                $value->enrapport_id = $rapport->id;
+                $value->save();
+            }
+            if($nutriment->name == "UEL"){
+                $value = new Value(); 
+                $value->value_surbrute = $corn_sil_values['UEL'];
+                $value->value_surseche =  $small_sil_values['UEL'];
+                $value->nutriment_id = $nutriment->id;
+                $value->enrapport_id = $rapport->id;
+                $value->save();
+            }
+            if($nutriment->name == "UEB"){
+                $value = new Value(); 
+                $value->value_surbrute = $corn_sil_values['UEB'];
+                $value->value_surseche =  $small_sil_values['UEB'];
+                $value->nutriment_id = $nutriment->id;
+                $value->enrapport_id = $rapport->id;
                 $value->save();
             }
 
     }
     
 }
+ 
 return redirect()->route('enrapports.index')
-                        ->with('success','les rapports Ensilage crées avec success.');
+->with('success','les rapports Ensilage crées avec success.');
+
 
 
     }
@@ -567,4 +598,67 @@ return redirect()->route('enrapports.index')
 
         return  $pdf->download('rapport_mp.pdf'); 
     }
+
+
+    
+
+    public function search(Request $request){
+        
+      
+        if($request->input('search_param')=="date_reception"){
+            $enrapports = Enrapport::where('date_reception', '=',$request->search)->get();
+
+
+        }
+        if($request->input('search_param')=="identifiant"){
+            $enrapports = Enrapport::where('Identifiant', '=',$request->search)->get();
+
+
+        }
+        if($request->input('search_param')=="multiple"){
+            $date_start = $request->date_start_m;
+            $date_end = $request->date_end_m;
+            $enrapports = Enrapport::where('date_reception', '=',$request->search);
+
+          
+            if($date_start !=NULL && $date_end !=NULL){
+                $enrapports = Enrapport::whereBetween('date_reception', [$date_start, $date_end])
+                ->when(request()->input('produit_name_m'), function ($query) {
+                    $query->where('produit_id', Produit::where('name','=',request()->input('produit_name_m'))->first()->id);
+                })->when($request->input('commercial_name_m'), function ($query) {
+                    $query->where('commercial_id', Commercial::where('name','=',request()->input('commercial_name_m'))->first()->id);
+                })  ->when($request->input('client_name_m'), function ($query) {
+                    $query->where('client_id', Client::where('name','=',request()->input('client_name_m'))->first()->id);
+                }) 
+                ->get();
+
+            }else{
+                $enrapports = Enrapport::when(request()->input('produit_name_m'), function ($query) {
+                    $query->where('produit_id', Produit::where('name','=',request()->input('produit_name_m'))->first()->id);
+                })->when($request->input('commercial_name_m'), function ($query) {
+                    $query->where('commercial_id', Commercial::where('name','=',request()->input('commercial_name_m'))->first()->id);
+                })  ->when($request->input('client_name_m'), function ($query) {
+                    $query->where('client_id', Client::where('name','=',request()->input('client_name_m'))->first()->id);
+                })  ->get();
+            }
+       
+        }
+
+       
+        $produits=Produit::all();
+        $clients= Client::all();
+        $commerciaux = Commercial::all();
+        $data = [
+            'Enrapports'  => $enrapports,
+            'produits' => $produits,
+            'commerciaux'=>$commerciaux,
+            'clients'=>$clients,
+
+        ];
+
+        return view('analyses.search_rapportensilage')->with($data);
+
+
+    }   
+
 }

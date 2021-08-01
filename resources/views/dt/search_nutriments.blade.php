@@ -48,8 +48,7 @@
     @endif
 
 </div>
-<div>
-<form action="{{ route('search_nutriment') }}" method="GET">
+<div><form action="{{ route('search_nutriment') }}" method="GET">
 
 <div class="form-row col-sm-6 align-items-right" style="float:right;">
 
@@ -66,6 +65,7 @@
     </div>
 </div>
 </form>
+
 </div>
 <br>
 <div class="form-row align-items-right" style="float:left;">
@@ -175,10 +175,7 @@
             @endforeach
         </tbody>
     </table>
-    {{-- Pagination --}}
-        <div class="d-flex justify-content-center">
-            {!! $nutriments->links() !!}
-        </div>
+   
 </div>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 

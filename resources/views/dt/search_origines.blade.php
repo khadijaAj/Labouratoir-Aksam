@@ -4,19 +4,19 @@
 
 @section('links')
 
-<li class="nav-item">
+<li class="nav-item ">
     <a href="/produits">
         <i class="la la-dropbox"></i>
         <p>Produits</p>
     </a>
 </li>
-<li class="nav-item active ">
+<li class="nav-item  ">
     <a href="/nutriments">
         <i class="la la-yelp"></i>
         <p>Nutriments</p>
     </a>
 </li>
-<li class="nav-item">
+<li class="nav-item active">
     <a href="/origines">
         <i class="la la-server"></i>
         <p>Origines</p>
@@ -32,11 +32,12 @@
 @endsection
 
 @section('Page_infos')
-<div class="card-title"><b><i class="la la-yelp"></i>
-        Nutriments</b></div>
+<div class="card-title"><b><i class="la la-server"></i>
+        Origines</b></div>
 @endsection
 
 @section('content')
+
 <div>
     @if ($message = Session::get('success'))
     <div class="alert alert-success alert-dismissible fade show">
@@ -49,7 +50,7 @@
 
 </div>
 <div>
-<form action="{{ route('search_nutriment') }}" method="GET">
+<form action="{{ route('search_produit') }}" method="GET">
 
 <div class="form-row col-sm-6 align-items-right" style="float:right;">
 
@@ -73,13 +74,13 @@
     <div class="col-auto">
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="{{ route('Nutriment.create') }}">Ajouter un
-                nutriment</a></button>
+                style="color: #ffffff; text-decoration: none; " href="{{ route('origines.create') }}">Ajouter une
+                origine</a></button>
     </div>
     <div class="col-auto">
         <br>
-        <button type="submit" id="example1" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="#">Importer</a></button>
+        <button id="example1" type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+                style="color: #ffffff; text-decoration: none; " href="">Importer</a></button>
     </div>
     <div class="col-auto">
         <br>
@@ -88,9 +89,8 @@
             Exporter
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="{{ route('exportnt') }}">Excel</a>
-            <a class="dropdown-item" href="/PDF_Nutriment">PDF</a>
-
+            <a class="dropdown-item" href="{{ route('exporto') }}">Excel</a>
+            <a class="dropdown-item" href="/PDF_Origine">PDF</a>
         </div>
     </div>
 
@@ -99,9 +99,8 @@
 </div>
 </div>
 <div id="example" style=" margin: 0 auto;" class="display-none">
-    <form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;"
-        action="{{ URL::to('importExcelNutriment') }}" class="form-horizontal" method="post"
-        enctype="multipart/form-data">
+    <form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;" action="{{ URL::to('importExcelOrigine') }}"
+        class="form-horizontal" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <input type="file" name="file" />
         <button class="btn btn-secondary">Importer Fichier</button>
@@ -133,34 +132,32 @@
             </tr>
         </thead>
         <tbody>
-        @if ($nutriments->count() == 0)
+        @if ($origines->count() == 0)
             <tr>
                 <td colspan="4"><center>Aucun résultat à afficher.</center></td>
             </tr>
             @endif
-            @foreach ($nutriments as $nutriment)
+            @foreach ($origines as $origine)
             <tr>
                 <th scope="row">
-                    <center>{{ $nutriment->id }}</center>
+                    <center>{{ $origine->id }}</center>
                 </th>
 
 
                 <td>
-                    <center>{{ $nutriment->name }}</center>
+                    <center>{{ $origine->name }}</center>
                 </td>
                 <td>
-                    <center>{{ $nutriment->Reference }}</center>
+                    <center>{{ $origine->Reference }}</center>
                 </td>
 
                 <td>
                     <center>
-                        <form action="{{ route('Nutriment.destroy',$nutriment->id) }}" method="POST">
+                        <form action="{{ route('origines.destroy',$origine->id) }}" method="POST">
 
 
-                            <a href="{{ route('Nutriment.show',$nutriment->id) }}"><i style="color:#000;"
-                                    class="la la-eye"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
-                            <a href="{{ route('Nutriment.edit',$nutriment->id) }}"><i style="color:#3EB805;"
+                            <a href="{{ route('origines.edit',$origine->id) }}"><i style="color:#3EB805;"
                                     class="la la-edit"></i></a>
 
                             @csrf
@@ -175,11 +172,9 @@
             @endforeach
         </tbody>
     </table>
-    {{-- Pagination --}}
-        <div class="d-flex justify-content-center">
-            {!! $nutriments->links() !!}
-        </div>
+   
 </div>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -205,5 +200,4 @@ $("#example1").click(function() {
 
 });
 </script>
-
 @endsection

@@ -253,10 +253,7 @@
             @endforeach
         </tbody>
     </table>
-    {{-- Pagination --}}
-    <div class="d-flex justify-content-center">
-        {!! $pfrapports->links() !!}
-    </div>
+   
 </div>
 
 <script type="text/javascript">

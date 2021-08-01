@@ -147,4 +147,14 @@ class OrigineController extends Controller
         $pdf->stream();
         return $pdf->download('liste_Origines.pdf');
     }
+    public function search(Request $request){
+        $search = $request->input('search');
+    
+        $origines = Origine::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('dt.search_origines', compact('origines'));
+    }
 }

@@ -48,177 +48,183 @@
 </div>
 
 <div>
-<form action="{{ route('search_mp') }}" method="POST">
-{{ csrf_field() }}
+    <form action="{{ route('search_mp') }}" method="POST">
+        {{ csrf_field() }}
 
-    <div class="form-row  col-sm-6  align-items-right" style="float:right;">
+        <div class="form-row  col-sm-6  align-items-right" style="float:right;">
 
-        <div class="input-group mb-2">
+            <div class="input-group mb-2">
 
-            <div class="input-group-prepend">
-                <div class="input-group-text" style="background-color:#FAFAFA;"><i class="la la-search"> </i></div>
+                <div class="input-group-prepend">
+                    <div class="input-group-text" style="background-color:#FAFAFA;"><i class="la la-search"> </i></div>
 
+                </div>
+
+                <input type="text" class="form-control" style="border: 1px solid #ced4da" id="search" name="search"
+                    placeholder="Chercher ...">
+
+                <div class="input-group-btn search-panel" style="background-color:#FAFAFA;border: 1px solid #ced4da;">
+                    <select id='purpose' name="search_param" id="search_param" class="btn btn-light dropdown-toggle"
+                        data-toggle="dropdown">
+                        <option value="all">Filtrer par</option>
+                        <option value="date_reception">Date de reception</option>
+                        <option value="produit">Produit</option>
+                        <option value="fournisseur">Fournisseur</option>
+                        <option value="origine">Origine</option>
+                        <option value="navire">Navire</option>
+                        <option value="multiple">Recherche multiple</option>
+
+                    </select>
+                </div>
+
+                <div class="form-row" id="produit" style="float: right;display:none;">
+
+                    <div class="form-group col-md-8">
+                        <label for="produits">Produit :</label>
+
+                        <input type='text' placeholder="Choisir .." class="tags_products form-control"
+                            name="produit_name" />
+                    </div>
+                    <br>
+                    <div class="form-group col-md-6">
+                        <label for="start">De : </label>
+                        <input type="date" class="form-control" name="date_start_p">
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="date_reception"> Jusqu'à : </label>
+                        <input type="date" class="form-control" name="date_end_p">
+                    </div>
+
+                    <div style=" float: right;
+    text-align: right;" class="form-group col-md-7">
+
+                        <button type="submit" style=" float: right;
+    text-align: right;" class="btn btn-secondary">- Chercher -</button>
+                    </div>
+                </div>
+                <div class="form-row" id="fournisseur" style="float: right;display:none;">
+                    <br>
+
+                    <div class="form-group col-md-8">
+                        <label for="fournisseur">Fournisseur :</label>
+
+                        <input type='text' placeholder="Choisir .." class="tags_fournisseurs form-control"
+                            name="fournisseur_name" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="start">De : </label>
+                        <input type="date" class="form-control" name="date_start_f">
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="date_reception"> Jusqu'à : </label>
+                        <input type="date" class="form-control" name="date_end_f">
+                    </div>
+
+                    <div style=" float: right;
+    text-align: right;" class="form-group col-md-7">
+
+                        <button type="submit" style=" float: right;
+    text-align: right;" class="btn btn-secondary">- Chercher -</button>
+                    </div>
+
+                </div>
+
+                <div class="form-row" id="submit_div" style="display:none;">
+
+
+                    &nbsp;&nbsp;<button type="submit" style=" float: right;
+    text-align: right;" class="btn btn-secondary">- Chercher -</button>
+                </div>
+
+                <div class="form-row" id="navire" style="float: right;display:none;">
+                    <div class="form-group col-md-8">
+                        <label for="navires">Navire :</label>
+
+                        <input type='text' placeholder="Choisir .." class="tags_navires form-control"
+                            name="navire_name" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="start">De : </label>
+                        <input type="date" class="form-control" name="date_start_n">
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="date_reception"> Jusqu'à : </label>
+                        <input type="date" class="form-control" name="date_end_n">
+                    </div>
+
+                    <div style=" float: right;
+    text-align: right;" class="form-group col-md-7">
+
+                        <button type="submit" style=" float: right;
+    text-align: right;" class="btn btn-secondary">- Chercher -</button>
+                    </div>
+                </div>
+                <div class="form-row" id="origine" style="float: right;display:none;">
+                    <div class="form-group col-md-8">
+                        <label for="origine">Origine :</label>
+
+                        <input type='text' placeholder="Choisir .." class="tags_origines form-control"
+                            name="origine_name" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="start">De : </label>
+                        <input type="date" class="form-control" name="date_start_o">
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="date_reception"> Jusqu'à : </label>
+                        <input type="date" class="form-control" name="date_end_o">
+                    </div>
+
+                    <div style=" float: right;
+    text-align: right;" class="form-group col-md-7">
+
+                        <button type="submit" style=" float: right;
+    text-align: right;" class="btn btn-secondary">- Chercher -</button>
+                    </div>
+                </div>
+                <div class="form-row" id="multiple" style="float: right;display:none;">
+
+                    <div class="form-group col-md-4">
+                        <label for="start">De : </label>
+                        <input type="date" class="form-control" name="date_start_m">
+
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="date_reception"> Jusqu'à : </label>
+                        <input type="date" class="form-control" name="date_end_m">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="navire">Produit</label>
+                        <input class="tags_products form-control" name='produit_name_m'>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="fournisseur">Fournisseur</label>
+                        <input type="text" class="tags_fournisseurs form-control" name="fournisseur_name_m">
+
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="navire">Navire</label>
+                        <input type="text" class="tags_navires form-control" name="navire_name_m">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="navire">Origine</label>
+                        <input type="text" class="tags_origines form-control" name="origine_name_m">
+                    </div>
+
+                    <div style=" float: right;
+    text-align: right;" class="form-group col-md-7">
+
+                        <button type="submit" style=" float: right;
+    text-align: right;" class="btn btn-secondary">- Chercher -</button>
+                    </div>
+                </div>
             </div>
 
-            <input type="text" class="form-control" style="border: 1px solid #ced4da" 
-               id="search" name="search"  placeholder="Chercher ...">
-              
-            <div class="input-group-btn search-panel" style="background-color:#FAFAFA;border: 1px solid #ced4da;">
-                <select id='purpose' name="search_param" id="search_param" class="btn btn-light dropdown-toggle"
-                    data-toggle="dropdown">
-                    <option value="all">Filtrer par</option>
-                    <option value="date_reception">Date de reception</option>
-                    <option value="produit">Produit</option>
-                    <option value="fournisseur">Fournisseur</option>
-                    <option value="origine">Origine</option>
-                    <option value="navire">Navire</option>
-                    <option value="multiple">Recherche multiple</option>
-
-                </select>
-            </div>
-      
-            <div class="form-row" id="produit" style="float: right;display:none;">
-
-            <div class="form-group col-md-8">
-            <label for="produits">Produit :</label>
-
-<input type='text'  placeholder="Choisir .." class="tags_products form-control" name="produit_name"/>
-</div>
-<br>
-<div class="form-group col-md-6">
-    <label for="start">De : </label>
-    <input type="date" class="form-control" name="date_start_p">
-
-</div>
-<div class="form-group col-md-6">
-    <label for="date_reception"> Jusqu'à : </label>
-    <input type="date" class="form-control" name="date_end_p">
-</div>
-
-<div style=" float: right;
-    text-align: right;" class="form-group col-md-7">
-
-<button type="submit" style=" float: right;
-    text-align: right;" class="btn btn-secondary">-  Chercher -</button>
-</div></div>
-<div class="form-row" id="fournisseur" style="float: right;display:none;">
-<br>
-
-<div class="form-group col-md-8">
-            <label for="fournisseur">Fournisseur :</label>
-
-<input type='text' placeholder="Choisir .."   class="tags_fournisseurs form-control" name="fournisseur_name"/>
-</div>
-<div class="form-group col-md-6">
-    <label for="start">De : </label>
-    <input type="date" class="form-control" name="date_start_f">
-
-</div>
-<div class="form-group col-md-6">
-    <label for="date_reception"> Jusqu'à : </label>
-    <input type="date" class="form-control" name="date_end_f">
-</div>
-
-<div style=" float: right;
-    text-align: right;" class="form-group col-md-7">
-
-<button type="submit" style=" float: right;
-    text-align: right;" class="btn btn-secondary">-  Chercher -</button>
-</div>
-
-</div>
-
-<div class="form-row" id="submit_div" style="display:none;">
-
-
-&nbsp;&nbsp;<button type="submit" style=" float: right;
-    text-align: right;" class="btn btn-secondary">-  Chercher -</button>
-</div>
-
-<div class="form-row" id="navire" style="float: right;display:none;">
-<div class="form-group col-md-8">
-            <label for="navires">Navire :</label>
-
-<input type='text' placeholder="Choisir .."   class="tags_navires form-control" name="navire_name"/>
-</div>
-<div class="form-group col-md-6">
-    <label for="start">De : </label>
-    <input type="date" class="form-control" name="date_start_n">
-
-</div>
-<div class="form-group col-md-6">
-    <label for="date_reception"> Jusqu'à : </label>
-    <input type="date" class="form-control" name="date_end_n">
-</div>
-
-<div style=" float: right;
-    text-align: right;" class="form-group col-md-7">
-
-<button type="submit" style=" float: right;
-    text-align: right;" class="btn btn-secondary">-  Chercher -</button>
-</div>
-</div>
-<div class="form-row" id="origine" style="float: right;display:none;">
-<div class="form-group col-md-8">
-            <label for="origine">Origine :</label>
-
-<input type='text' placeholder="Choisir .."    class="tags_origines form-control" name="origine_name"/>
-</div><div class="form-group col-md-6">
-    <label for="start">De : </label>
-    <input type="date" class="form-control" name="date_start_o">
-
-</div>
-<div class="form-group col-md-6">
-    <label for="date_reception"> Jusqu'à : </label>
-    <input type="date" class="form-control" name="date_end_o">
-</div>
-
-<div style=" float: right;
-    text-align: right;" class="form-group col-md-7">
-
-<button type="submit" style=" float: right;
-    text-align: right;" class="btn btn-secondary">-  Chercher -</button>
-</div>
-</div>
-<div class="form-row" id="multiple" style="float: right;display:none;">
-
-<div class="form-group col-md-4">
-    <label for="start">De : </label>
-    <input type="date" class="form-control" name="date_start_m">
-
-</div>
-<div class="form-group col-md-4">
-    <label for="date_reception"> Jusqu'à : </label>
-    <input type="date" class="form-control" name="date_end_m">
-</div>
-<div class="form-group col-md-4">
-    <label for="navire">Produit</label>
-    <input class="tags_products form-control" name='produit_name_m'>
-</div>
-<div class="form-group col-md-4">
-    <label for="fournisseur">Fournisseur</label>
-    <input type="text" class="tags_fournisseurs form-control" name="fournisseur_name_m">
-
-</div>
-<div class="form-group col-md-4">
-    <label for="navire">Navire</label>
-    <input type="text" class="tags_navires form-control" name="navire_name_m">
-</div>
-<div class="form-group col-md-4">
-    <label for="navire">Origine</label>
-    <input type="text" class="tags_origines form-control" name="origine_name_m">
-</div>
-
-<div style=" float: right;
-    text-align: right;" class="form-group col-md-7">
-
-<button type="submit" style=" float: right;
-    text-align: right;" class="btn btn-secondary">-  Chercher -</button>
-</div>
-</div>
         </div>
-
-    </div>
 
 </div>
 <br><br>
@@ -239,7 +245,8 @@
     <div class="col-auto">
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; "  id="edit_m" name="edit_m" >Modification multiple</a></button>
+                style="color: #ffffff; text-decoration: none; " id="edit_m" name="edit_m">Modification
+                multiple</a></button>
     </div>
     <div class="col-auto">
         <br>
@@ -276,7 +283,7 @@
 </div>
 <div class="table-responsive">
 
-    <table class="table "  id="dataTable" width="100%" cellspacing="0">
+    <table class="table " id="dataTable" width="100%" cellspacing="0">
 
         <thead style="background-color:#FAFAFA;">
             <tr>
@@ -311,10 +318,12 @@
 
             </tr>
         </thead>
-        <tbody >
+        <tbody>
             @if ($Mprapports->count() == 0)
             <tr>
-                <td colspan="12"><center>Aucun résultat à afficher.</center></td>
+                <td colspan="12">
+                    <center>Aucun résultat à afficher.</center>
+                </td>
             </tr>
             @endif
             @foreach ($Mprapports as $mprapport)
@@ -334,13 +343,14 @@
                 <td>
                     <center>{{ $mprapport->Num_bon}}</center>
                 </td>
-                @if(!is_null($mprapport->fournisseur)) 
-                <td><center>{{ $mprapport->fournisseur->name}}</center>
-                    </td>
-                     @else
-<td></td>
-                    @endif
-                
+                @if(!is_null($mprapport->fournisseur))
+                <td>
+                    <center>{{ $mprapport->fournisseur->name}}</center>
+                </td>
+                @else
+                <td></td>
+                @endif
+
                 @inject('value','App\Value') {{-- inject before foreach --}}
                 @inject('mesure','App\Mesure') {{-- inject before foreach --}}
                 @foreach($standards->nutriments as $nutriment)
@@ -378,12 +388,9 @@
             @endforeach
         </tbody>
     </table>
-    {{-- Pagination --}}
-        <div class="d-flex justify-content-center">
-            {!! $Mprapports->links() !!}
-        </div>
 
-        
+
+
 
 </div>
 
@@ -405,132 +412,122 @@ $("#example1").click(function() {
     display: none;
 
 }
-
-
 </style>
-   
-  
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-
-
-
 $(document).ready(function() {
     $('#purpose').on('change', function() {
         $val = $('#purpose option:selected').val();
-        if($val == "date_reception"){
+        if ($val == "date_reception") {
             document.getElementById("search").disabled = false;
 
             $("#multiple").hide();
             $("#produit").hide();
-                $("#fournisseur").hide();
-                $("#navire").hide();
-                $("#origine").hide();
-                $("#submit_div").show();
+            $("#fournisseur").hide();
+            $("#navire").hide();
+            $("#origine").hide();
+            $("#submit_div").show();
             document.getElementById('search').type = 'date';
 
 
-        }else if($val == "multiple"){
+        } else if ($val == "multiple") {
             document.getElementById("search").disabled = true;
 
             $("#produit").hide();
-                $("#fournisseur").hide();
-                $("#navire").hide();
-                $("#origine").hide();
+            $("#fournisseur").hide();
+            $("#navire").hide();
+            $("#origine").hide();
             $("#multiple").show();
             $("#submit_div").hide();
             document.getElementById('search').type = 'text';
 
 
-        }
-        else{
+        } else {
             document.getElementById("search").disabled = true;
 
             $("#multiple").hide();
             $("#submit_div").hide();
             document.getElementById('search').type = 'text';
 
-            if($val == "produit"){
+            if ($val == "produit") {
                 $("#produit").show();
                 $("#fournisseur").hide();
                 $("#navire").hide();
                 $("#origine").hide();
 
 
-            }else if($val == "fournisseur"){
+            } else if ($val == "fournisseur") {
                 $("#produit").hide();
                 $("#fournisseur").show();
                 $("#navire").hide();
                 $("#origine").hide();
 
-            }else if($val == "origine"){
+            } else if ($val == "origine") {
                 $("#produit").hide();
                 $("#fournisseur").hide();
                 $("#navire").hide();
                 $("#origine").show();
-                
 
-            }else if($val == "navire"){
+
+            } else if ($val == "navire") {
                 $("#produit").hide();
                 $("#fournisseur").hide();
                 $("#navire").show();
                 $("#origine").hide();
                 $("#submit_div").hide();
 
-                
+
             }
 
 
         }
-        
+
 
     });
 });
 $('.datepicker').datepicker();
 
-$( function() {
+$(function() {
     var availableTags = [
-        @foreach( $produits as $produit)
-                             "<?=$produit['name']?>",
-                            @endforeach
+        @foreach($produits as $produit)
+        "<?=$produit['name']?>",
+        @endforeach
     ];
-    $( ".tags_products" ).autocomplete({
-      source: availableTags
+    $(".tags_products").autocomplete({
+        source: availableTags
     });
 
     var availableTags1 = [
-        @foreach( $fournisseurs as $fournisseur)
-                             "<?=$fournisseur['name']?>",
-                            @endforeach
+        @foreach($fournisseurs as $fournisseur)
+        "<?=$fournisseur['name']?>",
+        @endforeach
     ];
-    $( ".tags_fournisseurs" ).autocomplete({
-      source: availableTags1
+    $(".tags_fournisseurs").autocomplete({
+        source: availableTags1
     });
 
     var availableTags2 = [
-        @foreach( $origines as $origine)
-                             "<?=$origine['name']?>",
-                            @endforeach
+        @foreach($origines as $origine)
+        "<?=$origine['name']?>",
+        @endforeach
     ];
-    $( ".tags_origines" ).autocomplete({
-      source: availableTags2
+    $(".tags_origines").autocomplete({
+        source: availableTags2
     });
 
     var availableTags3 = [
-        @foreach( $navires as $navire)
-                             "<?=$navire['name']?>",
-                            @endforeach
+        @foreach($navires as $navire)
+        "<?=$navire['name']?>",
+        @endforeach
     ];
-    $( ".tags_navires" ).autocomplete({
-      source: availableTags3
+    $(".tags_navires").autocomplete({
+        source: availableTags3
     });
-  } );
-
- 
-
-
+});
 </script>
 
 

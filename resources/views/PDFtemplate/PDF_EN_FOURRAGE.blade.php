@@ -49,7 +49,7 @@
         margin: 0;
         padding: 0;
         border: 0;
-        font-size: 100%;
+        font-size: 90%;
         font: inherit;
         vertical-align: baseline
     }
@@ -95,15 +95,15 @@
 
         border-spacing: 0;
         border: none;
-        font-size: 8.5px
+        font-size: 8.2px
     }
 
     body {
-        height: 840px;
+        height: 940px;
         width: 692px;
         margin: auto;
         font-family: 'Open Sans', sans-serif;
-        font-size: 8.5px
+        font-size: 8.3px
     }
 
     strong {
@@ -116,7 +116,7 @@
     }
 
     #header {
-        height: 80px
+        height: 60px
     }
 
     #header>#reference {
@@ -238,7 +238,7 @@
   border-radius: 1px;">
         <div>
             <center>
-                <p style="font-size:16px; font-weight: bold;"><b><u>BULLETIN D'ANALYSE FOURRAGES</u></b></p>
+                <p style="font-size:13px; font-weight: bold;"><b><u>BULLETIN D'ANALYSE FOURRAGES</u></b></p>
             </center>
         </div>
 
@@ -246,8 +246,8 @@
             <table align="center" width="100%" border="0">
             
                 <tr>
-                <td style="font-size:12px;text-align:left;">Commercial : @if(!is_null($enrapport->commercial)) {{ $enrapport->commercial->name }} @else @endif </td>
-                <td style="font-size:12px;text-align:right;">Identifiant :  {{ $enrapport->Identifiant }}</td>
+                <td style="font-size:10px;text-align:left;">Commercial : @if(!is_null($enrapport->commercial)) {{ $enrapport->commercial->name }} @else @endif </td>
+                <td style="font-size:10px;text-align:right;">Identifiant :  {{ $enrapport->Identifiant }}</td>
                 </tr>
 
             </table>
@@ -255,8 +255,8 @@
             <table align="center" width="100%" border="0">
             
             <tr>
-            <td style="font-size:12px;text-align:left;">Client : {{ $enrapport->client->name }} </td>
-            <td style="font-size:12px;text-align:right;">N° d'échantillon :  {{ $enrapport->num_ech }}</td>
+            <td style="font-size:10px;text-align:left;">Client : {{ $enrapport->client->name }} </td>
+            <td style="font-size:10px;text-align:right;">N° d'échantillon :  {{ $enrapport->num_ech }}</td>
             </tr>
 
         </table>
@@ -264,8 +264,8 @@
         <table align="center" width="100%" border="0">
             
             <tr>
-            <td style="font-size:12px;text-align:left;">Ref Client : {{ $enrapport->client->Reference }}  </td>
-            <td style="font-size:12px;text-align:right;">Type d'échantillon : {{ $enrapport->produit->name }}</td>
+            <td style="font-size:10px;text-align:left;">Ref Client : {{ $enrapport->client->Reference }}  </td>
+            <td style="font-size:10px;text-align:right;">Type d'échantillon : {{ $enrapport->produit->name }}</td>
             </tr>
 
         </table>
@@ -274,8 +274,8 @@
     <table align="center" width="100%" border="0">
             
             <tr>
-            <td style="font-size:12px;text-align:left;">Matière séche : {{ $enrapport->xml->DM }} &nbsp; % </td>  
-            <td style="font-size:12px;text-align:right;">Matière minérale : {{ $enrapport->xml->Ash }}  &nbsp; % MS </td>  
+            <td style="font-size:10px;text-align:left;">Matière séche : {{ $enrapport->xml->DM }} &nbsp; % </td>  
+            <td style="font-size:10px;text-align:right;">Matière minérale : {{ $enrapport->xml->Ash }}  &nbsp; % MS </td>  
 
         </tr>
 
@@ -288,8 +288,8 @@
                 $i=$enrapport->xml->Ash;
                 $MO=1000-$i*10;
             @endphp
-            <td style="font-size:12px;text-align:left;">Matière organique : {{ $MO }} &nbsp; g/Kg MS </td>  
-            <td style="font-size:12px;text-align:right;">pH : {{ $enrapport->xml->pH }} </td>  
+            <td style="font-size:10px;text-align:left;">Matière organique : {{ $MO }} &nbsp; g/Kg MS </td>  
+            <td style="font-size:10px;text-align:right;">pH : {{ $enrapport->xml->pH }} </td>  
 
         </tr>
 
@@ -299,11 +299,17 @@
         </div>
 
     </div>
-
-
-    <table cellSpacing='0' cellPadding='0' style="border-left: 1px solid #F2F4F3;
+    <div id="container" style=" position: relative;">
+        <div id="header" style="  margin: 0;
+        margin-left: 20;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;">
+        <center>
+    <table  cellpadding='0' cellspacing='0' style="width: 97%;border-left: 1px solid #F2F4F3;
     border-right: 1px solid #F2F4F3;border-bottom: 1px solid #F2F4F3;" class="table table-bordered  ">
-        <thead>
+       <thead>
             <tr style="border:none;background-color:#22b14c;color: #ffffff;">
                 <th style="padding-top: 12px; padding-bottom: 12px; text-align: left; padding: 8px;">
                     <center>Nutriment</center>
@@ -337,13 +343,56 @@
 
                 </td>
                 <td style="border:none;border-right: 1px solid #F2F4F3;">
-                    <center> {{ $value->where('enrapport_id','=',$enrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute') }}</center>
+                    <center> {{  number_format(((float) $value->where('enrapport_id','=',$enrapport->id,)->where('nutriment_id','=',$nutriment->id,)->value('value_surbrute')) ,2, '.', ',') }}</center>
                 </td>
                 <td style="border:none;border-right: 1px solid #F2F4F3;">
                     <center>  {{ $mesure->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('unite') }}</center>
                 </td>
 <td style="border:none;border-right: 1px solid #F2F4F3;">
+                @if($nutriment->name=='NDF')
+           <center>     33 Min ------- Max 47 </center>
+                @endif
 
+                @if($nutriment->name=='ADF')
+           <center>     19,93 Min ------- Max 30,46 </center>
+                @endif
+
+                @if($nutriment->name=='ADL')
+           <center>     3,5 Min ------- Max 5 </center>
+                @endif
+
+                @if($nutriment->name=='MAT')
+           <center>     5,80 Min ------- Max 9,00 </center>
+                @endif
+
+                @if($nutriment->name=='AMIDON')
+           <center>     21 Min ------- Max  41,93 </center>
+                @endif
+                @if($nutriment->name=='Sucre solubles')
+           <center>     0,99  Min ------- Max 6,63 </center>
+                @endif
+                @if($nutriment->name=='Matières grasses')
+           <center>     1,49 Min ------- Max 2,61 </center>
+                @endif
+
+                @if($nutriment->name=='Calcium')
+           <center>     0,16 Min ------- Max 0,31 </center>
+                @endif
+
+                @if($nutriment->name=='Phosphore')
+           <center>     0,19 Min ------- Max 0,28 </center>
+                @endif
+
+                @if($nutriment->name=='Magnesium')
+           <center>     0,13 Min ------- Max 0,23 </center>
+                @endif
+
+                @if($nutriment->name=='Potassium')
+           <center>     0,77 Min ------- Max 1,35 </center>
+                @endif
+                @if($nutriment->name=='Souffre')
+           <center>     0,08 Min ------- Max 0,13</center>
+                @endif
                 </td>
               
             </tr>
@@ -378,7 +427,7 @@
     <table align="center" width="100%" border="0">
             
             <tr>
-            <td style="text-align:left;"><img src="images/logo.png" height="50px;" alt=""></td>  
+            <td style="text-align:left;"><img src="images/logo.png" height="30px;" alt=""></td>  
             <td style="font-size:8px;text-align:left;"><br>Les informations et commentaires sont transmis pour application dans les conditions normalesd'utilisation sous la réseve de l'exhaustivé et de l'authenticité des informations communiquées par l'éleveur. Ils ne peuvent tenir compte du stockage de l'ensilage, du compotement silo (chauffage, etc), et des autres particularités propres à chaque élevage.<br> </p>
 </td>  
             <td style="font-size:8.8px;text-align:left;"><br>Référence :<br> {{ $date }}<br>

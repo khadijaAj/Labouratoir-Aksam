@@ -73,8 +73,6 @@
                         data-toggle="dropdown">
                         <option value="all">Filtrer par</option>
                         <option value="date_reception">Date de reception</option>
-                        <option value="date_analyse">Date d'analyse</option>
-
                         <option value="multiple">Recherche Multiple</option>
 
 
@@ -295,10 +293,7 @@ text-align: right;" class="btn btn-secondary">- Chercher -</button>
                     @endforeach
                 </tbody>
             </table>
-            {{-- Pagination --}}
-            <div class="d-flex justify-content-center">
-                {!! $Crapports->links() !!}
-            </div>
+           
         </div>
 
         <script type="text/javascript">
@@ -325,7 +320,7 @@ text-align: right;" class="btn btn-secondary">- Chercher -</button>
         $(document).ready(function() {
             $('#purpose').on('change', function() {
                 $val = $('#purpose option:selected').val();
-                if ($val == "date_reception" || $val == "date_analyse") {
+                if ($val == "date_reception") {
                     document.getElementById("search").disabled = false;
                     $("#multiple").hide();
                     $("#submit_div").show();
@@ -343,7 +338,15 @@ text-align: right;" class="btn btn-secondary">- Chercher -</button>
                     document.getElementById('search').type = 'text';
 
 
-                } 
+                } else {
+                    $("#multiple").hide();
+                    $("#submit_div").show();
+
+                    document.getElementById("search").disabled = false;
+
+                    document.getElementById('search').type = 'text';
+
+                }
 
             });
         });

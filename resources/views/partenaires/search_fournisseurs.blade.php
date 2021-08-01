@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Navire - Aksam Labs')
+@section('title', 'Fournisseurs - Aksam Labs')
 
 @section('links')
 <li class="nav-item ">
@@ -9,19 +9,20 @@
         <p>Commerciaux</p>
     </a>
 </li>
+
 <li class="nav-item ">
     <a href="/clients">
         <i class="la la-users"></i>
         <p>Clients</p>
     </a>
 </li>
-<li class="nav-item  ">
+<li class="nav-item active ">
     <a href="/fournisseurs">
         <i class="la la-industry"></i>
         <p>Fournisseurs</p>
     </a>
 </li>
-<li class="nav-item active ">
+<li class="nav-item  ">
     <a href="/navires">
         <i class="la la-ship"></i>
         <p>Navires</p>
@@ -30,8 +31,8 @@
 @endsection
 
 @section('Page_infos')
-<div class="card-title"><b><i class="la la-ship"></i>
-        Navires</b></div>
+<div class="card-title"><b><i class="la la-industry"></i>
+        Fournisseurs</b></div>
 @endsection
 
 @section('content')
@@ -47,7 +48,7 @@
 
 </div>
 <div>
-<form action="{{ route('search_navire') }}" method="GET">
+<form action="{{ route('search_client') }}" method="GET">
 
 <div class="form-row col-sm-6 align-items-right" style="float:right;">
 
@@ -64,7 +65,6 @@
     </div>
 
 </form>
-</div>
 
 </div>
 <br>
@@ -73,15 +73,13 @@
     <div class="col-auto">
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="{{ route('navires.create') }}">Ajouter un
-                navire</a></button>
+                style="color: #ffffff; text-decoration: none; " href="{{ route('fournisseurs.create') }}">Ajouter un
+                fournisseur</a></button>
     </div>
     <div class="col-auto">
         <br>
-
-        <button id="example1" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+        <button type="submit" id="example1" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
                 style="color: #ffffff; text-decoration: none; " href="#">Importer</a></button>
-
     </div>
     <div class="col-auto">
         <br>
@@ -90,8 +88,8 @@
             Exporter
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="{{ route('exportn') }}">Excel</a>
-            <a class="dropdown-item" href="/PDF_Navire">PDF</a>
+            <a class="dropdown-item" href="{{ route('exportf') }}">Excel</a>
+            <a class="dropdown-item" href="/PDF_Fournisseur">PDF</a>
 
         </div>
     </div>
@@ -100,15 +98,14 @@
 
 </div>
 </div>
-<div id="example" style=" margin: 0 auto;" class="display-none">
-    <form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;" action="{{ URL::to('importExcelNavire') }}"
-        class="form-horizontal" method="post" enctype="multipart/form-data">
-        {{ csrf_field() }}
-        <input type="file" name="file" />
-        <button class="btn btn-secondary">Importer Fichier</button>
+<div id="example" style=" margin: 0 auto;"  class="display-none">
+<form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;" action="{{ URL::to('importExcelFournisseur') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
+		{{ csrf_field() }}
+		<input type="file" name="file" />
+		<button class="btn btn-secondary">Importer Fichier</button>
         <a  class="btn btn-danger" href="{{ asset('pdf/guide.pdf') }}">Guide d'importation</a>
 
-    </form>
+	</form>
     <br>
 </div>
 <div class="table-responsive">
@@ -127,67 +124,71 @@
                     <center>Référence</center>
                 </th>
                 <th>
+                    <center>Adresse</center>
+                </th>
+
+                <th>
                     <center>Actions</center>
                 </th>
 
             </tr>
         </thead>
         <tbody>
-        @if ($navires->count() == 0)
+        @if ($fournisseurs->count() == 0)
         <tr>
-            <td colspan="4"><center>Aucun résultat à afficher.</center></td>
+            <td colspan="5"><center>Aucun résultat à afficher.</center></td>
         </tr>
         @endif
-            @foreach ($navires as $navire)
+        @foreach ($fournisseurs as $fournisseur)
             <tr>
                 <th scope="row">
-                    <center>{{ $navire->id }}</center>
+                    <center>{{ $fournisseur->id }}</center>
                 </th>
 
 
                 <td>
-                    <center>{{ $navire->name }}</center>
+                    <center>{{ $fournisseur->name }}</center>
                 </td>
                 <td>
-                    <center>{{ $navire->Reference }}</center>
+                    <center>{{ $fournisseur->Reference }}</center>
                 </td>
                 <td>
-                    <center>
-                        <form action="{{ route('navires.destroy',$navire->id) }}" method="POST">
-
-
-
-                            <a href="{{ route('navires.edit',$navire->id) }}"><i style="color:#3EB805;"
-                                    class="la la-edit"></i></a>
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button class="btn btn-link" type="submit"><i style="color:#C1130B;"
-                                    class="la la-trash-o"></i></button>
-                        </form>
-                    </center>
+                    <center>{{ $fournisseur->adresse }}</center>
                 </td>
+                <td>
+                        <center>
+                            <form action="{{ route('fournisseurs.destroy',$fournisseur->id) }}" method="POST">
+
+                                <a href="{{ route('fournisseurs.show',$fournisseur->id) }}"><i style="color:#000;"
+                                        class="la la-eye"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <a href="{{ route('fournisseurs.edit',$fournisseur->id) }}"><i style="color:#3EB805;"
+                                        class="la la-edit"></i></a>
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button class="btn btn-link" type="submit"><i style="color:#C1130B;"
+                                        class="la la-trash-o"></i></button>
+                            </form>
+                        </center>
+                    </td>
             </tr>
-            @endforeach
-
+        @endforeach
         </tbody>
     </table>
-    {{-- Pagination --}}
-        <div class="d-flex justify-content-center">
-            {!! $navires->links() !!}
-        </div>
-
+   
 </div>
-
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 <style type="text/css">
-.display-none {
 
-    display: none;
+    .display-none{
 
-}
+        display: none;
+
+    }
+
 </style>
 
 
@@ -199,11 +200,17 @@
 
 
 <script type="text/javascript">
-$("#example1").click(function() {
 
-    $("#example").toggleClass('display-none');
+
+
+$("#example1").click(function(){
+
+$("#example").toggleClass('display-none');
 
 });
+
+
+
 </script>
 
 @endsection

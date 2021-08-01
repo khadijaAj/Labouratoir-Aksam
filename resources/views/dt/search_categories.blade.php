@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Nutriments - Aksam Labs')
+@section('title', 'Catégories - Aksam Labs')
 
 @section('links')
 
-<li class="nav-item">
+<li class="nav-item ">
     <a href="/produits">
         <i class="la la-dropbox"></i>
         <p>Produits</p>
     </a>
 </li>
-<li class="nav-item active ">
+<li class="nav-item  ">
     <a href="/nutriments">
         <i class="la la-yelp"></i>
         <p>Nutriments</p>
@@ -22,7 +22,7 @@
         <p>Origines</p>
     </a>
 </li>
-<li class="nav-item">
+<li class="nav-item active">
     <a href="/categories">
         <i class="la la-sliders"></i>
         <p>Catégories</p>
@@ -32,8 +32,8 @@
 @endsection
 
 @section('Page_infos')
-<div class="card-title"><b><i class="la la-yelp"></i>
-        Nutriments</b></div>
+<div class="card-title"><b><i class="la la-sliders"></i>
+        Catégories</b></div>
 @endsection
 
 @section('content')
@@ -49,7 +49,7 @@
 
 </div>
 <div>
-<form action="{{ route('search_nutriment') }}" method="GET">
+<form action="{{ route('search_categorie') }}" method="GET">
 
 <div class="form-row col-sm-6 align-items-right" style="float:right;">
 
@@ -68,17 +68,17 @@
 </form>
 </div>
 <br>
-<div class="form-row align-items-right" style="float:left;">
+<div class="form-row col-sm-6  align-items-right" style="float:left;">
 
     <div class="col-auto">
         <br>
         <button type="submit" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
-                style="color: #ffffff; text-decoration: none; " href="{{ route('Nutriment.create') }}">Ajouter un
-                nutriment</a></button>
+                style="color: #ffffff; text-decoration: none; " href="{{ route('categories.create') }}">Ajouter une
+                catégorie</a></button>
     </div>
     <div class="col-auto">
         <br>
-        <button type="submit" id="example1" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
+        <button id="example1" style="border-radius: 40px ;background-color:#3A9341;" class="btn mb-2"><a
                 style="color: #ffffff; text-decoration: none; " href="#">Importer</a></button>
     </div>
     <div class="col-auto">
@@ -88,9 +88,8 @@
             Exporter
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="{{ route('exportnt') }}">Excel</a>
-            <a class="dropdown-item" href="/PDF_Nutriment">PDF</a>
-
+            <a class="dropdown-item" href="{{ route('exportct') }}">Excel</a>
+            <a class="dropdown-item" href="/PDF_Categorie">PDF</a>
         </div>
     </div>
 
@@ -100,7 +99,7 @@
 </div>
 <div id="example" style=" margin: 0 auto;" class="display-none">
     <form style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 10px;"
-        action="{{ URL::to('importExcelNutriment') }}" class="form-horizontal" method="post"
+        action="{{ URL::to('importExcelCategorie') }}" class="form-horizontal" method="post"
         enctype="multipart/form-data">
         {{ csrf_field() }}
         <input type="file" name="file" />
@@ -133,34 +132,32 @@
             </tr>
         </thead>
         <tbody>
-        @if ($nutriments->count() == 0)
+        @if ($categories->count() == 0)
             <tr>
                 <td colspan="4"><center>Aucun résultat à afficher.</center></td>
             </tr>
             @endif
-            @foreach ($nutriments as $nutriment)
+            @foreach ($categories as $categorie)
             <tr>
                 <th scope="row">
-                    <center>{{ $nutriment->id }}</center>
+                    <center>{{ $categorie->id }}</center>
                 </th>
 
 
                 <td>
-                    <center>{{ $nutriment->name }}</center>
+                    <center>{{ $categorie->name }}</center>
                 </td>
                 <td>
-                    <center>{{ $nutriment->Reference }}</center>
+                    <center>{{ $categorie->Reference }}</center>
                 </td>
 
                 <td>
                     <center>
-                        <form action="{{ route('Nutriment.destroy',$nutriment->id) }}" method="POST">
+                        <form action="{{ route('categories.destroy',$categorie->id) }}" method="POST">
 
 
-                            <a href="{{ route('Nutriment.show',$nutriment->id) }}"><i style="color:#000;"
-                                    class="la la-eye"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
-                            <a href="{{ route('Nutriment.edit',$nutriment->id) }}"><i style="color:#3EB805;"
+                            <a href="{{ route('categories.edit',$categorie->id) }}"><i style="color:#3EB805;"
                                     class="la la-edit"></i></a>
 
                             @csrf
@@ -173,12 +170,10 @@
                 </td>
             </tr>
             @endforeach
+
         </tbody>
     </table>
-    {{-- Pagination --}}
-        <div class="d-flex justify-content-center">
-            {!! $nutriments->links() !!}
-        </div>
+    
 </div>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
@@ -205,5 +200,4 @@ $("#example1").click(function() {
 
 });
 </script>
-
 @endsection

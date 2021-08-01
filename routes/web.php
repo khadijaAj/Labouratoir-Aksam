@@ -163,7 +163,17 @@ Route::post('standardtype/delete', 'StandardtypeController@destroy')->name('Stan
 
 Route::match(["get", "post"], "read-xml", 'XMLController@index')->name('xml-upload');
 
-Route::get('autocomplete', 'MprapportController@search');
 
+Route::get('/search_commerciaux/', 'CommercialController@search')->name('search_commercial');
+Route::get('/search_clients/', 'ClientController@search')->name('search_client');
 
-
+Route::get('/search_navires/', 'NavireController@search')->name('search_navire');
+Route::get('/search_origine/', 'OrigineController@search')->name('search_origine');
+Route::get('/search_nutriments/', 'NutrimentController@search')->name('search_nutriment');
+Route::get('/search_fournisseurs/', 'FournisseurController@search')->name('search_fournisseur');
+Route::get('/search_produits/', 'ProduitController@search')->name('search_produit');
+Route::get('/search_categories/', 'CategorieController@search')->name('search_categorie');
+Route::post('/search_mp/', 'MprapportController@search')->name('search_mp');
+Route::post('/search_pf/', 'PfrapportController@search')->name('search_pf');
+Route::post('/search_en/', 'EnrapportController@search')->name('search_en');
+Route::post('/search_ra/', 'CrapportController@search')->name('search_ra');

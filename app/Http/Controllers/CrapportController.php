@@ -30,8 +30,21 @@ class CrapportController extends Controller
      */
     public function index()
     {
+        $produits = Produit::all();
+        $commerciaux=Commercial::all();
+        $clients=Client::all();
         $Crapports = Crapport::orderBy('created_at','DESC')->paginate(30);
-        return view('analyses.rapportanalyse',compact('Crapports'));
+
+        $data = [
+            'Crapports'  => $Crapports,
+            'produits'=>$produits,
+            'clients'=>$clients,
+            'commerciaux'=>$commerciaux
+            
+
+
+        ];
+        return view('analyses.rapportanalyse')->with($data);
     }
 
     /**
@@ -447,4 +460,81 @@ class CrapportController extends Controller
         $pdf = PDF::loadView('PDFtemplate.Rapport_Client', $data);
         return  $pdf->download('rapport_client.pdf'); 
     }
+
+    
+
+    public function search(Request $request){
+        
+      
+        if($request->input('search_param')=="date_reception"){
+            $crapports = Crapport::where('date_reception', '=',$request->search)->get();
+
+
+        }
+        if($request->input('search_param')=="date_analyse"){
+            $crapports = Crapport::where('date_analyse', '=',$request->search)->get();
+
+
+        }
+       
+        if($request->input('search_param')=="multiple"){
+            $date_start = $request->date_start_m;
+            $date_end = $request->date_end_m;
+     
+            
+
+          
+            if($date_start !=NULL && $date_end !=NULL){
+                if($request->type_date=="date_analyse" ){
+                    $crapports = Crapport::whereBetween('date_analyse', [$date_start, $date_end])
+                    ->when(request()->input('produit_name_m'), function ($query) {
+                        $query->where('produit_id', Produit::where('name','=',request()->input('produit_name_m'))->first()->id);
+                    })->when($request->input('commercial_name_m'), function ($query) {
+                        $query->where('commercial_id', Commercial::where('name','=',request()->input('commercial_name_m'))->first()->id);
+                    })  ->when($request->input('client_name_m'), function ($query) {
+                        $query->where('client_id', Client::where('name','=',request()->input('client_name_m'))->first()->id);
+                    }) 
+                    ->get();
+                
+                }else{
+                    $crapports = Crapport::whereBetween('date_reception', [$date_start, $date_end])
+                    ->when(request()->input('produit_name_m'), function ($query) {
+                        $query->where('produit_id', Produit::where('name','=',request()->input('produit_name_m'))->first()->id);
+                    })->when($request->input('commercial_name_m'), function ($query) {
+                        $query->where('commercial_id', Commercial::where('name','=',request()->input('commercial_name_m'))->first()->id);
+                    })  ->when($request->input('client_name_m'), function ($query) {
+                        $query->where('client_id', Client::where('name','=',request()->input('client_name_m'))->first()->id);
+                    }) 
+                    ->get();
+                }
+               
+
+            }else{
+                $crapports = Crapport::when(request()->input('produit_name_m'), function ($query) {
+                    $query->where('produit_id', Produit::where('name','=',request()->input('produit_name_m'))->first()->id);
+                })->when($request->input('commercial_name_m'), function ($query) {
+                    $query->where('commercial_id', Commercial::where('name','=',request()->input('commercial_name_m'))->first()->id);
+                })  ->when($request->input('client_name_m'), function ($query) {
+                    $query->where('client_id', Client::where('name','=',request()->input('client_name_m'))->first()->id);
+                })  ->get();
+            }
+       
+        }
+
+       
+        $produits=Produit::all();
+        $clients= Client::all();
+        $commerciaux = Commercial::all();
+        $data = [
+            'Crapports'  => $crapports,
+            'produits' => $produits,
+            'commerciaux'=>$commerciaux,
+            'clients'=>$clients,
+
+        ];
+
+        return view('analyses.search_rapportanalyse')->with($data);
+
+
+    } 
 }

@@ -49,20 +49,23 @@
 
 </div>
 <div>
-    <div class="form-row col-sm-6  align-items-right" style="float:right;">
+<form action="{{ route('search_categorie') }}" method="GET">
 
-        <div class="input-group mb-2">
+<div class="form-row col-sm-6 align-items-right" style="float:right;">
 
-            <div class="input-group-prepend">
-                <div class="input-group-text" style="background-color:#FAFAFA;"><i class="la la-search"> </i></div>
-            </div>
+    <div class="input-group mb-2">
 
-            <input type="text" class="form-control" id="myInput" onkeyup="myFunction()"
-                style="border: 1px solid #ced4da" id="search_categorie" placeholder="Chercher ...">
-
+        <div class="input-group-prepend">
+            <div class="input-group-text " style="background-color:#FAFAFA;"><i class="la la-search"> </i></div>
         </div>
-    </div>
 
+        <input type="text"  class="form-control"
+            style="border: 1px solid #ced4da" name="search" id="search" placeholder="Chercher ...">
+
+
+    </div>
+</div>
+</form>
 </div>
 <br>
 <div class="form-row col-sm-6  align-items-right" style="float:left;">

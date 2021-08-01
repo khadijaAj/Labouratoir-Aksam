@@ -154,5 +154,14 @@ class FournisseurController extends Controller
         $pdf->stream();
         return $pdf->download('liste_fournisseurs.pdf');
     }
-
+    public function search(Request $request){
+        $search = $request->input('search');
+    
+        $fournisseurs = Fournisseur::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('Reference', 'LIKE', "%{$search}%")
+            ->get();
+    
+        return view('partenaires.search_fournisseurs', compact('fournisseurs'));
+    }
 }
