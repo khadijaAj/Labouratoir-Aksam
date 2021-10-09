@@ -62,7 +62,7 @@
         </div>
         <div class="form-group col-md-6">
             <label for="ref_nutriment">Référence</label>
-            <input type="text" class="form-control" name="Reference" value="{{ old('name') }}"
+            <input type="text" class="form-control" name="Reference" value="{{ old('Reference') }}"
                 placeholder="Entrer la référence">
         </div>
 

@@ -15,7 +15,7 @@ class CreatePfrapportsTable extends Migration
     {
         Schema::create('pfrapports', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('Num')->unique();
+            $table->integer('Num')->nullable();
             $table->integer('produit_id')->unsigned();
             $table->string('Identification')->nullable();
             $table->enum('Commentaire' , array('interne', 'externe'))->nullable();

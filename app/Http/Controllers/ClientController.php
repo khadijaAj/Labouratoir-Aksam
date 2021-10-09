@@ -2,8 +2,19 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Client;
 use App\Commercial;
+use App\Crapport;
+use App\Produit;
+use App\Formule;
+use App\Commande;
+use App\Detailscommande;
+use App\Standardtype;
+use App\Nutriment;
+use App\Value;
+use App\Vrapport;
+use App\ELevages;
 use Illuminate\Http\Request;
 use App\Exports\ClientExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,6 +39,7 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::paginate(30);
+        $crapports=Crapport::all();
         return view('partenaires.clients',compact('clients'));
 
 
@@ -58,24 +70,45 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'Reference' => 'nullable',
-            'adresse' => 'nullable',
-            'Region' => 'nullable',
-            'commercial_id' => 'nullable',
-            'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
-            
+            'name'  => 'required',
+            'civility'=> 'nullable',
+            'code'=> 'nullable',
+            'email'=> 'nullable',
+            'adresse'=> 'nullable',
+            'ville'=> 'nullable',
+            'pays'=> 'nullable',
+            'familleCl'=> 'nullable',
+            'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'modeReglement'=> 'nullable',
+            'salleTraite'=> 'nullable',
+            'modelivrainson'=> 'nullable',
+            'province'=> 'nullable',
+            'typeElevage'=>'nullable',
+            'statut'=>'nullable',
+            'commercial_id'=>'nullable'
+               
         ]);
-  
+        
         Client::create([
-            'name' => $request->name,
-            'Reference' => $request->Reference,
+            'name'   => $request->name,
+            'civility' => $request->civility,
+            'code' => $request->code,
+            'email'=>  $request->email,
             'adresse' => $request->adresse,
-            'tele' => $request->tele,
-            'commercial_id' => $request->commercial_id,
-            'Region' => $request->Region
+            'ville' => $request->ville,
+            'pays'=>  $request->pays,
+           'familleCl' => $request->familleCl,
+           'tele'  => $request->tele,
+           'modeReglement' => $request->modeRgelement,
+           'salleTraite' => $request->salleTraite,
+           'modelivrainson' => $request->modelivraison,
+            'province' => $request->province,
+            'statut'=>$request->statut,
+            'typeElevage'=> implode(",",$request->typeElevage),
+            'commercial_id' => $request->commercial_id
            
         ]);
+       
         return redirect()->route('clients.index')
                         ->with('success','Client ajouté avec success.');
     }
@@ -87,7 +120,17 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Client $client)
-    {
+
+    {     
+        $standards=Standardtype::find(3);
+        $values = Value::all();
+        $crapports =Crapport::all();
+        $details=Detailscommande::all();
+        $commandes=Commande::all();
+        $formules=Formule::all();
+        $vrapports=Vrapport::all();
+        $elevages=Elevages::all();
+
         return view('partenaires.show_client',compact('client'));
 
     }
@@ -118,12 +161,24 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $request->validate([
-            'name' => 'required',
-            'Reference' => 'nullable',
-            'adresse' => 'nullable',
-            'Region' => 'nullable',
-            'commercial_id' => 'nullable',
-            'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10'
+        'name'  => 'required',
+        'civility'=> 'nullable',
+        'code'=> 'nullable',
+        'email'=>'nullable',
+        'adresse'=> 'nullable',
+        'ville'=> 'nullable',
+        'pays'=> 'nullable',
+        'familleCl'=> 'nullable',
+        'tele' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+        'modeReglement'=> 'nullable',
+        'salleTraite'=> 'nullable',
+        'modelivrainson'=> 'nullable',
+        'province'=> 'nullable',
+        'statut'=>'nullable',
+        'typeElevage'=> explode(",",$request->typeElevage),
+        'commercial_id'=>'nullable'
+           
+        
         ]);
   
         $client->update($request->all());

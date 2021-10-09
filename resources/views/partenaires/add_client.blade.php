@@ -46,56 +46,116 @@
 </div>
 @endif
 
-<form action="{{ route('clients.store') }}" method="POST">
+<form action="{{ route('clients.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="form-row">
-
-        <div class="form-group col-md-6">
-            <label for="nom_client">Nom du Client</label>
-            <input type="text" class="form-control" name="name" value="{{ old('name') }}"  placeholder="Enter le nom d'utilisateur">
+       <div class="form-group col-md-6 ">
+            <label for="nom_prespecteur">Nom Client</label>
+            <input type="text" class="form-control" name="name" value="{{ old('name') }}"  placeholder="Entrer le nom complet">
         </div>
         <div class="form-group col-md-6">
-            <label for="ref_client">Référence</label>
-            <input type="text" class="form-control" name="Reference" value="{{ old('Reference') }}" placeholder="Entrer la référence">
-        </div>
-
+            <label for="civility">Civilité</label>
+            <select name="civlity"  class="custom-select mr-sm-2">
+                <option value="Monsieur">M.</option>
+                <option value="Madame">Mme</option>            
+           </select>
+        </div> 
     </div>
     <div class="form-row">
-
         <div class="form-group col-md-6">
-            <label for="adresse_client">Adresse</label>
-            <input type="text" class="form-control" name="adresse" value="{{ old('adresse') }}"
+            <label for="code">Code</label>
+            <input type="text" class="form-control" name="code" value="{{ old('code') }}"  placeholder="Entrer un code">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="commercial">Commercial</label>
+            <select name="commercial_id" class="custom-select mr-sm-2">
+                <option value="">-- choisi un commercial --</option>
+                @foreach ($commercials as $commercial)
+                <option value="{{ $commercial->id }}">  {{ $commercial->name }} </option>
+                 @endforeach
+            </select>
+         </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="adresse_client">Adresse 1</label>
+            <input type="text" class="form-control"  id="inputAddress" name="adresse" value="{{ old('adresse') }}"
                 placeholder="Enter l'adresse">
         </div>
         <div class="form-group col-md-6">
-            <label for="numtele_client">Numéro téléphone</label>
-            <input type="text" class="form-control" name="tele" value="{{ old('tele') }}"
-                placeholder="Entrer le numéro du téléphone">
+            <label for="ville">Ville</label>
+            <input type="text" class="form-control"  name="ville" value="{{ old('ville') }}">
         </div>
-
     </div>
     <div class="form-row">
-
         <div class="form-group col-md-6">
-            <label for="commercial">Commercial</label>
-            <select class="custom-select mr-sm-2" name="commercial_id">
-                <option selected value="">Choisir un commercial ...</option>
-                @foreach( $commercials as $comm)
-                <option value="{{ $comm['id'] }}">{{ $comm['name'] }}</option>
-                @endforeach
-            </select>
-            </select>
+            <label for="pays">Pays</label>
+            <input type="text" class="form-control"  name="pays" value="{{ old('pays') }}">
         </div>
-        <div class="form-group col-md-6">
-            <label for="region_client">Région</label>
-            <input type="text" class="form-control" name="Region" value="{{ old('Region') }}"
-                placeholder="Entrer la région">
-        </div>
-
-       
+        <div class="form-group col-md-6 ">
+            <label for="province">Province</label>
+            <input type="text" class="form-control" name="province" value="{{ old('province') }}"  >
+       </div>
     </div>
-    <br>
+    <div class="form-row">
+       <div class="form-group col-md-6">
+            <label for="tele">Numéro téléphone</label>
+            <input type="number" class="form-control" name="tele" value="{{ old('tele') }}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="mail">Email</label>
+            <input type="mail" class="form-control" name="email" value="{{ old('email') }}"
+                placeholder="exemple@gmail.com">
+        </div>   
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+           <label for="modeRegelement">Mode de régelement</label>
+           <select name="modeRegelement"  class="custom-select mr-sm-2">
+                <option value="cheque">Chèque</option>
+                <option value="espece">Espèce</option> 
+                <option value="EFFET">EFFTET</option>              
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="mode_livraison">Mode de livraison</label>
+            <select name="modelivraison"  class="custom-select mr-sm-2">
+                <option value="Camion_aksam">Camion Aksam</option>
+                <option value="Camion_propre">Camion Propre</option>               
+            </select>
+        </div>
+    </div>
+     <div class="form-row">
+       <div class="form-group col-md-6">
+            <label for="familleCl">Famille Client</label>
+            <select name="familleCl"  class="custom-select mr-sm-2">
+                <option value="cooperative">Coopérative</option>
+                <option value="eleveur">Eleveur</option>   
+                <option value="revendeur">Revendeur</option>                           
+            </select> 
+        </div>
+        <div class="form-group col-md-6">
+        <label for="salleTraite">Salle de Traite</label>
+            <select name="salleTraite"  class="custom-select mr-sm-2">
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>                           
+            </select> 
+        </div>   
+    </div>
+ <div class="form-row">
+   <div class="form-group col-md-6">
+    <label for="typeElevage">Type de l'élevage :</label><br>
+    
+    <input type="checkbox"    name="typeElevage[]" value="VL"> <label>VL</label><br>
+    <input type="checkbox"    name="typeElevage[]" value="BV"> <label>BV</label><br>
+    <input type="checkbox"    name="typeElevage[]" value="OV"> <label>OV</label><br>
+</div>
+<div class="form-group col-md-6">
+<label>Bloque</label>
+<input type="checkbox"  name="statut" value="bloque">
+</div>
+</div>
 
     <div class="card-action">
         <center><button type="submit" class="btn btn-success">Enregistrer</button></center>

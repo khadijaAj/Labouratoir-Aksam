@@ -27,7 +27,6 @@
         <p>Catégories</p>
     </a>
 </li>
-
 @endsection
 
 @section('Page_infos')
@@ -58,6 +57,19 @@
         <input type="text" class="form-control" name="name" value="{{ $produit->name }}"
             placeholder="Enter le nom du produit">
     </div>
+    <div class="form-group">
+        <label for="prixu">Prix Unitaire HT</label>
+        <input type="number" class="form-control" name="prixu" value="{{ $produit->prixu }}"
+            placeholder="Entrer le prix de ce produit">
+    </div>
+    <div class="form-group">
+    <label for="taxe">Taxe</label>
+            <select name="taxe"  class="custom-select mr-sm-2">
+                <option value="0.1">10%</option>
+                <option value="0.14">14%</option> 
+                <option value="0.2">20%</option>                           
+            </select> 
+    </div>  
     <div class="form-group">
         <label for="ref_produit">Référence</label>
         <input type="text" class="form-control" name="Reference" value="{{ $produit->Reference }}"

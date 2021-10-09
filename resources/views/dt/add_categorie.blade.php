@@ -22,13 +22,12 @@
         <p>Origines</p>
     </a>
 </li>
-<li class="nav-item active">
+<li class="nav-item actives ">
     <a href="/categories">
         <i class="la la-sliders"></i>
         <p>Catégories</p>
     </a>
 </li>
-
 @endsection
 
 @section('Page_infos')

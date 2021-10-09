@@ -94,8 +94,8 @@ class MprapportController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'num' => 'required',
-            'num_bon' => 'required',
+            'num' => 'nullable',
+            'num_bon' => 'nullable',
             'produit_id' => 'required',
             'fournisseur_id' => 'nullable',
             'origine_id' => 'nullable',

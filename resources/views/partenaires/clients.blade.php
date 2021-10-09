@@ -118,7 +118,13 @@
                     <center>Nom</center>
                 </th>
                 <th>
+                    <center>Type d'élevage</center>
+                </th>
+                <th>
                     <center>Commercial</center>
+                </th>
+                <th>
+                    <center>statut</center>
                 </th>
                 <th>
                     <center>Actions</center>
@@ -142,6 +148,9 @@
                 <td>
                     <center>{{ $client->name }}</center>
                 </td>
+                <td>
+                    <center>{{ $client->typeElevage }}</center>
+                </td>
                 @if ($client->commercial()->exists())
                 
                     <td>
@@ -152,7 +161,9 @@
                     <center>-</center>
                 </td>
                 @endif
-                
+                <td>
+                    <center>{{ $client->statut }}</center>
+                </td>
                 <td>
                     <center>
                         <form action="{{ route('clients.destroy',$client->id) }}" method="POST">

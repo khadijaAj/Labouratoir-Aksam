@@ -14,7 +14,7 @@ class Produit extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'Reference','categorie_id'
+        'name', 'Reference','prixu','categorie_id','taxe'
     ];
 
     public function categorie()
@@ -37,5 +37,13 @@ class Produit extends Model
     public function Enrapports()
     {
         return $this->hasOne(Enrapport::class);
+    }
+    public function commande()
+    {
+        return $this->belongsToMany(Commande::class);
+    }
+    public function detailscommande()
+    {
+        return $this->hasMany(Detailscommande::class); 
     }
 }

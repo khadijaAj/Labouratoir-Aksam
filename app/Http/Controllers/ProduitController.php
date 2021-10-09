@@ -57,6 +57,8 @@ class ProduitController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'prixu'=>'required',
+            'taxe'=>'required',
             'Reference' => 'nullable',
             'categorie_id' => 'nullable'
             
@@ -65,6 +67,8 @@ class ProduitController extends Controller
         Produit::create([
             'name' => $request->name,
             'Reference' => $request->Reference,
+            'prixu'=>$request->prixu,
+            'taxe'=>$request->taxe,
             'categorie_id' => $request->categorie_id,
            
         ]);
@@ -123,6 +127,8 @@ class ProduitController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'prixu'=>'required',
+            'taxe'=>'required',
             'Reference' => 'nullable',
             'categorie_id' => 'nullable'
             

@@ -15,6 +15,9 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  
+ 
+  
+ 
 </head>
 
 <body>
@@ -52,6 +55,12 @@
                         <li class="nav-item">
                             <a class="nav-link" style="color:#FFFFFF;" href="/commerciaux">Partenaires</a>
                         </li>
+
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" style="color:#FFFFFF;" href="/prospecteurs">CRM</a>
+                        </li>
+
 
                     </ul>
 
@@ -144,39 +153,14 @@
 
 
 </body>
-<script>
-function myFunction() {
-    // Declare variables
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-}
 </script>
 
-
-</script>
 <script src="{{ asset('js/core/popper.min.js')}}"></script>
 <script src="{{ asset('js/core/bootstrap.min.js')}}"></script>
 <script src="{{ asset('js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 <script src="{{ asset('js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')}}"></script>
 <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
 <script src="{{ asset('js/file.min.js')}}"></script>
-
 <script>
 
 function toggle(source) {

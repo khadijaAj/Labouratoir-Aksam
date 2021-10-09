@@ -280,7 +280,8 @@ class EnrapportController extends Controller
         foreach($standards->nutriments as $nutriment){
            
           // this for calculating Values with Method="Infra rouge"
-            if(DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('methode')=='Infra Rouge' && DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('xml_equivalent') !=NULL){
+            if(DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('methode')=='Infra Rouge' 
+            && DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('xml_equivalent') !=NULL){
             $xml_equivalent= DB::table('mesures')->where('standardtype_id','=',4)->where('nutriment_id','=',$nutriment->id)->value('xml_equivalent');
             $value = new Value(); 
             

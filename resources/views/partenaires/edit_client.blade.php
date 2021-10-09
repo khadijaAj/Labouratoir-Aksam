@@ -57,61 +57,121 @@
             <input type="text" class="form-control" name="name" value ="{{ $client->name }}" placeholder="Enter le nom d'utilisateur">
         </div>
         <div class="form-group col-md-6">
-            <label for="ref_client">Référence</label>
-            <input type="text" class="form-control" name="Reference"  value ="{{ $client->Reference }}" placeholder="Entrer la référence">
+            <label for="code_client">Code</label>
+            <input type="text" class="form-control" name="code"  value ="{{ $client->code }}" >
         </div>
 
     </div>
     <div class="form-row">
 
-        <div class="form-group col-md-6">
-            <label for="adresse_client">Adresse</label>
-            <input type="text" class="form-control" name="adresse" value ="{{ $client->name }}"
-                placeholder="Enter l'adresse">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="numtele_client">Numéro téléphone</label>
-            <input type="text" class="form-control" name="tele" value ="{{ $client->tele }}"
-                placeholder="Entrer le numéro du téléphone">
-        </div>
-
-    </div>
-    <div class="form-row">
-
-    @if(!is_null($client->commercial)) 
-
-    <div class="form-group col-md-6">
-            <label for="commercial">Commercial</label>
-            <select class="custom-select mr-sm-2" name="commercial_id">
-                <option selected value="{{ $client->commercial->id }}">{{ $client->commercial->name }}</option>
-                @foreach( $commercials as $comm)
-                <option value="{{ $comm['id'] }}">{{ $comm['name'] }}</option>
-                @endforeach
-            </select>
-            </select>
-        </div>
    
-    @else
-    <div class="form-group col-md-6">
-            <label for="commercial">Commercial</label>
-            <select class="custom-select mr-sm-2" name="commercial_id">
-                <option selected value="">Choisir un commercial..</option>
-                @foreach( $commercials as $comm)
-                <option value="{{ $comm['id'] }}">{{ $comm['name'] }}</option>
-                @endforeach
-            </select>
-            </select>
-        </div>               
-    @endif
-        
-        <div class="form-group col-md-6">
-            <label for="region_client">Région</label>
-            <input type="text" class="form-control" name="Region" value="{{ $client->Region }}"
-                placeholder="Entrer la région">
-        </div>
-
        
     </div>
+    <div class="form-row">
+
+        <div class="form-group col-md-6">
+            <label for="province_client">Province</label>
+            <input type="text" class="form-control" name="province" value ="{{ $client->province }}">
+        </div>
+        <div class="form-group col-md-6">
+        <label for="adresse_client">Adresse</label>
+            <input type="text" class="form-control" name="adresse" value ="{{ $client->adresse }}"
+                placeholder="Enter l'adresse">
+        </div>
+    </div>
+    <div class="form-row">
+
+        <div class="form-group col-md-6">
+           <label for="ville_client">Ville</label>
+           <input type="text" class="form-control" name="ville" value ="{{ $client->ville }}"placeholder="Enter la ville">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="pays_client">Pays</label>
+            <input type="text" class="form-control" name="pays" value ="{{ $client->pays }}">
+        </div>
+    </div>
+    <div class="form-row">
+
+        <div class="form-group col-md-6">
+        <label for="email_client">Email</label>
+          <input type="mail" class="form-control" name="email" value ="{{ $client->email}}">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="numtele_client">Numéro téléphone</label>
+           <input type="text" class="form-control" name="tele" value ="{{ $client->tele }}" placeholder="Entrer le numéro du téléphone">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+           <label for="modeRegelement">Mode de régelement</label>
+           <select name="modeRegelement"  class="custom-select mr-sm-2">
+                <option value="cheque">Chèque</option>
+                <option value="espece">Espèce</option> 
+                <option value="EFFET">EFFTET</option>              
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="mode_livraison">Mode de livraison</label>
+            <select name="modelivraison"  class="custom-select mr-sm-2">
+                <option value="Camion_aksam">Camion Aksam</option>
+                <option value="Camion_propre">Camion Propre</option>               
+            </select>
+        </div>
+    </div>
+     <div class="form-row">
+       <div class="form-group col-md-6">
+            <label for="familleCl">Famille Client</label>
+            <select name="familleCl"  class="custom-select mr-sm-2">
+                <option value="cooperative">Coopérative</option>
+                <option value="eleveur">Eleveur</option>   
+                <option value="revendeur">Revendeur</option>                           
+            </select> 
+        </div>
+        <div class="form-group col-md-6">
+        <label for="salleTraite">Salle de Traite</label>
+            <select name="salleTraite"  class="custom-select mr-sm-2">
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>                           
+            </select> 
+        </div>   
+    </div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="typeElevage">Type de l'élevage :</label><br>
+        <input type="checkbox"    name="typeElevage[]" value="{{('vl')}}"> <label>VL</label><br>
+        <input type="checkbox"    name="typeElevage[]" value="{{old('bv')}}"> <label>BV</label><br>
+        <input type="checkbox"    name="typeElevage[]" value="{{old('ov')}}"> <label>OV</label><br>
+        <input type="checkbox"    name="typeElevage[]" value="{{old('caprin')}}"> <label>Caprin</label><br>
+   
+</div>
+@if(!is_null($client->commercial)) 
+
+<div class="form-group col-md-6">
+        <label for="commercial">Commercial</label>
+        <select class="custom-select mr-sm-2" name="commercial_id">
+            <option selected value="{{ $client->commercial->id }}">{{ $client->commercial->name }}</option>
+            @foreach( $commercials as $comm)
+            <option value="{{ $comm['id'] }}">{{ $comm['name'] }}</option>
+            @endforeach
+        </select>
+        </select>
+    </div>
+
+@else
+<div class="form-group col-md-6">
+        <label for="commercial">Commercial</label>
+        <select class="custom-select mr-sm-2" name="commercial_id">
+            <option selected value="">Choisir un commercial..</option>
+            @foreach( $commercials as $comm)
+            <option value="{{ $comm['id'] }}">{{ $comm['name'] }}</option>
+            @endforeach
+        </select>
+        </select>
+    </div>               
+@endif
+
+</div>
+    
     <br>
 
     <div class="card-action">

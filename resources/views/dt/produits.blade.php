@@ -28,7 +28,6 @@
         <p>Catégories</p>
     </a>
 </li>
-
 @endsection
 
 @section('Page_infos')
@@ -123,6 +122,9 @@
                     <center>Nom</center>
                 </th>
                 <th>
+                    <center>Prix unitaire HT</center>
+                </th>
+                <th>
                     <center>Réference</center>
                 </th>
                 <th>
@@ -153,6 +155,9 @@
 
                 <td>
                     <center>{{ $produit->name }}</center>
+                </td>
+                <td>
+                    <center>{{ $produit->prixu }}</center>
                 </td>
                 <td>
                     <center>{{ $produit->Reference }}</center>

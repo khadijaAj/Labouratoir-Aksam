@@ -30,4 +30,12 @@ class Commercial extends Model
     {
         return $this->hasMany(Enrapport::class);
     }
+    public function commande()
+ {
+     return $this->belongsToMany(Commande::class);
+ }
+ public function vrapport()
+ {
+     return $this->belongsToMany(vrapport::class);
+ }
 }

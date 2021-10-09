@@ -15,7 +15,7 @@ class CreateMprapportsTable extends Migration
     {
         Schema::create('mprapports', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('Num')->unique();
+            $table->string('Num')->nullable();
             $table->string('Num_bon')->nullable();
             $table->integer('origine_id')->nullable()->unsigned();
             $table->integer('produit_id')->nullable()->unsigned();

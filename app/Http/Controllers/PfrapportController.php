@@ -267,7 +267,7 @@ class PfrapportController extends Controller
     {
         
         $request->validate([
-            'num' => 'required',
+            'num' => 'nullable',
             'produit_id' => 'required',
             'identification' => 'nullable',
             'conformite' => 'nullable',
@@ -377,7 +377,7 @@ class PfrapportController extends Controller
     {
     
         $request->validate([
-            'num' => 'required',
+            'num' => 'nullable',
             'produit_id' => 'required',
             'identification' => 'nullable',
             'conformite' => 'nullable',

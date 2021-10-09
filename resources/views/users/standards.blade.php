@@ -57,10 +57,49 @@
         </a>
       </div>
       </div>
-    @endforeach
-    
-	
-	
-	
+    @endforeach	
 </div>
-    @endsection
+<hr style="display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;">
+<div class="card-title"><b><i class="la la-key"></i>
+        CRM Standards</b></div>
+        <hr>
+<div class="row">
+
+<div class="col-md-3 col-sm-4">
+	<div class="wrimagecard wrimagecard-topimage">
+         <a href="/standardsbv">
+          <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+            <center><i class="fa fa-table" style="color:#BB7824"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h6><center>Bovin</center></h6>
+          </div>
+        </a>
+      </div>
+</div>
+<div class="col-md-3 col-sm-4">
+	<div class="wrimagecard wrimagecard-topimage">
+         <a  href="/standardsov">
+          <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+            <center><i class="fa fa-table" style="color:#BB7824"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h6><center>Ovin</center></h6>
+          </div>
+        </a>
+      </div>
+</div>
+<div class="col-md-3 col-sm-4">
+	<div class="wrimagecard wrimagecard-topimage">
+         <a href="/standardsvl">
+          <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+            <center><i class="fa fa-table" style="color:#BB7824"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h6><center>Vache laitière</center></h6>
+          </div>
+        </a>
+      </div>
+</div>
+</div>
+@endsection

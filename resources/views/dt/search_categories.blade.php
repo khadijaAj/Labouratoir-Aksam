@@ -28,7 +28,6 @@
         <p>Catégories</p>
     </a>
 </li>
-
 @endsection
 
 @section('Page_infos')

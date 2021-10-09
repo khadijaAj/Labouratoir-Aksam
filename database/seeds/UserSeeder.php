@@ -12,7 +12,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        /** Creating An admin account */
+        
+         /** Creating An admin account */
 
         $User = new User();
         $User->name ='Administrateur';
